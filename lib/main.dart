@@ -1,3 +1,4 @@
+import 'package:cs_mobile/screens/main_screen/main_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark(),
-      home: const Text('Flutter Demo Home Page'),
+      home: const MainScreen(),
     );
   }
 }

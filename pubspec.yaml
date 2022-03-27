@@ -30,13 +30,23 @@ dependencies:
   flutter:
     sdk: flutter
 
-
+  string_validators:
+    git:
+      url: https://github.com/bizz84/codewithandrea_flutter_packages
+      path: packages/string_validators
+  alert_dialogs:
+    git:
+      url: https://github.com/bizz84/codewithandrea_flutter_packages
+      path: packages/alert_dialogs
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   http: ^0.13.4
   firebase_core: ^1.13.1
   firebase_auth: ^3.3.11
+  flutter_riverpod: ^1.0.3
+  github_sign_in: ^0.0.5-dev.4
+  shared_preferences: ^2.0.13
 
 dev_dependencies:
   flutter_test:

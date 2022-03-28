@@ -8,12 +8,12 @@ class SharedPreferencesService {
   SharedPreferencesService(this.sharedPreferences);
   final SharedPreferences sharedPreferences;
 
-  static const onboardingCompleteKey = 'onboardingComplete';
+  static const githubOAuthKey = 'githubOAuthKey';
 
-  Future<void> setOnboardingComplete() async {
-    await sharedPreferences.setBool(onboardingCompleteKey, true);
+  Future<void> setGithubOAuthKey(key) async {
+    await sharedPreferences.setString(githubOAuthKey, key);
   }
 
-  bool isOnboardingComplete() =>
-      sharedPreferences.getBool(onboardingCompleteKey) ?? false;
+  String? getGithubOAuthKey() =>
+      sharedPreferences.getString(githubOAuthKey);
 }

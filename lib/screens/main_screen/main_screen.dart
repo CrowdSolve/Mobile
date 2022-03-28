@@ -22,7 +22,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    final githubOAuthKeyModel = ref.watch(githubOAuthKeyModelProvider);
       future: futureAlbum,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {

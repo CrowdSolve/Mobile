@@ -1,9 +1,11 @@
 import 'package:alert_dialogs/alert_dialogs.dart';
 import 'package:cs_mobile/auth/auth_model.dart';
+import 'package:cs_mobile/top_level_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class GithubAuthScreen extends StatefulWidget {
+class GithubAuthScreen extends ConsumerStatefulWidget {
   final AuthModel model;
   final VoidCallback? onSignedIn;
   const GithubAuthScreen({
@@ -21,10 +23,10 @@ class GithubAuthScreen extends StatefulWidget {
   }
 
   @override
-  State<GithubAuthScreen> createState() => _GithubAuthScreenState();
+  _GithubAuthScreenState createState() => _GithubAuthScreenState();
 }
 
-class _GithubAuthScreenState extends State<GithubAuthScreen> {
+class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
    AuthModel get model => widget.model;
 
   @override
@@ -50,12 +52,13 @@ class _GithubAuthScreenState extends State<GithubAuthScreen> {
   }
 
   Future<void> _submit() async {
+    final githubOAuthKeyModel = ref.watch(githubOAuthKeyModelProvider.notifier);
+
     try {
-      final bool success = await model.authenticate(context);
-      if (success) {
-        if (widget.onSignedIn != null) {
-          widget.onSignedIn?.call();
-        }
+      final String githubOAuthKey = await model.authenticate(context);
+      githubOAuthKeyModel.setGithubOAuthKey(githubOAuthKey);
+      if (widget.onSignedIn != null) {
+        widget.onSignedIn?.call();
       }
     } catch (e) {
       _showSignInError(model, e);

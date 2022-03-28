@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
-set(BINARY_NAME "cs_mobile")
-set(APPLICATION_ID "com.example.cs_mobile")
+set(BINARY_NAME "CrowdSolve")
+set(APPLICATION_ID "dev.lasheen.crowdsolve")
 
 cmake_policy(SET CMP0063 NEW)
 

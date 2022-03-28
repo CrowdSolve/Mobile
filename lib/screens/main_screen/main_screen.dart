@@ -77,7 +77,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
 Future<Questions> fetch() async {
   final response = await http.get(Uri.parse(
-      'https://api.github.com/repos/flutter/flutter/issues?page=1&per_page=2'));
+      'https://api.github.com/repos/CrowdSolve/data/issues?page=1'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,

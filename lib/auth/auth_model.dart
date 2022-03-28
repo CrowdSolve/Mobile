@@ -12,7 +12,7 @@ class AuthModel with ChangeNotifier {
     this.isLoading = false,
     this.submitted = false,
   });
-  Future<bool> authenticate(context) async {
+  Future<String> authenticate(context) async {
     final GitHubSignIn gitHubSignIn = GitHubSignIn(
       scope: 'public_repo, user',
       clientId: '4b4d462397a576ac86fd',
@@ -27,7 +27,7 @@ class AuthModel with ChangeNotifier {
           .signInWithCredential(githubAuthCredential);
       updateWith(isLoading: true);
 
-      return true;
+      return result.token!;
     } catch (e) {
       updateWith(isLoading: false);
       rethrow;

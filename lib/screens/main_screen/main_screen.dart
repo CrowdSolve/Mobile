@@ -3,9 +3,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 
 import '../../top_level_provider.dart';
+import 'models/question.dart';
+import 'services/questions_service.dart';
 import 'widgets/add_question.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
@@ -71,49 +72,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-Future<Questions> fetch() async {
-  final response = await http.get(Uri.parse(
-      'https://api.github.com/repos/CrowdSolve/data/issues?page=1'));
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return Questions.fromJson(jsonDecode(response.body));
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
-
-class Questions {
-  final List<Question> questions;
-
-  const Questions({
-    required this.questions,
-  });
-
-  factory Questions.fromJson(List json) {
-    return Questions(
-      questions: (json as List).map((i) => Question.fromJson(i)).toList(),
-    );
-  }
-}
-
-class Question {
-  final String userId;
-
-  const Question({
-    required this.userId,
-  });
-
-  factory Question.fromJson(Map<String, dynamic> json) {
-    return Question(
-      userId: json["title"],
     );
   }
 }

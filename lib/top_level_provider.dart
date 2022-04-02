@@ -18,7 +18,7 @@ final githubOAuthKeyModelProvider =
 
 class GithubOAuthKeyModel extends StateNotifier<String> {
   GithubOAuthKeyModel(this.sharedPreferencesService)
-      : super(sharedPreferencesService.getGithubOAuthKey()!);
+      : super(sharedPreferencesService.getGithubOAuthKey()??'');
   final SharedPreferencesService sharedPreferencesService;
 
   Future<void> setGithubOAuthKey(key) async {

@@ -1,4 +1,5 @@
 import 'package:alert_dialogs/alert_dialogs.dart';
+import 'package:awesome_icons/awesome_icons.dart';
 import 'package:cs_mobile/auth/auth_model.dart';
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,10 +44,25 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        child: Text("asas"),
-        onPressed: model.isLoading ? null : _submit,
+    return Material(
+      child: Center(
+        child: SizedBox(
+          width: 200,
+          child: TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.black,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(FontAwesomeIcons.github, color: Colors.white,),
+                SizedBox(width: 20,),
+                Text("Sign in with Github", style: TextStyle(color: Colors.white),)
+              ],
+            ),
+            onPressed: model.isLoading ? null : _submit,
+          ),
+        ),
       ),
     );
   }

@@ -1,7 +1,3 @@
-
-
-
-
 class Questions {
   final List<Question> questions;
 

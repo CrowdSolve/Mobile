@@ -60,7 +60,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         for (var item in snapshot.data!.questions)
-                          QuestionCard(title: item.userId)
+                          QuestionCard(question: item)
                       ],
                     ),
                   ),

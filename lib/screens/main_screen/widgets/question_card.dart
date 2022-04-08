@@ -1,8 +1,11 @@
+import 'package:cs_mobile/screens/main_screen/models/question.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class QuestionCard extends StatelessWidget {
-  final String title;
-  const QuestionCard({Key? key, required this.title}) : super(key: key);
+  static  DateFormat f = DateFormat('MM/dd hh:mm');
+  final Question question;
+  const QuestionCard({Key? key, required this.question}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,18 +27,20 @@ class QuestionCard extends StatelessWidget {
                 Expanded(
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.circle,
-                        color: Colors.blue,
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(question.posterAvatarUrl),
+                        radius: 10,
                       ),
-                      SizedBox(width: 10,),
-                      Text('Sam Rewiha', style: TextStyle(fontSize: 12,color: Colors.black87),),
-                      Text(' ● 1 hour ago',style: TextStyle(fontSize:10,color: Colors.black38)),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(question.posterName, style: TextStyle(fontSize: 12,color: Colors.black87),),
+                      Text(' ● ${f.format(DateTime.now())}',style: TextStyle(fontSize:10,color: Colors.black38)),
                     ],
                   ),
                 ),
                 Expanded(
-                  child: Text(title, overflow: TextOverflow.fade),
+                  child: Text(question.title, overflow: TextOverflow.fade),
                 ),
                 Expanded(
                   child: Row(
@@ -45,7 +50,7 @@ class QuestionCard extends StatelessWidget {
                         color: Colors.red,
                       ),
                       SizedBox(width: 5,),
-                      Text('215', style: TextStyle(color: Colors.black54),),
+                      Text(question.heart.toString(), style: TextStyle(color: Colors.black54),),
                       SizedBox(
                         width: 30,
                       ),
@@ -54,7 +59,7 @@ class QuestionCard extends StatelessWidget {
                         color: Colors.grey,
                       ),
                       SizedBox(width: 5,),
-                      Text('215', style: TextStyle(color: Colors.black54),),
+                      Text(question.noOfComments.toString(), style: TextStyle(color: Colors.black54),),
 
                     ],
                   ),

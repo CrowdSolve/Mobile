@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cs_mobile/screens/main_screen/widgets/question_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -52,15 +53,17 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             future: futureAlbum,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (var item in snapshot.data!.questions)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(item.userId),
-                      )
-                  ],
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (var item in snapshot.data!.questions)
+                          QuestionCard(title: item.userId)
+                      ],
+                    ),
+                  ),
                 );
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');

@@ -69,12 +69,19 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           child: const Icon(Icons.add_comment_rounded),
         ),
         body: SafeArea(
+          child: RefreshIndicator(
+            onRefresh: () => Future.sync(
+              () => _pagingController.refresh(),
+            ),
             child: PagedListView<int, Question>(
-          pagingController: _pagingController,
-          builderDelegate: PagedChildBuilderDelegate<Question>(
-            itemBuilder: (context, item, index) => QuestionCard(question: item),
+              pagingController: _pagingController,
+              builderDelegate: PagedChildBuilderDelegate<Question>(
+                itemBuilder: (context, item, index) =>
+                    QuestionCard(question: item),
+              ),
+            ),
           ),
-        )),
+        ),
       ),
     );
   }

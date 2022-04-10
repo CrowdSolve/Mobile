@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:cs_mobile/screens/main_screen/widgets/question_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../top_level_provider.dart';
 import 'models/question.dart';
@@ -18,13 +19,32 @@ class MainScreen extends ConsumerStatefulWidget {
 }
 
 class _MainScreenState extends ConsumerState<MainScreen> {
-  late Future<Questions> futureAlbum;
+  static const _pageSize = 5;
 
+  final PagingController<int, Question> _pagingController =
+      PagingController(firstPageKey: 0);
   @override
   void initState() {
+     _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
     super.initState();
-    futureAlbum = fetch();
   }
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      final newItems = await fetch(pageKey);
+      final isLastPage = newItems.length < _pageSize;
+      if (isLastPage) {
+        _pagingController.appendLastPage(newItems);
+      } else {
+        final nextPageKey = pageKey + newItems.length;
+        _pagingController.appendPage(newItems, nextPageKey);
+      }
+    } catch (error) {
+      _pagingController.error = error;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -49,32 +69,18 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           child: const Icon(Icons.add_comment_rounded),
         ),
         body: SafeArea(
-          child: FutureBuilder(
-            future: futureAlbum,
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasData) {
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        for (var item in snapshot.data!.questions)
-                          QuestionCard(question: item)
-                      ],
-                    ),
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
+            child: PagedListView<int, Question>(
+          pagingController: _pagingController,
+          builderDelegate: PagedChildBuilderDelegate<Question>(
+            itemBuilder: (context, item, index) => QuestionCard(question: item),
           ),
-        ),
+        )),
       ),
     );
+  }
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
   }
 }

@@ -73,11 +73,22 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             onRefresh: () => Future.sync(
               () => _pagingController.refresh(),
             ),
-            child: PagedListView<int, Question>(
-              pagingController: _pagingController,
-              builderDelegate: PagedChildBuilderDelegate<Question>(
-                itemBuilder: (context, item, index) =>
-                    QuestionCard(question: item),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                children: [
+                  Text("Recommended for you", style: Theme.of(context).textTheme.titleLarge,),
+                  PagedListView<int, Question>(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    pagingController: _pagingController,
+                    builderDelegate: PagedChildBuilderDelegate<Question>(
+                      itemBuilder: (context, item, index) =>
+                          QuestionCard(question: item),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

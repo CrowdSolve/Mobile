@@ -33,7 +33,9 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseAuth = ref.watch(firebaseAuthProvider);
     return MaterialApp(
+      darkTheme: ThemeData.dark().copyWith(useMaterial3: true),
       debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.dark,
       home: AuthWidget(
         nonSignedInBuilder: (_) => Consumer(
           builder: (context, ref, _) {

@@ -79,8 +79,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               child: ListView(
                 physics: BouncingScrollPhysics(),
                 children: [
-                  Text("Recommended for you", style: Theme.of(context).textTheme.titleLarge,),
                   SearchButton(),
+                  SizedBox(height: 50,),
+                  Text("Recommended for you", style: Theme.of(context).textTheme.titleLarge,),
                   PagedListView<int, Question>(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),

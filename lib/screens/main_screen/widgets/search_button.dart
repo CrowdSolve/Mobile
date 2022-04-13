@@ -6,12 +6,33 @@ class SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: () {
-        showSearch(context: context, delegate: Search());
-      },
-      icon: Icon(Icons.search),
-      label: Text("search"),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: TextButton(
+        onPressed: () {
+          showSearch(context: context, delegate: Search());
+        },
+        child: SizedBox(
+          height: 30,
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 5),
+              child: Text(
+                'Search',
+                style: TextStyle(color: Colors.white54),
+              ),
+            ),
+          ),
+        ),
+        style: TextButton.styleFrom(
+          backgroundColor: Colors.white.withOpacity(0.05),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+            side: BorderSide.none,
+          ),
+        ),
+      ),
     );
   }
 }

@@ -14,11 +14,6 @@ class QuestionCard extends StatelessWidget {
       child: ConstrainedBox(
         constraints: BoxConstraints.tightFor(height: 200),
         child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          shadowColor: Colors.black54,
-          elevation: 0.5,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Column(
@@ -36,16 +31,17 @@ class QuestionCard extends StatelessWidget {
                       ),
                       Text(
                         question.posterName,
-                        style: TextStyle(fontSize: 12, color: Colors.black87),
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                       Text(' ● ${f.format(DateTime.now())}',
-                          style:
-                              TextStyle(fontSize: 10, color: Colors.black38)),
+                          style: Theme.of(context).textTheme.labelSmall),
                     ],
                   ),
                 ),
                 Expanded(
-                  child: Text(question.title, overflow: TextOverflow.fade),
+                  child: Text(question.title,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      overflow: TextOverflow.fade),
                 ),
                 Expanded(
                   child: Row(
@@ -59,21 +55,20 @@ class QuestionCard extends StatelessWidget {
                       ),
                       Text(
                         question.heart.toString(),
-                        style: TextStyle(color: Colors.black54),
+                        style: Theme.of(context).textTheme.labelMedium,
                       ),
                       SizedBox(
                         width: 30,
                       ),
                       Icon(
                         Icons.comment,
-                        color: Colors.grey,
                       ),
                       SizedBox(
                         width: 5,
                       ),
                       Text(
                         question.noOfComments.toString(),
-                        style: TextStyle(color: Colors.black54),
+                        style: Theme.of(context).textTheme.labelMedium,
                       ),
                     ],
                   ),

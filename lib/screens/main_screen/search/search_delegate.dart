@@ -37,10 +37,13 @@ class Search extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     _pagingController.refresh();
     _fetchPage();
-    return PagedListView<int, Question>(
-      pagingController: _pagingController,
-      builderDelegate: PagedChildBuilderDelegate<Question>(
-        itemBuilder: (context, item, index) => QuestionCard(question: item),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: PagedListView<int, Question>(
+        pagingController: _pagingController,
+        builderDelegate: PagedChildBuilderDelegate<Question>(
+          itemBuilder: (context, item, index) => QuestionCard(question: item),
+        ),
       ),
     ); 
   }

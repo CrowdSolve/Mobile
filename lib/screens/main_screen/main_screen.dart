@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:animations/animations.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/question_card.dart';
+import 'package:cs_mobile/screens/main_screen/widgets/question_details/question_details.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/search_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -87,8 +89,20 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     physics: NeverScrollableScrollPhysics(),
                     pagingController: _pagingController,
                     builderDelegate: PagedChildBuilderDelegate<Question>(
-                      itemBuilder: (context, item, index) =>
-                          QuestionCard(question: item),
+                      itemBuilder: (context, item, index) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: OpenContainer(
+                          closedColor: Colors.white10,
+                          closedShape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          openColor: Colors.black,
+                          closedBuilder: (_, __) =>
+                              QuestionCard(question: item),
+                          openBuilder: (_, __) => QuestionDetails(id: item.id),
+                        ),
+                      ),
                     ),
                   ),
                 ],

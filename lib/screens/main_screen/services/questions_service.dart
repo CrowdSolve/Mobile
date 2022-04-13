@@ -45,3 +45,20 @@ Future<List<Question>> fetchWithQuery(int pageKey,
     throw Exception('Failed to load album');
   }
 }
+
+Future<Question> fetchWithId(int id) async {
+  final response = await http.get(Uri.parse(
+      'https://api.github.com/search/issues?q=repo:CrowdSolve/data/$id'));
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+
+    return Question.fromJson(jsonDecode(response.body)['items'][0]);
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    print(response.body);
+    throw Exception('Failed to load album');
+  }
+}

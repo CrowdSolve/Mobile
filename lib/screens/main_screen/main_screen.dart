@@ -100,7 +100,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                           openColor: Colors.black,
                           closedBuilder: (_, __) =>
                               QuestionCard(question: item),
-                          openBuilder: (_, __) => QuestionDetails(id: item.id),
+                          openBuilder: (_, __) => QuestionDetails(id: item.id, question: item,),
                         ),
                       ),
                     ),

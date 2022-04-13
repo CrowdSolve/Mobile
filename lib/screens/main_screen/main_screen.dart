@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cs_mobile/screens/main_screen/widgets/question_card.dart';
+import 'package:cs_mobile/screens/main_screen/widgets/search_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -79,6 +80,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 physics: BouncingScrollPhysics(),
                 children: [
                   Text("Recommended for you", style: Theme.of(context).textTheme.titleLarge,),
+                  SearchButton(),
                   PagedListView<int, Question>(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),

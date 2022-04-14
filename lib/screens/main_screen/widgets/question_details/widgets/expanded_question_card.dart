@@ -32,7 +32,7 @@ class ExpandedQuestionCard extends StatelessWidget {
                     question.posterName,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
-                  Text(' ● ${f.format(DateTime.now())}',
+                  Text(' ● ${f.format(DateTime.parse(question.createdAt))}',
                       style: Theme.of(context).textTheme.labelSmall),
                 ],
               ),

@@ -35,6 +35,9 @@ class QuestionCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    question.imageUrl != null
+                        ? Expanded(child: Image.network(question.imageUrl!))
+                        : SizedBox.shrink(),
                     Expanded(
                       child: Row(
                         children: [
@@ -49,7 +52,7 @@ class QuestionCard extends StatelessWidget {
                             question.posterName,
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
-                          Text(' ● ${f.format(DateTime.now())}',
+                          Text(' ● ${f.format(DateTime.parse(question.createdAt))}',
                               style: Theme.of(context).textTheme.labelSmall),
                         ],
                       ),

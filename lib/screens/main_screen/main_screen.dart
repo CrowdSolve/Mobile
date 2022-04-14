@@ -89,20 +89,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     physics: NeverScrollableScrollPhysics(),
                     pagingController: _pagingController,
                     builderDelegate: PagedChildBuilderDelegate<Question>(
-                      itemBuilder: (context, item, index) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: OpenContainer(
-                          closedColor: Colors.white10,
-                          closedShape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                          ),
-                          openColor: Colors.black,
-                          closedBuilder: (_, __) =>
-                              QuestionCard(question: item),
-                          openBuilder: (_, __) => QuestionDetails(id: item.id, question: item,),
-                        ),
-                      ),
+                      itemBuilder: (context, item, index) {
+                        return QuestionCard(question: item);},
                     ),
                   ),
                 ],

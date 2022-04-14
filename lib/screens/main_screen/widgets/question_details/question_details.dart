@@ -55,22 +55,24 @@ class _QuestionDetailsState extends State<QuestionDetails> {
       onRefresh: () => Future.sync(
         () => _pagingController.refresh(),
       ),
-      child: ListView(
-        physics: BouncingScrollPhysics(),
-        children: [
-          ExpandedQuestionCard(question: widget.question),
-          PagedListView<int, Comment>(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            pagingController: _pagingController,
-            builderDelegate: PagedChildBuilderDelegate<Comment>(
-              itemBuilder: (context, item, index) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: CommentCard(comment: item),
+      child: Material(
+        child: ListView(
+          physics: BouncingScrollPhysics(),
+          children: [
+            ExpandedQuestionCard(question: widget.question),
+            PagedListView<int, Comment>(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              pagingController: _pagingController,
+              builderDelegate: PagedChildBuilderDelegate<Comment>(
+                itemBuilder: (context, item, index) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: CommentCard(comment: item),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

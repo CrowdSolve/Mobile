@@ -36,7 +36,7 @@ class _QuestionDetailsState extends State<QuestionDetails> {
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      final newItems = await fetchCommentsWithIssueId(widget.id, pageKey);
+      final newItems = await Future.delayed(Duration(milliseconds: 500),()=>fetchCommentsWithIssueId(widget.id, pageKey));
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);

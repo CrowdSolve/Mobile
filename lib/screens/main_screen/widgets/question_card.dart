@@ -35,9 +35,6 @@ class QuestionCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    question.imageUrl != null
-                        ? Expanded(child: Image.network(question.imageUrl!))
-                        : SizedBox.shrink(),
                     Expanded(
                       child: Row(
                         children: [

@@ -20,20 +20,20 @@ class QuestionCardWithImage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: ConstrainedBox(
         constraints: BoxConstraints.tightFor(height: 400),
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => QuestionDetails(
-                  id: question.id,
-                  question: question,
+        child: Card(
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuestionDetails(
+                    id: question.id,
+                    question: question,
+                  ),
                 ),
-              ),
-            );
-          },
-          child: Card(
-            clipBehavior: Clip.antiAlias,
+              );
+            },
             child: Column(
               children: [
                 Expanded(

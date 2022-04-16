@@ -1,5 +1,6 @@
 import 'package:cs_mobile/screens/main_screen/models/question.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 
 class ExpandedQuestionCard extends StatelessWidget {
@@ -45,9 +46,7 @@ class ExpandedQuestionCard extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              Text(question.body,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                  overflow: TextOverflow.fade),
+              MarkdownBody(data: question.body, styleSheet: MarkdownStyleSheet(a: Theme.of(context).textTheme.bodyLarge)),
               SizedBox(
                 height: 20,
               ),

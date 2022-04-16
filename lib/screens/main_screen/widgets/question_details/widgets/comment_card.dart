@@ -29,7 +29,7 @@ class CommentCard extends StatelessWidget {
                 comment.posterName,
                 style: Theme.of(context).textTheme.titleSmall,
               ),
-              Text(' ● ${f.format(DateTime.now())}',
+              Text(' ● ${f.format(DateTime.parse(comment.createdAt))}',
                   style: Theme.of(context).textTheme.labelSmall),
             ],
           ),

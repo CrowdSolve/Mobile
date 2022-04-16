@@ -5,7 +5,7 @@ import 'package:animations/animations.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/question_card.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/question_card_with_image.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/question_details/question_details.dart';
-import 'package:cs_mobile/screens/main_screen/widgets/search_button.dart';
+import 'package:cs_mobile/screens/main_screen/widgets/search_button/widgets/search_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';

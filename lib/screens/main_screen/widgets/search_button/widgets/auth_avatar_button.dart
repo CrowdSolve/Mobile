@@ -1,4 +1,5 @@
 import 'package:cs_mobile/models/user.dart';
+import 'package:cs_mobile/screens/main_screen/widgets/search_button/widgets/profile_dialog.dart';
 import 'package:cs_mobile/services/user_service.dart';
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +15,30 @@ class AuthAvatarButton extends ConsumerWidget {
       future: fetchAuthenticatedUser(githubOAuthKeyModel),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return InkWell(            
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  opaque: false,
+                  barrierDismissible: true,
+                  pageBuilder: (_, anim, ___) => FadeTransition(
+                    opacity: anim,
+                    child: ProfileDialog(
+                      user: snapshot.data!,
+                    ),
+                  ),
+                ),
+              );
+            },
             child: Padding(
               padding: const EdgeInsets.all(1.0),
-              child: CircleAvatar(
-                maxRadius: 15,
-                backgroundImage: NetworkImage(snapshot.data!.avatarUrl,),
+              child: Hero(
+                tag: 'avatar',
+                child: CircleAvatar(
+                  maxRadius: 15,
+                  backgroundImage: NetworkImage(snapshot.data!.avatarUrl,),
+                ),
               ),
             ),
           );

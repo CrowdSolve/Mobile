@@ -82,3 +82,58 @@ Future<List<Comment>> fetchCommentsWithIssueId(int id, int pageKey) async {
     throw Exception('Failed to load album');
   }
 }
+
+Future<bool> likeQuestion(String authKey, int questionId) async {
+  print('attempt like');
+  final response = await http.post(
+    Uri.parse(
+        'https://api.github.com/repos/CrowdSolve/data/issues/$questionId/reactions'),
+    headers: <String, String>{
+      'Authorization': 'token ' + authKey,
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{'content': 'heart'}),
+  );
+
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    // If the server did return a 200/201 OK/CREATED response,
+    // then return true.
+    return true;
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then return false.
+    print(response.statusCode);
+    return false;
+  }
+}
+
+Future<bool> unlikeQuestion(String authKey, int questionId, int userId) async {
+  final reactionsResponse = await http.get(
+    Uri.parse(
+        'https://api.github.com/repos/CrowdSolve/data/issues/$questionId/reactions'),
+  );
+
+  if (reactionsResponse.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then return true.
+    for (final reaction in jsonDecode(reactionsResponse.body)) {
+      if (reaction['user']['id'] == userId || reaction['content'] == 'heart') {
+        final response = await http.delete(
+          Uri.parse(
+              'https://api.github.com/repos/CrowdSolve/data/issues/$questionId/reactions/${reaction['id']}'),
+          headers: <String, String>{
+            'Authorization': 'token ' + authKey,
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        );
+        if (response.statusCode == 204) {
+          // If the server did return a 204 response,
+          // then return false.
+          return false;
+        }
+        break;
+      }
+    }
+  }
+  return true;
+}

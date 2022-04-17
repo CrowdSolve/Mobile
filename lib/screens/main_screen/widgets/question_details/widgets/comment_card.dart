@@ -49,7 +49,6 @@ class CommentCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.favorite,
-                color: Colors.red,
               ),
               SizedBox(
                 width: 5,

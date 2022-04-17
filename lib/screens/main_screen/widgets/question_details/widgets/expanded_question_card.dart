@@ -1,9 +1,13 @@
 import 'package:cs_mobile/screens/main_screen/models/question.dart';
+import 'package:cs_mobile/screens/main_screen/services/questions_service.dart';
+import 'package:cs_mobile/top_level_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:like_button/like_button.dart';
 
-class ExpandedQuestionCard extends StatelessWidget {
+class ExpandedQuestionCard extends ConsumerWidget {
   final Question question;
   static DateFormat f = DateFormat('MM/dd hh:mm');
 
@@ -11,7 +15,8 @@ class ExpandedQuestionCard extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final githubOAuthKeyModel = ref.watch(githubOAuthKeyModelProvider);
     return Hero(
       tag: 'question'+question.id.toString(),
       child: Card(
@@ -52,16 +57,18 @@ class ExpandedQuestionCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    question.heart.toString(),
-                    style: Theme.of(context).textTheme.labelMedium,
+                  LikeButton(
+                    likeCount: question.heart,
+                    size: 24,
+                    onTap: (liked)  async {
+                      if(!liked){
+                        bool r = await likeQuestion(githubOAuthKeyModel, question.id);
+                        return r; 
+                      }else{
+                        bool r = await unlikeQuestion(githubOAuthKeyModel, question.id, 102481201);
+                        return r;
+                      }
+                    },
                   ),
                   SizedBox(
                     width: 30,

@@ -1,12 +1,44 @@
-import 'package:cs_mobile/models/user.dart';
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-class ProfileDialog extends StatelessWidget {
+import 'package:alert_dialogs/alert_dialogs.dart';
+import 'package:cs_mobile/models/user.dart';
+import 'package:cs_mobile/top_level_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class ProfileDialog extends ConsumerWidget  {
   final UserModel user;
   const ProfileDialog({Key? key, required this.user}) : super(key: key);
-
+  Future<void> _signOut(BuildContext context, FirebaseAuth firebaseAuth) async {
+    try {
+      Navigator.pop(context);
+      await firebaseAuth.signOut();
+    } catch (e) {
+      unawaited(showExceptionAlertDialog(
+        context: context,
+        title: "Logout failed",
+        exception: e,
+      ));
+    }
+  }
+  Future<void> _confirmSignOut(
+      BuildContext context, FirebaseAuth firebaseAuth) async {
+    final bool didRequestSignOut = await showAlertDialog(
+          context: context,
+          title: "Logout",
+          content: "Are you sure",
+          cancelActionText: "Cancel",
+          defaultActionText: "Logout",
+        ) ??
+        false;
+    if (didRequestSignOut == true) {
+      await _signOut(context, firebaseAuth);
+    }
+  }
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    final firebaseAuth = ref.watch(firebaseAuthProvider);
     return SafeArea(
       child: Dialog(
         elevation: 0,
@@ -18,7 +50,6 @@ class ProfileDialog extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 30),
                 child: Card(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Align(
                         alignment: Alignment.topLeft,
@@ -49,6 +80,16 @@ class ProfileDialog extends StatelessWidget {
                               height: 22,
                             ),
                           ],
+                        ),
+                      ),
+                      Spacer(),
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: IconButton(
+                          tooltip: "Sign out",
+                          onPressed: () =>
+                              _confirmSignOut(context, firebaseAuth),
+                          icon: Icon(Icons.logout_rounded),
                         ),
                       )
                     ],

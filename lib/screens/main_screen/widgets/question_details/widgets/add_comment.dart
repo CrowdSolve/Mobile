@@ -1,14 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:alert_dialogs/alert_dialogs.dart';
-import 'package:cs_mobile/screens/main_screen/models/comment.dart';
-import 'package:cs_mobile/screens/main_screen/models/question.dart';
+import 'package:cs_mobile/screens/main_screen/services/questions_service.dart';
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:http/http.dart' as http;
 
 
 class AddComment extends ConsumerStatefulWidget {
@@ -35,32 +32,11 @@ class _AddCommentState extends ConsumerState<AddComment> {
     final githubOAuthKeyModel = ref.watch(githubOAuthKeyModelProvider);
 
 
-    Future<void> _submit(String authKey) async {
-      final response = await http.post(
-        Uri.parse('https://api.github.com/repos/CrowdSolve/data/issues/${widget.questionId}/comments'),
-        headers: <String, String>{
-          'Authorization': 'token ' + authKey,
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'body': _bodyController.text
-        }),
-      );
-
-      if (response.statusCode == 201) {
-        // If the server did return a 201 CREATED response,
-        // then parse the JSON.
-        print(response.body);
-      } else {
-        // If the server did not return a 201 CREATED response,
-        // then throw an exception.
-        print(response.statusCode);
-      }
-    }
 
     Future<void> _trySubmit(BuildContext context) async {
       try {
-        await _submit(githubOAuthKeyModel);
+        await addComment(githubOAuthKeyModel,
+            <String, String>{'body': _bodyController.text}, widget.questionId);
       } catch (e) {
         unawaited(showExceptionAlertDialog(
           context: context,

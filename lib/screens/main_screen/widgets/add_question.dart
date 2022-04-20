@@ -5,6 +5,7 @@ import 'package:cs_mobile/screens/main_screen/services/questions_service.dart';
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddQuestion extends ConsumerStatefulWidget {
   const AddQuestion({Key? key}) : super(key: key);
@@ -25,6 +26,41 @@ class _AddQuestionState extends ConsumerState<AddQuestion> {
 
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  XFile? _imageFile;
+  String? _retrieveDataError;
+  dynamic _pickImageError;
+  final ImagePicker _picker = ImagePicker();
+
+
+  void _insertText(String inserted, TextEditingController _controller) {
+      final text = _controller.text;
+      final selection = _controller.selection;
+      final newText =
+          text.replaceRange(selection.start, selection.end, inserted);
+      _controller.value = TextEditingValue(
+        text: newText,
+        selection: TextSelection.collapsed(
+            offset: selection.baseOffset + inserted.length),
+      );
+    }
+
+  Future<void> _onImageButtonPressed() async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: ImageSource.gallery,
+      );
+      setState(() {
+        //_imageFile = pickedFile;
+        _insertText(pickedFile!.name, _bodyController);
+      });
+    } catch (e) {
+      setState(() {
+        _pickImageError = e;
+      });
+    }
+    
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +124,9 @@ class _AddQuestionState extends ConsumerState<AddQuestion> {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Spacer(),
+                IconButton(
+                    onPressed: () => _onImageButtonPressed(),
+                    icon: Icon(Icons.attach_email_rounded)),
                 TextButton(
                   onPressed:
                       _validated ? () => _confirmSubmit(context) : null,

@@ -131,7 +131,7 @@ class _AddQuestionState extends ConsumerState<AddQuestion> {
                 const Spacer(),
                 IconButton(
                     onPressed: !_loading?() => _onImageButtonPressed():null,
-                    icon: !_loading?Icon(Icons.attach_email_rounded):CircularProgressIndicator()),
+                    icon: !_loading?Icon(Icons.attach_file_rounded):CircularProgressIndicator()),
                 TextButton(
                   onPressed:
                       _validated && !_loading? () => _confirmSubmit(context) : null,

@@ -32,6 +32,7 @@ class _AddQuestionState extends ConsumerState<AddQuestion> {
   dynamic _pickImageError;
   final ImagePicker _picker = ImagePicker();
 
+  bool _loading = false;
 
   void _insertText(String inserted, TextEditingController _controller) {
       final text = _controller.text;
@@ -47,12 +48,16 @@ class _AddQuestionState extends ConsumerState<AddQuestion> {
 
   Future<void> _onImageButtonPressed() async {
     try {
+      setState(() {
+        _loading = true;
+      });
       final XFile? pickedFile = await _picker.pickImage(
         source: ImageSource.gallery,
       );
+      String pickedImagePath = await uploadImage(pickedFile!.path);
+      _insertText('![]($pickedImagePath)', _bodyController);
       setState(() {
-        //_imageFile = pickedFile;
-        _insertText(pickedFile!.name, _bodyController);
+        _loading = false;
       });
     } catch (e) {
       setState(() {
@@ -125,11 +130,11 @@ class _AddQuestionState extends ConsumerState<AddQuestion> {
                 ),
                 const Spacer(),
                 IconButton(
-                    onPressed: () => _onImageButtonPressed(),
-                    icon: Icon(Icons.attach_email_rounded)),
+                    onPressed: !_loading?() => _onImageButtonPressed():null,
+                    icon: !_loading?Icon(Icons.attach_email_rounded):CircularProgressIndicator()),
                 TextButton(
                   onPressed:
-                      _validated ? () => _confirmSubmit(context) : null,
+                      _validated && !_loading? () => _confirmSubmit(context) : null,
                   child: Text("Save"),
                 )
               ],

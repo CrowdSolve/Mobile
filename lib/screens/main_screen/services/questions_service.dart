@@ -180,3 +180,18 @@ Future<void> addComment(String authKey, Map data, int questionId) async {
     print(response.statusCode);
   }
 }
+
+Future<String> uploadImage(filepath) async {
+  var url = Uri.parse('https://api.imgur.com/3/image');
+  var request = http.MultipartRequest('POST', url,);
+  request.files.add(await http.MultipartFile.fromPath('image', filepath));
+  request.headers['Authorization'] = 'Client-ID 50eef72dc333c55';
+  http.Response response = await http.Response.fromStream(await request.send());
+
+  if (response.statusCode == 201) {
+  } else {
+    print(response.statusCode);
+  }
+  String uploadedImageUrl = jsonDecode(response.body)['data']['link'];
+  return uploadedImageUrl;
+}

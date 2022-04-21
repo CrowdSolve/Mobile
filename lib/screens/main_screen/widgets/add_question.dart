@@ -61,7 +61,8 @@ class _AddQuestionState extends ConsumerState<AddQuestion> {
       });
     } catch (e) {
       setState(() {
-        _pickImageError = e;
+        _loading = false;
+        showExceptionAlertDialog(context: context, title: 'Error occured', exception: e);
       });
     }
     

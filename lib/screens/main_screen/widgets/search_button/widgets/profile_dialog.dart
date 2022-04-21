@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:alert_dialogs/alert_dialogs.dart';
 import 'package:cs_mobile/models/user.dart';
+import 'package:cs_mobile/screens/main_screen/my_questions/my_questions.dart';
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -80,6 +81,14 @@ class ProfileDialog extends ConsumerWidget  {
                               height: 22,
                             ),
                           ],
+                        ),
+                      ),
+                      TextButton(
+                        child: Text('My Questions'),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyQuestions(user.login)),
                         ),
                       ),
                       Spacer(),

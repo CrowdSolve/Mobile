@@ -47,7 +47,10 @@ class AuthAvatarButton extends ConsumerWidget {
         }
 
         // By default, show a loading spinner.
-        return const CircularProgressIndicator();
+        return const AspectRatio(
+          aspectRatio: 1,
+          child: const CircularProgressIndicator(),
+        );
       },
     );
   }

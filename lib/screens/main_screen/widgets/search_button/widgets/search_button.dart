@@ -13,12 +13,12 @@ class SearchButton extends StatelessWidget {
         onPressed: () {
           showSearch(context: context, delegate: Search());
         },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              height: 30,
-              child: Align(
+        child: SizedBox(
+          height: 30,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Align(
                 alignment: AlignmentDirectional.centerStart,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 5),
@@ -28,9 +28,9 @@ class SearchButton extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-            AuthAvatarButton()
-          ],
+              AuthAvatarButton()
+            ],
+          ),
         ),
         style: TextButton.styleFrom(
           backgroundColor: Colors.white.withOpacity(0.05),

@@ -19,7 +19,8 @@ class ExpandedQuestionCard extends ConsumerWidget {
     final githubOAuthKeyModel = ref.watch(githubOAuthKeyModelProvider);
     return Hero(
       tag: 'question'+question.id.toString(),
-      child: Card(
+      child: Container(
+        color: Theme.of(context).cardColor,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15.0),
           child: Column(

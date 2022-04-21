@@ -78,10 +78,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               () => _pagingController.refresh(),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 12,),
               child: ListView(
                 physics: BouncingScrollPhysics(),
                 children: [
+                  SizedBox(height: 10,),
                   SearchButton(),
                   SizedBox(height: 50,),
                   Text("Recommended for you", style: Theme.of(context).textTheme.titleLarge,),

@@ -22,7 +22,7 @@ class ExpandedQuestionCard extends ConsumerWidget {
       child: Container(
         color: Theme.of(context).cardColor,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15.0),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

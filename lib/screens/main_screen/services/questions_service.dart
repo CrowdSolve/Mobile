@@ -159,6 +159,25 @@ Future<void> addQuestion(String authKey, Map data) async {
   }
 }
 
+Future<void> lockQuestion(String authKey, int questionId) async {
+  final response = await http.post(
+    Uri.parse('https://api.github.com/repos/CrowdSolve/data/issues/$questionId/lock'),
+    headers: <String, String>{
+      'Authorization': 'token ' + authKey,
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
+
+  if (response.statusCode == 201) {
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    print(response.body);
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    print(response.statusCode);
+  }
+}
 Future<void> addComment(String authKey, Map data, int questionId) async {
   final response = await http.post(
     Uri.parse(

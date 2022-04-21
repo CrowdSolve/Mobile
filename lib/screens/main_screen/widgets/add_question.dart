@@ -6,6 +6,8 @@ import 'package:cs_mobile/top_level_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:text_selection_controls/text_selection_controls.dart';
+
 
 class AddQuestion extends ConsumerStatefulWidget {
   const AddQuestion({Key? key}) : super(key: key);
@@ -167,6 +169,44 @@ class _AddQuestionState extends ConsumerState<AddQuestion> {
                     ),
                     Expanded(
                       child: TextFormField(
+                        selectionControls: FlutterSelectionControls(verticalPadding: 14, horizontalPadding: 16,toolBarItems: <ToolBarItem>[
+                          ToolBarItem(
+                              item: Text(
+                                'Select All',
+                              ),
+                              itemControl: ToolBarItemControl.selectAll),
+                          ToolBarItem(
+                              item: Text(
+                                'Copy',
+                              ),
+                              itemControl: ToolBarItemControl.copy),
+                          ToolBarItem(
+                              item: Text(
+                                'Paste',
+                              ),
+                              itemControl: ToolBarItemControl.paste),
+                          ToolBarItem(
+                              item: Text(
+                                'Bold',
+                              ),
+                              onItemPressed: (content, start, end) =>
+                                    wrapText(content, start, end, '**'),
+                              ),
+                              ToolBarItem(
+                                  item: Text(
+                                    'Italic',
+                                  ),
+                              onItemPressed: (content, start, end) =>
+                                    wrapText(content, start, end, '*'),
+                              ),
+                          ToolBarItem(
+                              item: Text(
+                                'Strikethrough',
+                              ),
+                              onItemPressed: (content, start, end) =>
+                                    wrapText(content, start, end, '~~'),
+                              ),
+                        ]),
                         controller: _bodyController,
                         focusNode: _bodyFocusNode,
                         maxLines: 99,
@@ -181,5 +221,27 @@ class _AddQuestionState extends ConsumerState<AddQuestion> {
         ],
       ), 
     );
+  }
+
+  wrapText(selection, start, end, String wrapee) {
+    int wrapeeLength = wrapee.length;
+    var _rec = _bodyController;
+    final before = _rec.text.substring(0, start);
+    final content = _rec.text.substring(start, end);
+    final after = _rec.text.substring(_rec.selection.end);
+
+    if (before.endsWith(wrapee) && after.startsWith(wrapee)) {
+      _rec.text = before.substring(0, before.length - wrapeeLength) +
+          content +
+          after.substring(wrapeeLength);
+      _rec.selection = TextSelection(
+          baseOffset: start - wrapeeLength, extentOffset: end - wrapeeLength);
+    } else {
+      _rec.value = TextEditingValue(
+        text: before + wrapee + content + wrapee + after,
+        selection: TextSelection(
+            baseOffset: start + wrapeeLength, extentOffset: end + wrapeeLength),
+      );
+    }
   }
 }

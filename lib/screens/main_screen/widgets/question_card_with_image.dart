@@ -98,6 +98,7 @@ class QuestionCardWithImage extends StatelessWidget {
                                       Expanded(
                                         flex: 2,
                                         child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
                                             Icon(
                                               Icons.favorite,
@@ -112,7 +113,7 @@ class QuestionCardWithImage extends StatelessWidget {
                                                   .labelMedium,
                                             ),
                                             SizedBox(
-                                              width: 30,
+                                              width: 15,
                                             ),
                                             Icon(
                                               Icons.comment,

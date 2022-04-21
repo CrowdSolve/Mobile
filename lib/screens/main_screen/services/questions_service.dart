@@ -28,7 +28,7 @@ Future<List<Question>> fetchWithQuery(int pageKey,
     {required String searchTerm}) async {
       print(searchTerm);
   final response = await http.get(Uri.parse(
-      'https://api.github.com/search/issues?q=repo:CrowdSolve/data+$searchTerm'));
+      'https://api.github.com/search/issues?q=repo:CrowdSolve/data+$searchTerm&page=$pageKey'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,

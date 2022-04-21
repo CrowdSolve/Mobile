@@ -28,6 +28,13 @@ class ExpandedQuestionCard extends ConsumerWidget {
             children: [
               Row(
                 children: [
+                  SizedBox.fromSize(
+                    child: IconButton(
+                      padding: EdgeInsets.only(right: 5),
+                      constraints: BoxConstraints(),
+                        onPressed: (() => Navigator.pop(context)),
+                        icon: Icon(Icons.arrow_back_ios_rounded)),
+                  ),
                   CircleAvatar(
                     backgroundImage: NetworkImage(question.posterAvatarUrl),
                     radius: 10,

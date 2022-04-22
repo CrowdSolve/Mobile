@@ -191,45 +191,31 @@ class _AddQuestionState extends ConsumerState<AddQuestion> {
                       ),
                       Expanded(
                         child: TextFormField(
-                          selectionControls: FlutterSelectionControls(verticalPadding: 14, horizontalPadding: 16,toolBarItems: <ToolBarItem>[
+                          selectionControls: FlutterSelectionControls(verticalPadding: 14, horizontalPadding: 12,toolBarItems: <ToolBarItem>[
                             ToolBarItem(
-                                item: Text(
-                                  'Cut',
-                                ),
+                                item: Icon(Icons.cut_rounded),
                                 itemControl: ToolBarItemControl.cut),
                             ToolBarItem(
-                                item: Text(
-                                  'Copy',
-                                ),
+                                item: Icon(Icons.copy_rounded),
                                 itemControl: ToolBarItemControl.copy),
                             ToolBarItem(
-                                item: Text(
-                                  'Paste',
-                                ),
+                                item: Icon(Icons.paste_rounded),
                                 itemControl: ToolBarItemControl.paste),
                             ToolBarItem(
-                                item: Text(
-                                  'Select All',
-                                ),
+                                item: Icon(Icons.select_all_rounded),
                                 itemControl: ToolBarItemControl.selectAll),
                             ToolBarItem(
-                                item: Text(
-                                  'Bold',
-                                ),
+                                item: Icon(Icons.format_bold_rounded),
                                 onItemPressed: (content, start, end) =>
                                       wrapText(content, start, end, '**'),
                                 ),
                                 ToolBarItem(
-                                    item: Text(
-                                      'Italic',
-                                    ),
+                                    item: Icon(Icons.format_italic_rounded),
                                 onItemPressed: (content, start, end) =>
                                       wrapText(content, start, end, '*'),
                                 ),
                             ToolBarItem(
-                                item: Text(
-                                  'Strikethrough',
-                                ),
+                                item: Icon(Icons.format_strikethrough_rounded),
                                 onItemPressed: (content, start, end) =>
                                       wrapText(content, start, end, '~~'),
                                 ),

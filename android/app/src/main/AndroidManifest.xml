@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.cs_mobile">
+    package="dev.lasheen.crowdsolve">
    <application
-        android:label="CrowdSolve"
+        android:label="Crowd Solve"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

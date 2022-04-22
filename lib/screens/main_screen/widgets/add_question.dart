@@ -157,9 +157,6 @@ class _AddQuestionState extends ConsumerState<AddQuestion> {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const Spacer(),
-                  IconButton(
-                      onPressed: !_loading?() => _onImageButtonPressed():null,
-                      icon: !_loading?Icon(Icons.attach_file_rounded):CircularProgressIndicator()),
                   TextButton(
                     onPressed:
                         _validated && !_loading? () => _confirmSubmit(context) : null,
@@ -236,7 +233,18 @@ class _AddQuestionState extends ConsumerState<AddQuestion> {
                                 onItemPressed: (content, start, end) =>
                                       wrapText(content, start, end, '~~'),
                                 ),
-                          ]),
+                            ToolBarItem(
+                                  item: !_loading
+                                      ? Icon(
+                                          Icons.add_photo_alternate_rounded
+                                        )
+                                      : CircularProgressIndicator(),
+                                  onItemPressed: (content, start, end) =>
+                                      !_loading
+                                          ? _onImageButtonPressed()
+                                          : null,
+                                ),
+                              ]),
                           controller: _bodyController,
                           focusNode: _bodyFocusNode,
                           maxLines: 99,

@@ -107,14 +107,13 @@ class _AddQuestionState extends ConsumerState<AddQuestion> {
           'title': _titleController.text,
           'body': _bodyController.text
         });
+        Navigator.pop(context);
       } catch (e) {
         unawaited(showExceptionAlertDialog(
           context: context,
           title: "Failed",
           exception: e,
         ));
-      } finally {
-        Navigator.pop(context);
       }
     }
 

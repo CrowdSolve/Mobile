@@ -6,9 +6,9 @@ import '../models/comment.dart';
 import '../models/question.dart';
 
 
-Future<List<Question>> fetch(int pageKey) async {
+Future<List<Question>> fetch(int pageKey, {String searchTerm = 'labels=visible'}) async {
   final response = await http.get(Uri.parse(
-      'https://api.github.com/repos/CrowdSolve/data/issues?page=$pageKey'));
+      'https://api.github.com/repos/CrowdSolve/data/issues?$searchTerm&page=$pageKey'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,

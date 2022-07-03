@@ -59,7 +59,7 @@ class Search extends SearchDelegate {
     try {
       final newItems = await fetchWithQuery(
         pageKey,
-        searchTerm: query,
+        searchTerm: query + '+label:visible',
       );
 
       final isLastPage = newItems.length < _pageSize;

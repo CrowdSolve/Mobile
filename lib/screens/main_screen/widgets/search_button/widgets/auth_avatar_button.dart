@@ -43,7 +43,7 @@ class AuthAvatarButton extends ConsumerWidget {
             ),
           );
         } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
+          return Icon(Icons.error_outline_rounded, color: Colors.red,);
         }
 
         // By default, show a loading spinner.

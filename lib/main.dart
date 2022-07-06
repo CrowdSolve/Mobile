@@ -37,11 +37,8 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.dark,
       home: AuthWidget(
-        nonSignedInBuilder: (_) => Consumer(
-          builder: (context, ref, _) {
-            return GithubAuthScreen.withFirebaseAuth(firebaseAuth);
-          },
-        ),
+        nonSignedInBuilder: (_) =>
+            GithubAuthScreen.withFirebaseAuth(firebaseAuth),
         signedInBuilder: (_) => MainScreen(),
       ),
       onGenerateRoute: (settings) =>

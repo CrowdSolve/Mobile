@@ -44,7 +44,9 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return widget.model.isLoading?
+    Center(child: CircularProgressIndicator(),):
+    Material(
       child: Center(
         child: SizedBox(
           width: 200,
@@ -68,11 +70,8 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
   }
 
   Future<void> _submit() async {
-    final githubOAuthKeyModel = ref.watch(githubOAuthKeyModelProvider.notifier);
-
     try {
-      final String githubOAuthKey = await model.authenticate(context);
-      githubOAuthKeyModel.setGithubOAuthKey(githubOAuthKey);
+      await model.authenticate(context, ref);
       if (widget.onSignedIn != null) {
         widget.onSignedIn?.call();
       }

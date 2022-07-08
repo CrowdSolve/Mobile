@@ -44,80 +44,91 @@ class ProfileDialog extends ConsumerWidget  {
       child: Dialog(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        child: Stack(
-          children: <Widget>[
-            Positioned.fill(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 30),
-                child: Card(
-                  child: Column(
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: IconButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            icon: Icon(Icons.close_rounded)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: Column(
-                          children: [
-                            Text(
-                              user.login,
-                              style: TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.w600),
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Text(
-                              user.id.toString(),
-                              style: TextStyle(fontSize: 14),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(
-                              height: 22,
-                            ),
-                          ],
+        insetPadding: EdgeInsets.only(top: 60, right: 10, left: 10),
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.zero,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(Icons.close_rounded)),
+                ),
+                SizedBox(height: 20,),
+                SizedBox(
+                  height: 35,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Hero(
+                        tag: 'avatar',
+                        child: CircleAvatar(
+                          backgroundColor: Colors.transparent,
+                          backgroundImage: NetworkImage(user.avatarUrl),
                         ),
                       ),
-                      TextButton(
-                        child: Text('My Questions'),
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyQuestions(user.login)),
-                        ),
+                      SizedBox(
+                        width: 22,
                       ),
-                      Spacer(),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: IconButton(
-                          tooltip: "Sign out",
-                          onPressed: () =>
-                              _confirmSignOut(context, firebaseAuth),
-                          icon: Icon(Icons.logout_rounded),
-                        ),
-                      )
+                      user.name==""?
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Youssef Lasheen',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.normal,),
+                          ),
+                          Text(
+                            user.login,
+                            style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.grey),
+                          ),
+                        ],
+                      ):Text(
+                            user.login,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.normal),
+                          ),
+                      
+                      
                     ],
                   ),
                 ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Hero(
-                tag: 'avatar',
-                child: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: NetworkImage(user.avatarUrl),
-                  maxRadius: 50,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Divider(),
                 ),
-              ),
+                TextButton(
+                  child: Text('My Questions'),
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyQuestions(user.login)),
+                  ),
+                ),
+                Spacer(),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: IconButton(
+                    tooltip: "Sign out",
+                    onPressed: () =>
+                        _confirmSignOut(context, firebaseAuth),
+                    icon: Icon(Icons.logout_rounded),
+                  ),
+                )
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

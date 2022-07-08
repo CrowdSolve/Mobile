@@ -18,7 +18,7 @@ class AuthModel with ChangeNotifier {
       scope: 'public_repo, user',
       clientId: '4b4d462397a576ac86fd',
       clientSecret: '7bbde3c03020db1b1f31f6080e6823cc415086cd',
-      redirectUrl: 'https://crowd-solve.firebaseapp.com/__/auth/handler');
+      redirectUrl: 'crowdsolve.lasheen.dev://oauth2redirect');
 
     
     try {

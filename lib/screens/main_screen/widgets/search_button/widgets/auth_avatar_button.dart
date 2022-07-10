@@ -17,19 +17,18 @@ class AuthAvatarButton extends ConsumerWidget {
         if (snapshot.hasData) {
           return InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  opaque: false,
-                  barrierDismissible: true,
-                  pageBuilder: (_, anim, ___) => FadeTransition(
-                    opacity: anim,
-                    child: ProfileDialog(
-                      user: snapshot.data!,
-                    ),
-                  ),
-                ),
-              );
+              showGeneralDialog(
+                  context: context,
+                  pageBuilder: (BuildContext buildContext,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: ProfileDialog(
+                        user: snapshot.data!,
+                      ),
+                    );
+                  });
             },
             child: Padding(
               padding: const EdgeInsets.all(1.0),

@@ -19,6 +19,8 @@ class AuthAvatarButton extends ConsumerWidget {
             onTap: () {
               showGeneralDialog(
                   context: context,
+                  barrierDismissible: true,
+                  barrierLabel: 'Profile',
                   pageBuilder: (BuildContext buildContext,
                       Animation<double> animation,
                       Animation<double> secondaryAnimation) {

@@ -107,9 +107,10 @@ class ProfileDialog extends ConsumerWidget  {
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Divider(),
               ),
-              TextButton(
-                child: Text('My Questions'),
-                onPressed: () => Navigator.push(
+              ListTile(
+                leading: Icon(Icons.my_library_books),
+                title: Text('My questions'),
+                onTap: ()=> Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => MyQuestions(user.login)),

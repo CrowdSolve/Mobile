@@ -45,6 +45,7 @@ class _MyQuestionsState extends ConsumerState<MyQuestions> {
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
+        appBar: AppBar(backgroundColor: Colors.transparent,),
         body: SafeArea(
           child: RefreshIndicator(
             onRefresh: () => Future.sync(

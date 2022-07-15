@@ -15,7 +15,7 @@ class AuthModel with ChangeNotifier {
   });
   Future<void> authenticate(context, ref) async {
     final GitHubSignIn gitHubSignIn = GitHubSignIn(
-      scope: 'public_repo, user',
+      scope: 'public_repo, user, notifications',
       clientId: '4b4d462397a576ac86fd',
       clientSecret: '7bbde3c03020db1b1f31f6080e6823cc415086cd',
       redirectUrl: 'crowdsolve.lasheen.dev://oauth2redirect');

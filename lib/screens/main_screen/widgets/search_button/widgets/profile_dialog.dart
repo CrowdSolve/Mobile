@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:alert_dialogs/alert_dialogs.dart';
 import 'package:cs_mobile/models/user.dart';
+import 'package:cs_mobile/screens/main_screen/my_notifications/my_notifications.dart';
 import 'package:cs_mobile/screens/main_screen/my_questions/my_questions.dart';
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,6 +41,7 @@ class ProfileDialog extends ConsumerWidget  {
   @override
   Widget build(BuildContext context, ref) {
     final firebaseAuth = ref.watch(firebaseAuthProvider);
+    final githubOAuthKeyModel = ref.watch(githubOAuthKeyModelProvider);
     return SafeArea(
       child: Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
@@ -114,6 +116,15 @@ class ProfileDialog extends ConsumerWidget  {
                   context,
                   MaterialPageRoute(
                       builder: (context) => MyQuestions(user.login)),
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.notifications),
+                title: Text('My Notifications'),
+                onTap: ()=> Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyNotifications(githubOAuthKeyModel)),
                 ),
               ),
               Spacer(),

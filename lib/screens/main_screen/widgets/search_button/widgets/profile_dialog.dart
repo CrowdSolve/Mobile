@@ -128,14 +128,13 @@ class ProfileDialog extends ConsumerWidget  {
                 ),
               ),
               Spacer(),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: IconButton(
-                  tooltip: "Sign out",
-                  onPressed: () =>
-                      _confirmSignOut(context, firebaseAuth),
-                  icon: Icon(Icons.logout_rounded),
-                ),
+                    Center(
+                      child: TextButton(
+                        style: TextButton.styleFrom(),
+                        child: Text(
+                          "Logout",
+                          style: TextStyle(color: Colors.red),
+                        ),
               )
             ],
           ),

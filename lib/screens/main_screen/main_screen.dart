@@ -80,7 +80,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12,),
               child: ListView(
-                physics: BouncingScrollPhysics(),
                 children: [
                   SizedBox(height: 10,),
                   SearchButton(),

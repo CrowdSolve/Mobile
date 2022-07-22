@@ -75,7 +75,6 @@ class _QuestionDetailsState extends State<QuestionDetails> {
           child: const Icon(Icons.add_comment_rounded),
         ),
         body: ListView(
-          physics: BouncingScrollPhysics(),
           children: [
             ExpandedQuestionCard(question: widget.question),
             PagedListView<int, Comment>(

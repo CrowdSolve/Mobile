@@ -38,6 +38,7 @@ dependencies:
     git:
       url: https://github.com/YoussefLasheen/flutter_text_selection_controls
       path: text_selection_controls/
+  dynamic_color: ^1.5.3
 
 dev_dependencies:
   flutter_test:

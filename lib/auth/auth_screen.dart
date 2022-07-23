@@ -50,16 +50,13 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
       child: Center(
         child: SizedBox(
           width: 200,
-          child: TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.black,
-            ),
+          child: ElevatedButton(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(FontAwesomeIcons.github, color: Colors.white,),
+                Icon(FontAwesomeIcons.github,),
                 SizedBox(width: 20,),
-                Text("Sign in with Github", style: TextStyle(color: Colors.white),)
+                Text("Sign in with Github",)
               ],
             ),
             onPressed: model.isLoading ? null : _submit,

@@ -44,10 +44,26 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return widget.model.isLoading?
-    Center(child: CircularProgressIndicator(),):
-    Material(
-      child: Center(
+    return widget.model.isLoading
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                stops: [
+                  0.3,0.9,1
+                ],
+                colors: [
+                  Theme.of(context).colorScheme.onPrimary,
+                  Theme.of(context).colorScheme.onSecondary,
+                  Theme.of(context).colorScheme.onTertiary,
+                ],
+              ),
+            ),
+            child: Center(
         child: SizedBox(
           width: 200,
           child: ElevatedButton(

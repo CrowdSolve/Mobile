@@ -44,13 +44,13 @@ class _AddQuestionState extends ConsumerState<AddQuestion> {
                   content: Text(
                       'Do you really want to discard your current changes?'),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       child: Text('Cancel'),
                       onPressed: () {
                         Navigator.of(context).pop(false);
                       },
                     ),
-                    FlatButton(
+                    TextButton(
                       child: Text('Discard'),
                       onPressed: () {
                         Navigator.of(context).pop(true);

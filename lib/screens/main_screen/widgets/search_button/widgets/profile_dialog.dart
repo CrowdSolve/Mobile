@@ -83,28 +83,42 @@ class ProfileDialog extends ConsumerWidget  {
                           SizedBox(
                             width: 22,
                           ),
-                          user.name==""?
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Youssef Lasheen',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.normal,),
-                              ),
-                              Text(
-                                user.login,
-                                style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.grey),
-                              ),
-                            ],
-                          ):Text(
-                                user.login,
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.normal),
-                              ),
+                          user.name!=""?
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    user.name,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize: 15, fontWeight: FontWeight.normal,),
+                                  ),
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    user.login,
+                                      overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ):Flexible(
+                            child: Text(
+                                  user.login,
+                                  overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  style: TextStyle(
+                                      fontSize: 15, fontWeight: FontWeight.normal),
+                                ),
+                          ),
                           
                           
                         ],

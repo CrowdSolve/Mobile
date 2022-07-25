@@ -33,7 +33,7 @@ class SearchButton extends StatelessWidget {
           ),
         ),
         style: TextButton.styleFrom(
-          backgroundColor: Colors.white.withOpacity(0.05),
+          backgroundColor: Theme.of(context).colorScheme.onSecondary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
             side: BorderSide.none,

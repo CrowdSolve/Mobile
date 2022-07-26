@@ -54,53 +54,51 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget build(BuildContext context) {
     final firebaseAuth = ref.watch(firebaseAuthProvider);
 
-    return Material(
-      child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          heroTag: 'add',
-          onPressed: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder<void>(
-                opaque: false,
-                pageBuilder: (_, __, ___) => const Hero(
-                  tag: 'add',
-                  child: SafeArea(child: AddQuestion()),
-                ),
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'add',
+        onPressed: () {
+          Navigator.push(
+            context,
+            PageRouteBuilder<void>(
+              opaque: false,
+              pageBuilder: (_, __, ___) => const Hero(
+                tag: 'add',
+                child: SafeArea(child: AddQuestion()),
               ),
-            );
-          },
-          child: const Icon(Icons.add_comment_rounded),
-        ),
-        body: SafeArea(
-          child: RefreshIndicator(
-            onRefresh: () => Future.sync(
-              () => _pagingController.refresh(),
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12,),
-              child: ListView(
-                children: [
-                  SizedBox(height: 10,),
-                  SearchButton(),
-                  SizedBox(height: 50,),
-                  Text("Recommended for you", style: Theme.of(context).textTheme.titleLarge,),
-                  PagedListView<int, Question>(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    pagingController: _pagingController,
-                    builderDelegate: PagedChildBuilderDelegate<Question>(
-                      itemBuilder: (context, item, index) {
-                        if (item.imageUrl == '') {
-                          return QuestionCard(question: item);
-                        } else {
-                          return QuestionCardWithImage(question: item);
-                        }
-                      },
-                    ),
+          );
+        },
+        child: const Icon(Icons.add_comment_rounded),
+      ),
+      body: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: () => Future.sync(
+            () => _pagingController.refresh(),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12,),
+            child: ListView(
+              children: [
+                SizedBox(height: 10,),
+                SearchButton(),
+                SizedBox(height: 50,),
+                Text("Recommended for you", style: Theme.of(context).textTheme.titleLarge,),
+                PagedListView<int, Question>(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  pagingController: _pagingController,
+                  builderDelegate: PagedChildBuilderDelegate<Question>(
+                    itemBuilder: (context, item, index) {
+                      if (item.imageUrl == '') {
+                        return QuestionCard(question: item);
+                      } else {
+                        return QuestionCardWithImage(question: item);
+                      }
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

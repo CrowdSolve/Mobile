@@ -55,6 +55,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final firebaseAuth = ref.watch(firebaseAuthProvider);
 
     return Scaffold(
+      backgroundColor: Colors.white12,
       floatingActionButton: FloatingActionButton(
         heroTag: 'add',
         onPressed: () {

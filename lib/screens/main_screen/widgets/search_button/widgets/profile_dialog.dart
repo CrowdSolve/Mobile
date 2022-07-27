@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:alert_dialogs/alert_dialogs.dart';
 import 'package:cs_mobile/models/user.dart';
+import 'package:cs_mobile/screens/main_screen/my_answers/my_answers.dart';
 import 'package:cs_mobile/screens/main_screen/my_notifications/my_notifications.dart';
 import 'package:cs_mobile/screens/main_screen/my_questions/my_questions.dart';
 import 'package:cs_mobile/top_level_provider.dart';
@@ -144,6 +145,15 @@ class ProfileDialog extends ConsumerWidget  {
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyNotifications(githubOAuthKeyModel)),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.question_answer_rounded),
+                      title: Text('My Answers'),
+                      onTap: ()=> Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyAnswers(githubOAuthKeyModel)),
                       ),
                     ),
                     Spacer(),

@@ -58,6 +58,7 @@ class _QuestionDetailsState extends State<QuestionDetails> {
         () => _pagingController.refresh(),
       ),
       child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         floatingActionButton: FloatingActionButton(
           heroTag: 'addComment',
           onPressed: () {

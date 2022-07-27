@@ -20,7 +20,7 @@ class ExpandedQuestionCard extends ConsumerWidget {
     return Hero(
       tag: 'question'+question.id.toString(),
       child: Material(
-        color: Theme.of(context).cardColor,
+      color: Colors.transparent,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15.0),
           child: Column(

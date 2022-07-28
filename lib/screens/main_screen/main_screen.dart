@@ -29,11 +29,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       PagingController(firstPageKey: 0);
   @override
   void initState() {
-     _pagingController.addPageRequestListener((pageKey) {
+    _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
     super.initState();
   }
+
   Future<void> _fetchPage(int pageKey) async {
     try {
       final newItems = await fetch(pageKey);
@@ -48,7 +49,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       _pagingController.error = error;
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -78,34 +78,54 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             () => _pagingController.refresh(),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12,),
-            child: ListView(
-              children: [
-                SizedBox(height: 10,),
-                SearchButton(),
-                SizedBox(height: 50,),
-                Text("Recommended for you", style: Theme.of(context).textTheme.titleLarge,),
-                PagedListView<int, Question>(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  pagingController: _pagingController,
-                  builderDelegate: PagedChildBuilderDelegate<Question>(
-                    itemBuilder: (context, item, index) {
-                      if (item.imageUrl == '') {
-                        return QuestionCard(question: item);
-                      } else {
-                        return QuestionCardWithImage(question: item);
-                      }
-                    },
-                  ),
-                ),
-              ],
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
             ),
+            child: CustomScrollView(slivers: <Widget>[
+              const SliverAppBar(
+                floating: true,
+                backgroundColor: Colors.transparent,
+                surfaceTintColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                
+                title: SearchButton(),
+                titleSpacing: 0,
+
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Text(
+                      "Recommended for you",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    PagedListView<int, Question>(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      pagingController: _pagingController,
+                      builderDelegate: PagedChildBuilderDelegate<Question>(
+                        itemBuilder: (context, item, index) {
+                          if (item.imageUrl == '') {
+                            return QuestionCard(question: item);
+                          } else {
+                            return QuestionCardWithImage(question: item);
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ]),
           ),
         ),
       ),
     );
   }
+
   @override
   void dispose() {
     _pagingController.dispose();

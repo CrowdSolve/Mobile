@@ -55,7 +55,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final firebaseAuth = ref.watch(firebaseAuthProvider);
 
     return Scaffold(
-      backgroundColor: Colors.white12,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: FloatingActionButton(
         heroTag: 'add',
         onPressed: () {
@@ -77,49 +77,44 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           onRefresh: () => Future.sync(
             () => _pagingController.refresh(),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
+          child: DefaultTabController(
+            length: 2,
+            child: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              title: SearchButton(),
+              pinned: true,
+              floating: true,
+              surfaceTintColor: Colors.transparent,
+              backgroundColor: Theme.of(context).colorScheme.background,
+              forceElevated: boxIsScrolled,
+              bottom: TabBar(
+                isScrollable: true,
+                tabs: <Widget>[
+                  Tab(
+                    text: "Home",
+                  ),
+                  Tab(
+                    text: "Example page",
+                  )
+                ],
+              ),
+            )
+          ];
+        },
+        body: Padding(
+          padding: const EdgeInsets.symmetric(
               horizontal: 12,
             ),
-            child: CustomScrollView(slivers: <Widget>[
-              const SliverAppBar(
-                floating: true,
-                backgroundColor: Colors.transparent,
-                surfaceTintColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-                
-                title: SearchButton(),
-                titleSpacing: 0,
-
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    SizedBox(
-                      height: 50,
-                    ),
-                    Text(
-                      "Recommended for you",
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    PagedListView<int, Question>(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      pagingController: _pagingController,
-                      builderDelegate: PagedChildBuilderDelegate<Question>(
-                        itemBuilder: (context, item, index) {
-                          if (item.imageUrl == '') {
-                            return QuestionCard(question: item);
-                          } else {
-                            return QuestionCardWithImage(question: item);
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ]),
+          child: TabBarView(
+            children: <Widget>[
+              ForYouFilter(pagingController: _pagingController,),
+              ForYouFilter(pagingController: _pagingController,)
+            ],
+          ),
+        ),
+      ),
           ),
         ),
       ),
@@ -130,5 +125,44 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   void dispose() {
     _pagingController.dispose();
     super.dispose();
+  }
+}
+
+class ForYouFilter extends StatelessWidget {
+  const ForYouFilter({
+    Key? key,
+    required PagingController<int, Question> pagingController,
+  }) : _pagingController = pagingController, super(key: key);
+
+  final PagingController<int, Question> _pagingController;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: 
+        [
+          SizedBox(
+            height: 50,
+          ),
+          Text(
+            "Recommended for you",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          PagedListView<int, Question>(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            pagingController: _pagingController,
+            builderDelegate: PagedChildBuilderDelegate<Question>(
+              itemBuilder: (context, item, index) {
+                if (item.imageUrl == '') {
+                  return QuestionCard(question: item);
+                } else {
+                  return QuestionCardWithImage(question: item);
+                }
+              },
+            ),
+          ),
+        ],
+    );
   }
 }

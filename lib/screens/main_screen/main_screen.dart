@@ -55,6 +55,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final firebaseAuth = ref.watch(firebaseAuthProvider);
 
     return Scaffold(
+      appBar: AppBar(toolbarHeight: 0,surfaceTintColor: Colors.transparent,),
       backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: FloatingActionButton(
         heroTag: 'add',
@@ -91,12 +92,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               forceElevated: boxIsScrolled,
               bottom: TabBar(
                 isScrollable: true,
+                indicatorSize: TabBarIndicatorSize.label,
                 tabs: <Widget>[
                   Tab(
                     text: "Home",
                   ),
                   Tab(
-                    text: "Example page",
+                    text: "Categories",
                   )
                 ],
               ),

@@ -16,6 +16,7 @@ class AuthAvatarButton extends ConsumerWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return InkWell(
+            customBorder: const CircleBorder(),
             onTap: () {
               showGeneralDialog(
                   context: context,

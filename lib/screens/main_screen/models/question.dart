@@ -22,7 +22,7 @@ class Question {
   });
 
   factory Question.fromJson(Map<String, dynamic> json) {
-    RegExp exp = RegExp(r'!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)');
+    RegExp exp = RegExp(r'\!\[\]\((.*)\)');
     RegExpMatch? firstMatch = exp.firstMatch(json["body"]??"");
     String url = '';
     if (firstMatch!=null) url=firstMatch.group(1)!;

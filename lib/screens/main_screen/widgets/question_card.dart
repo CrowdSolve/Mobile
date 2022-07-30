@@ -12,7 +12,7 @@ class QuestionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     RegExp exp = RegExp(
-      r"\[(.*?)\]\(.*?\)",
+      r"!\[]\(.*\)\n",
     );
     String body = question.body.replaceAll(exp, ' *image* ');
     return Padding(

@@ -13,9 +13,9 @@ class QuestionCardWithImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     RegExp exp = RegExp(
-      r"\[(.*?)\]\(.*?\)",
+      r"!\[]\(.*\)\n",
     );
-    String body = question.body.replaceAll(exp, ' *image* ');
+    String body = question.body.replaceAll(exp, '');
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: ConstrainedBox(

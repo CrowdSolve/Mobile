@@ -1,8 +1,8 @@
-import 'package:cs_mobile/screens/main_screen/screens/widgets/home_screen.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/search_button/widgets/search_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'screens/home_screen.dart';
 import 'widgets/add_question.dart';
 
 class MainScreen extends ConsumerStatefulWidget {

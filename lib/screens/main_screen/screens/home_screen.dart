@@ -4,7 +4,8 @@ import 'package:cs_mobile/screens/main_screen/widgets/question_card_with_image.d
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../models/question.dart';
+import '../models/question.dart';
+
 
 class HomeScreen extends StatefulWidget {
   @override

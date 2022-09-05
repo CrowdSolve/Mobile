@@ -1,3 +1,4 @@
+import 'package:cs_mobile/screens/main_screen/screens/categories_screen.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/search_button/widgets/search_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,7 +69,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           ),
         child: TabBarView(
           children: <Widget>[
-            HomeScreen()
+            HomeScreen(),
+            CategoriesScreen()
           ],
         ),
         ),

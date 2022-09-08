@@ -48,17 +48,24 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             surfaceTintColor: Colors.transparent,
             backgroundColor: Theme.of(context).colorScheme.background,
             forceElevated: boxIsScrolled,
-            bottom: TabBar(
-              isScrollable: true,
-              indicatorSize: TabBarIndicatorSize.label,
-              tabs: <Widget>[
-                Tab(
-                  text: "Home",
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(48),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TabBar(
+                  padding: EdgeInsets.only(left: 16),
+                  isScrollable: true,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  tabs: <Widget>[
+                    Tab(
+                      text: "Home",
+                    ),
+                    Tab(
+                      text: "Categories",
+                    )
+                  ],
                 ),
-                Tab(
-                  text: "Categories",
-                )
-              ],
+              ),
             ),
           )
         ];

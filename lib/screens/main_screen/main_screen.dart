@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'screens/home_screen.dart';
-import 'widgets/add_question.dart';
+import 'widgets/md_editor/md_editor.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -28,7 +28,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               opaque: false,
               pageBuilder: (_, __, ___) => const Hero(
                 tag: 'add',
-                child: SafeArea(child: AddQuestion()),
+                child: SafeArea(child: MDEditor.question()),
               ),
             ),
           );

@@ -1,6 +1,6 @@
 import 'package:cs_mobile/screens/main_screen/models/comment.dart';
 import 'package:cs_mobile/screens/main_screen/models/question.dart';
-import 'package:cs_mobile/screens/main_screen/widgets/question_details/widgets/add_comment.dart';
+import 'package:cs_mobile/screens/main_screen/widgets/md_editor/md_editor.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/question_details/widgets/comment_card.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/question_details/widgets/expanded_question_card.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,6 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
 import '../../services/questions_service.dart';
-import '../add_question.dart';
 
 class QuestionDetails extends StatefulWidget {
   final int id;
@@ -68,7 +67,7 @@ class _QuestionDetailsState extends State<QuestionDetails> {
                 opaque: false,
                 pageBuilder: (_, __, ___) => Hero(
                   tag: 'add',
-                  child: SafeArea(child: AddComment(questionId: widget.id)),
+                  child: SafeArea(child: MDEditor.comment(questionId: widget.id)),
                 ),
               ),
             );

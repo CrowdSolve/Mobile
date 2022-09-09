@@ -26,10 +26,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             context,
             PageRouteBuilder<void>(
               opaque: false,
-              pageBuilder: (_, __, ___) => const Hero(
-                tag: 'add',
-                child: SafeArea(child: MDEditor.question()),
-              ),
+              pageBuilder: (_, __, ___) => MDEditor.question(),
             ),
           );
         },

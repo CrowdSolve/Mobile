@@ -59,16 +59,13 @@ class _QuestionDetailsState extends State<QuestionDetails> {
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         floatingActionButton: FloatingActionButton(
-          heroTag: 'addComment',
+          heroTag: 'add',
           onPressed: () {
             Navigator.push(
               context,
               PageRouteBuilder<void>(
                 opaque: false,
-                pageBuilder: (_, __, ___) => Hero(
-                  tag: 'add',
-                  child: SafeArea(child: MDEditor.comment(questionId: widget.id)),
-                ),
+                pageBuilder: (_, __, ___) => MDEditor.comment(questionId: widget.id),
               ),
             );
           },

@@ -199,6 +199,28 @@ Future<void> addComment(String authKey, Map data, int questionId) async {
     print(response.statusCode);
   }
 }
+Future<bool> deleteComment(String authKey, int commentId) async {
+  print('attempt like');
+  final response = await http.delete(
+    Uri.parse(
+        'https://api.github.com/repos/CrowdSolve/data/issues/comments/$commentId'),
+    headers: <String, String>{
+      'Accept': 'application/vnd.github+json',
+      'Authorization': 'Bearer $authKey',
+    },
+  );
+
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    // If the server did return a 200/201 OK/CREATED response,
+    // then return true.
+    return true;
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then return false.
+    print(response.statusCode);
+    return false;
+  }
+}
 
 Future<String> uploadImage(filepath) async {
   var url = Uri.parse('https://api.imgur.com/3/image');

@@ -116,7 +116,7 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
                 style: TextButton.styleFrom(visualDensity: VisualDensity.compact,),
                 onPressed:_validated && !_loading? () {
                     widget.isTitleIncluded
-                        ? confirmSubmitQuestion(context, githubOAuthKeyModel,_titleController.text, _bodyController.text)
+                        ? confirmSubmitQuestion(context, githubOAuthKeyModel,_titleController.text, _bodyController.text +'\n\n'+'[tags]:- "$query,"')
                         : confirmSubmitComment(context, githubOAuthKeyModel,_bodyController.text, widget.questionId!);
                     
                 }:null,

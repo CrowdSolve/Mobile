@@ -16,6 +16,7 @@ class CommentCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final githubOAuthKeyModel = ref.watch(githubOAuthKeyModelProvider);
+    final firebaseAuth = ref.watch(firebaseAuthProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15.0),
       child: Column(
@@ -37,7 +38,8 @@ class CommentCard extends ConsumerWidget {
               Text(' ● ${timeago.format(DateTime.now().subtract(DateTime.now().difference(DateTime.parse(comment.createdAt))))}',
                   style: Theme.of(context).textTheme.labelSmall),
               Spacer(),
-              PopupMenuButton(
+              firebaseAuth.currentUser!.providerData.first.uid == comment.userId.toString()
+                  ? PopupMenuButton(
                     icon: Icon(Icons.more_vert),
                     itemBuilder: (context) => [
                       PopupMenuItem(
@@ -45,7 +47,8 @@ class CommentCard extends ConsumerWidget {
                         onTap: () => deleteComment(githubOAuthKeyModel, comment.id),
                       ),
                     ],
-                  ),
+                  )
+                  : Container(),
             ],
           ),
           SizedBox(

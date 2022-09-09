@@ -531,6 +531,13 @@ packages:
       url: "https://github.com/YoussefLasheen/flutter_text_selection_controls"
     source: git
     version: "0.0.2"
+  timeago:
+    dependency: "direct main"
+    description:
+      name: timeago
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.3.0"
   typed_data:
     dependency: transitive
     description:

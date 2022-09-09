@@ -1,11 +1,10 @@
 import 'package:cs_mobile/screens/main_screen/models/question.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'question_details/question_details.dart';
 
+import 'package:timeago/timeago.dart' as timeago;
 class QuestionCard extends StatelessWidget {
-  static DateFormat f = DateFormat('MM/dd hh:mm');
   final Question question;
   const QuestionCard({Key? key, required this.question}) : super(key: key);
 
@@ -56,7 +55,7 @@ class QuestionCard extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                         Text(
-                            ' ● ${f.format(DateTime.parse(question.createdAt))}',
+                            ' ● ${timeago.format(DateTime.now().subtract(DateTime.now().difference(DateTime.parse(question.createdAt))))}',
                             style: Theme.of(context).textTheme.labelSmall),
                       ],
                     ),

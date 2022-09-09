@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:intl/intl.dart';
+
+import 'package:timeago/timeago.dart' as timeago;
+
 
 import '../../../models/comment.dart';
 
 class CommentCard extends StatelessWidget {
   final Comment comment;
-  static DateFormat f = DateFormat('MM/dd hh:mm');
   const CommentCard({Key? key, required this.comment}) : super(key: key);
 
   @override
@@ -29,7 +30,7 @@ class CommentCard extends StatelessWidget {
                 comment.posterName,
                 style: Theme.of(context).textTheme.titleSmall,
               ),
-              Text(' ● ${f.format(DateTime.parse(comment.createdAt))}',
+              Text(' ● ${timeago.format(DateTime.now().subtract(DateTime.now().difference(DateTime.parse(comment.createdAt))))}',
                   style: Theme.of(context).textTheme.labelSmall),
             ],
           ),

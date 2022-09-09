@@ -4,12 +4,12 @@ import 'package:cs_mobile/top_level_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
+
+import 'package:timeago/timeago.dart' as timeago;
 
 class ExpandedQuestionCard extends ConsumerWidget {
   final Question question;
-  static DateFormat f = DateFormat('MM/dd hh:mm');
 
   const ExpandedQuestionCard({Key? key, required this.question})
       : super(key: key);
@@ -46,7 +46,7 @@ class ExpandedQuestionCard extends ConsumerWidget {
                     question.posterName,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
-                  Text(' ● ${f.format(DateTime.parse(question.createdAt))}',
+                  Text(' ● ${timeago.format(DateTime.now().subtract(DateTime.now().difference(DateTime.parse(question.createdAt))))}',
                       style: Theme.of(context).textTheme.labelSmall),
                 ],
               ),

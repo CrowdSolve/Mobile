@@ -78,10 +78,12 @@ class _QuestionDetailsState extends State<QuestionDetails> {
         body: ListView(
           children: [
             ExpandedQuestionCard(question: widget.question),
-            PagedListView<int, Comment>(
+            Divider(thickness: 2,),
+            PagedListView<int, Comment>.separated(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               pagingController: _pagingController,
+              separatorBuilder: (context, index) => Divider(thickness: 1,),
               builderDelegate: PagedChildBuilderDelegate<Comment>(
                 itemBuilder: (context, item, index) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),

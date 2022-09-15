@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'screens/home_screen.dart';
+import 'widgets/animated_fab.dart';
 import 'widgets/md_editor/md_editor.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
@@ -19,19 +20,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     return Scaffold(
       appBar: AppBar(toolbarHeight: 0,surfaceTintColor: Colors.transparent,),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'add',
-        onPressed: () {
-          Navigator.push(
-            context,
-            PageRouteBuilder<void>(
-              opaque: false,
-              pageBuilder: (_, __, ___) => MDEditor.question(),
-            ),
-          );
-        },
-        child: const Icon(Icons.add_comment_rounded),
-      ),
+      floatingActionButton: AnimatedFAB(openWidget: MDEditor.question()),
       body: SafeArea(
         child: DefaultTabController(
           length: 2,

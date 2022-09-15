@@ -1,5 +1,6 @@
 import 'package:cs_mobile/screens/main_screen/models/comment.dart';
 import 'package:cs_mobile/screens/main_screen/models/question.dart';
+import 'package:cs_mobile/screens/main_screen/widgets/animated_fab.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/md_editor/md_editor.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/question_details/widgets/comment_card.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/question_details/widgets/expanded_question_card.dart';
@@ -58,19 +59,7 @@ class _QuestionDetailsState extends State<QuestionDetails> {
       ),
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        floatingActionButton: FloatingActionButton(
-          heroTag: 'add',
-          onPressed: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder<void>(
-                opaque: false,
-                pageBuilder: (_, __, ___) => MDEditor.comment(questionId: widget.id),
-              ),
-            );
-          },
-          child: const Icon(Icons.add_comment_rounded),
-        ),
+        floatingActionButton: AnimatedFAB(openWidget: MDEditor.comment(questionId: widget.id,)),
         body: ListView(
           children: [
             ExpandedQuestionCard(question: widget.question),

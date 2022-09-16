@@ -72,14 +72,10 @@ class AuthWidget extends ConsumerWidget {
           );
         });
       },
-      loading: () => const Scaffold(
-        body: Center(
+      loading: () => const Center(
           child: CircularProgressIndicator(),
         ),
-      ),
-      error: (object, stackTrace) => Scaffold(
-        body: Text(object.toString()),
-      ),
+      error: (object, stackTrace) => Center(child: Text(object.toString()),)
     );
   }
 }

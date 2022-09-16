@@ -1,4 +1,5 @@
 import 'package:cs_mobile/screens/main_screen/main_screen.dart';
+import 'package:cs_mobile/screens/main_screen/models/question.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/question_details/question_details.dart';
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:dynamic_color/dynamic_color.dart';
@@ -29,7 +30,7 @@ class AuthWidget extends ConsumerWidget {
               routes: [
                 GoRoute(
                   path: 'questions/:id',
-                  builder: (context, state) => QuestionDetails(id: state.params['id']!,),
+                  builder: (context, state) => QuestionDetails(id: state.params['id']!, question: state.extra! as Question,),
                 ),
               ],
             ),

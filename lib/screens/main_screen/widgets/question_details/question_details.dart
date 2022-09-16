@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import '../../services/questions_service.dart';
 
 class QuestionDetails extends StatefulWidget {
-  final String id;
+  final String? id;
   final Question? question;
 
   static DateFormat f = DateFormat('MM/dd hh:mm');
@@ -31,16 +31,21 @@ class _QuestionDetailsState extends State<QuestionDetails> {
   late Future<Question> question;
   @override
   void initState() {
-    question = fetchWithId(widget.id);
-    _pagingController.addPageRequestListener((pageKey) {
+    if(widget.question != null){
+      _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
+    }
+    else if(widget.id != null){
+      question = fetchWithId(widget.id!);
+    }
+    
     super.initState();
   }
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      final newItems = await Future.delayed(Duration(milliseconds: 500),()=>fetchCommentsWithIssueId(widget.id, pageKey));
+      final newItems = await Future.delayed(Duration(milliseconds: 500),()=>fetchCommentsWithIssueId(widget.question!.id, pageKey));
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);

@@ -1,7 +1,7 @@
 import 'package:cs_mobile/screens/main_screen/models/question.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import 'question_details/question_details.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
 class QuestionCard extends StatelessWidget {
@@ -23,17 +23,7 @@ class QuestionCard extends StatelessWidget {
           child: Card(
             clipBehavior: Clip.antiAlias,
             child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => QuestionDetails(
-                      id: question.id,
-                      question: question,
-                    ),
-                  ),
-                );
-              },
+              onTap: () =>context.go('/questions/q', extra: question),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
                 child: Column(

@@ -104,6 +104,5 @@ class ExpandedQuestionCard extends ConsumerWidget {
         ),
       ),
     );
-    ;
   }
 }

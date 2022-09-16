@@ -1,7 +1,6 @@
 import 'package:alert_dialogs/alert_dialogs.dart';
 import 'package:awesome_icons/awesome_icons.dart';
 import 'package:cs_mobile/auth/auth_model.dart';
-import 'package:cs_mobile/top_level_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

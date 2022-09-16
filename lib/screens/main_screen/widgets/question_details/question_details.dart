@@ -12,10 +12,10 @@ import '../../services/questions_service.dart';
 
 class QuestionDetails extends StatefulWidget {
   final String id;
-  final Question question;
+  final Question? question;
 
   static DateFormat f = DateFormat('MM/dd hh:mm');
-  const QuestionDetails({Key? key, required this.id, required this.question})
+  const QuestionDetails({Key? key, required this.id, this.question})
       : super(key: key);
 
   @override
@@ -28,8 +28,10 @@ class _QuestionDetailsState extends State<QuestionDetails> {
   final PagingController<int, Comment> _pagingController =
       PagingController(firstPageKey: 0);
 
+  late Future<Question> question;
   @override
   void initState() {
+    question = fetchWithId(widget.id);
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
@@ -62,7 +64,20 @@ class _QuestionDetailsState extends State<QuestionDetails> {
         floatingActionButton: AnimatedFAB(openWidget: MDEditor.comment(questionId: widget.id,)),
         body: ListView(
           children: [
-            ExpandedQuestionCard(question: widget.question),
+            widget.question != null?ExpandedQuestionCard(question: widget.question!):
+            FutureBuilder<Question>(
+              future: question,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ExpandedQuestionCard(question: snapshot.data!);
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+
+                // By default, show a loading spinner.
+                return const Center(child:  CircularProgressIndicator());
+              },
+            ),
             Divider(thickness: 2,),
             PagedListView<int, Comment>.separated(
               shrinkWrap: true,

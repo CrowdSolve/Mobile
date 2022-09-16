@@ -57,8 +57,6 @@ class MyApp extends ConsumerWidget {
               GithubAuthScreen.withFirebaseAuth(firebaseAuth),
           signedInBuilder: (_) => MainScreen(),
         ),
-        onGenerateRoute: (settings) =>
-            AppRouter.onGenerateRoute(settings, firebaseAuth),
       );
     });
   }

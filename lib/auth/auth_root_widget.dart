@@ -1,22 +1,69 @@
+import 'package:cs_mobile/screens/main_screen/main_screen.dart';
 import 'package:cs_mobile/top_level_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import 'auth_screen.dart';
 
 class AuthWidget extends ConsumerWidget {
   const AuthWidget({
     Key? key,
-    required this.signedInBuilder,
-    required this.nonSignedInBuilder,
   }) : super(key: key);
-  final WidgetBuilder nonSignedInBuilder;
-  final WidgetBuilder signedInBuilder;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authStateChanges = ref.watch(authStateChangesProvider);
+    final firebaseAuth = ref.watch(firebaseAuthProvider);
     return authStateChanges.when(
-      data: (user) => _data(context, user),
+      data: (user) {
+        bool isSignedIn = user != null;
+        late final _router = GoRouter(
+          routes: [
+            GoRoute(
+              path: '/',
+              builder: (context, state) => MainScreen(),
+            ),
+            GoRoute(
+              path: '/login',
+              builder: (context, state) =>
+                  GithubAuthScreen.withFirebaseAuth(firebaseAuth),
+            ),
+          ],
+          redirect: (state) {
+            final loggingIn = state.subloc == '/login';
+            if (!isSignedIn) return loggingIn ? null : '/login';
+
+            if (loggingIn) return '/';
+
+            return null;
+          },
+        );
+        return DynamicColorBuilder(builder: (ightDynamic, darkDynamic) {
+          ColorScheme darkColorScheme;
+
+          if (darkDynamic != null) {
+            darkColorScheme = darkDynamic.harmonized();
+          } else {
+            darkColorScheme = ColorScheme.fromSeed(
+              seedColor: Colors.blue,
+              brightness: Brightness.dark,
+            );
+          }
+          return MaterialApp.router(
+            darkTheme: ThemeData(
+              useMaterial3: true,
+              colorScheme: darkColorScheme,
+            ),
+            debugShowCheckedModeBanner: false,
+            themeMode: ThemeMode.dark,
+            routeInformationProvider: _router.routeInformationProvider,
+            routeInformationParser: _router.routeInformationParser,
+            routerDelegate: _router.routerDelegate,
+          );
+        });
+      },
       loading: () => const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
@@ -26,12 +73,5 @@ class AuthWidget extends ConsumerWidget {
         body: Text(object.toString()),
       ),
     );
-  }
-
-  Widget _data(BuildContext context, User? user) {
-    if (user != null) {
-        return signedInBuilder(context);
-    }
-    return nonSignedInBuilder(context);
   }
 }

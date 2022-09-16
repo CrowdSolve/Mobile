@@ -1,15 +1,10 @@
-import 'package:cs_mobile/auth/auth_screen.dart';
 import 'package:cs_mobile/auth/auth_root_widget.dart';
 import 'package:cs_mobile/firebase_options.dart';
-import 'package:cs_mobile/screens/main_screen/main_screen.dart';
-import 'package:cs_mobile/top_level_provider.dart';
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'routing/app_router.dart';
 import 'services/shared_prefrences.dart';
 
 Future<void> main() async {
@@ -24,40 +19,6 @@ Future<void> main() async {
         SharedPreferencesService(sharedPreferences),
       ),
     ],
-    child: MyApp(),
+    child: AuthWidget(),
   ));
-}
-
-class MyApp extends ConsumerWidget {
-  const MyApp({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final firebaseAuth = ref.watch(firebaseAuthProvider);
-    return DynamicColorBuilder(builder: (lightDynamic, darkDynamic) {
-      ColorScheme darkColorScheme;
-
-      if (darkDynamic != null) {
-        darkColorScheme = darkDynamic.harmonized();
-      } else {
-        darkColorScheme = ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          brightness: Brightness.dark,
-        );
-      }
-
-      return MaterialApp(
-        darkTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: darkColorScheme,
-        ),
-        debugShowCheckedModeBanner: false,
-        themeMode: ThemeMode.dark,
-        home: AuthWidget(
-          nonSignedInBuilder: (_) =>
-              GithubAuthScreen.withFirebaseAuth(firebaseAuth),
-          signedInBuilder: (_) => MainScreen(),
-        ),
-      );
-    });
-  }
 }

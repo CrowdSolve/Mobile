@@ -28,7 +28,7 @@ class Question {
     if (firstMatch!=null) url=firstMatch.group(1)!;
 
     return Question(
-      id: json["number"],
+      id: json["number"].toString(),
       title: json["title"],
       body: json["body"]??"",
       imageUrl:  url,

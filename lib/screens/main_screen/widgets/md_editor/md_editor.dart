@@ -13,7 +13,7 @@ import 'helpers.dart';
 
 class MDEditor extends ConsumerStatefulWidget {
   final bool isTitleIncluded;
-  final int? questionId;
+  final String? questionId;
 
   const MDEditor.question({Key? key,}) : questionId = null,isTitleIncluded = true, super(key: key);
   const MDEditor.comment({Key? key, required this.questionId,}) : isTitleIncluded = false ,super(key: key);

@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import '../../services/questions_service.dart';
 
 class QuestionDetails extends StatefulWidget {
-  final int id;
+  final String id;
   final Question question;
 
   static DateFormat f = DateFormat('MM/dd hh:mm');

@@ -47,7 +47,7 @@ Future<List<Question>> fetchWithQuery(int pageKey,
   }
 }
 
-Future<Question> fetchWithId(int id) async {
+Future<Question> fetchWithId(String id) async {
   final response = await http.get(Uri.parse(
       'https://api.github.com/repos/CrowdSolve/data/issues/$id'));
 
@@ -64,7 +64,7 @@ Future<Question> fetchWithId(int id) async {
   }
 }
 
-Future<List<Comment>> fetchCommentsWithIssueId(int id, int pageKey) async {
+Future<List<Comment>> fetchCommentsWithIssueId(String id, int pageKey) async {
   final response = await http.get(Uri.parse(
       'https://api.github.com/repos/CrowdSolve/data/issues/$id/comments?page=$pageKey'));
 
@@ -83,7 +83,7 @@ Future<List<Comment>> fetchCommentsWithIssueId(int id, int pageKey) async {
   }
 }
 
-Future<bool> likeQuestion(String authKey, int questionId) async {
+Future<bool> likeQuestion(String authKey, String questionId) async {
   print('attempt like');
   final response = await http.post(
     Uri.parse(
@@ -107,7 +107,7 @@ Future<bool> likeQuestion(String authKey, int questionId) async {
   }
 }
 
-Future<bool> unlikeQuestion(String authKey, int questionId, int userId) async {
+Future<bool> unlikeQuestion(String authKey, String questionId, int userId) async {
   final reactionsResponse = await http.get(
     Uri.parse(
         'https://api.github.com/repos/CrowdSolve/data/issues/$questionId/reactions'),

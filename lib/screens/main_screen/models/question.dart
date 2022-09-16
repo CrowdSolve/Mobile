@@ -1,3 +1,5 @@
+import 'package:cs_mobile/screens/main_screen/models/label.dart';
+
 class Question {
   final String id;
   final String title;
@@ -8,6 +10,7 @@ class Question {
   final String createdAt;
   final int heart;
   final int noOfComments;
+  final List<Label> labels;
 
   const Question({
     required this.id,
@@ -19,6 +22,7 @@ class Question {
     required this.createdAt,
     required this.heart,
     required this.noOfComments,
+    required this.labels,
   });
 
   factory Question.fromJson(Map<String, dynamic> json) {
@@ -37,6 +41,7 @@ class Question {
       createdAt: json["created_at"],
       heart: json["reactions"]['heart'],
       noOfComments: json["comments"],
+      labels: json["labels"].map<Label>((e) => Label.fromJson(e)).toList(),
     );
   }
 }

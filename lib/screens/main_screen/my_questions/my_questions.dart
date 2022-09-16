@@ -5,7 +5,6 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../models/question.dart';
 import '../services/questions_service.dart';
 import '../widgets/question_card.dart';
-import '../widgets/question_card_with_image.dart';
 
 class MyQuestions extends ConsumerStatefulWidget {
   final userLogin;
@@ -56,13 +55,7 @@ class _MyQuestionsState extends ConsumerState<MyQuestions> {
               child: PagedListView<int, Question>(
                     pagingController: _pagingController,
                     builderDelegate: PagedChildBuilderDelegate<Question>(
-                      itemBuilder: (context, item, index) {
-                        if (item.imageUrl == '') {
-                          return QuestionCard(question: item);
-                        } else {
-                          return QuestionCardWithImage(question: item);
-                        }
-                      },
+                      itemBuilder: (context, item, index) =>QuestionCard(question: item)
                     ),
                   ),
             ),

@@ -1,6 +1,5 @@
 import 'package:cs_mobile/screens/main_screen/services/questions_service.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/question_card.dart';
-import 'package:cs_mobile/screens/main_screen/widgets/question_card_with_image.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -80,13 +79,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               physics: NeverScrollableScrollPhysics(),
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate<Question>(
-                itemBuilder: (context, item, index) {
-                  if (item.imageUrl == '') {
-                    return QuestionCard(question: item);
-                  } else {
-                    return QuestionCardWithImage(question: item);
-                  }
-                },
+                itemBuilder: (context, item, index) => QuestionCard(question: item,)
               ),
             ),
           ],

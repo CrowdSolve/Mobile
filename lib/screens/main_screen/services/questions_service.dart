@@ -26,19 +26,16 @@ Future<List<Question>> fetch(int pageKey, {String searchTerm = 'labels=visible'}
 
 Future<List<Question>> fetchWithQuery(int pageKey,
     {required String searchTerm}) async {
-      print(searchTerm);
   final response = await http.get(Uri.parse(
       'https://api.github.com/search/issues?q=repo:CrowdSolve/data+$searchTerm&page=$pageKey'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    print(response.statusCode);
     var tagObjsJson = jsonDecode(response.body)['items'] as List;
     List<Question> tagObjs =
         tagObjsJson.map((tagJson) => Question.fromJson(tagJson)).toList();
 
-    print(tagObjs);
     return tagObjs;
   } else {
     // If the server did not return a 200 OK response,
@@ -59,7 +56,6 @@ Future<Question> fetchWithId(String id) async {
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
-    print(response.body);
     throw Exception('Failed to load album');
   }
 }
@@ -78,13 +74,11 @@ Future<List<Comment>> fetchCommentsWithIssueId(String id, int pageKey) async {
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
-    print(response.body);
     throw Exception('Failed to load album');
   }
 }
 
 Future<bool> likeQuestion(String authKey, String questionId) async {
-  print('attempt like');
   final response = await http.post(
     Uri.parse(
         'https://api.github.com/repos/CrowdSolve/data/issues/$questionId/reactions'),
@@ -102,7 +96,6 @@ Future<bool> likeQuestion(String authKey, String questionId) async {
   } else {
     // If the server did not return a 201 CREATED response,
     // then return false.
-    print(response.statusCode);
     return false;
   }
 }
@@ -151,11 +144,9 @@ Future<void> addQuestion(String authKey, Map data) async {
   if (response.statusCode == 201) {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
-    print(response.body);
   } else {
     // If the server did not return a 201 CREATED response,
     // then throw an exception.
-    print(response.statusCode);
   }
 }
 
@@ -171,11 +162,9 @@ Future<void> lockQuestion(String authKey, int questionId) async {
   if (response.statusCode == 201) {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
-    print(response.body);
   } else {
     // If the server did not return a 201 CREATED response,
     // then throw an exception.
-    print(response.statusCode);
   }
 }
 Future<void> addComment(String authKey, Map data, int questionId) async {
@@ -192,15 +181,12 @@ Future<void> addComment(String authKey, Map data, int questionId) async {
   if (response.statusCode == 201) {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
-    print(response.body);
   } else {
     // If the server did not return a 201 CREATED response,
     // then throw an exception.
-    print(response.statusCode);
   }
 }
 Future<bool> deleteComment(String authKey, int commentId) async {
-  print('attempt like');
   final response = await http.delete(
     Uri.parse(
         'https://api.github.com/repos/CrowdSolve/data/issues/comments/$commentId'),
@@ -217,7 +203,6 @@ Future<bool> deleteComment(String authKey, int commentId) async {
   } else {
     // If the server did not return a 201 CREATED response,
     // then return false.
-    print(response.statusCode);
     return false;
   }
 }
@@ -231,7 +216,6 @@ Future<String> uploadImage(filepath) async {
 
   if (response.statusCode == 201) {
   } else {
-    print(response.statusCode);
   }
   String uploadedImageUrl = jsonDecode(response.body)['data']['link'];
   return uploadedImageUrl;

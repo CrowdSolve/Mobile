@@ -55,7 +55,6 @@ class Search extends SearchDelegate {
   
   Future<void> _fetchPage() async {
     int pageKey = 0;
-    print(query);
     try {
       final newItems = await fetchWithQuery(
         pageKey,

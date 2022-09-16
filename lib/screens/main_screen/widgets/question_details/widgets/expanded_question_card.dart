@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:like_button/like_button.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -90,6 +91,11 @@ class ExpandedQuestionCard extends ConsumerWidget {
                   Text(
                     question.noOfComments.toString(),
                     style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  Spacer(),
+                  IconButton(
+                    onPressed: () => Share.share('https://crowdsolve.lasheen.dev/questions/${question.id}'),
+                    icon: Icon(Icons.share),
                   ),
                 ],
               )

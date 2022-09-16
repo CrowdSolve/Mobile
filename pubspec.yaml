@@ -21,7 +21,7 @@ dependencies:
       url: https://github.com/bizz84/codewithandrea_flutter_packages
       path: packages/alert_dialogs
   http: ^0.13.4
-  firebase_core: ^1.13.1
+  firebase_core: ^1.22.0
   firebase_auth: ^3.3.11
   flutter_riverpod: ^1.0.3
   github_sign_in: ^0.0.5-dev.4

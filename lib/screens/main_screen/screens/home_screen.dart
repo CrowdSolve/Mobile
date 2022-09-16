@@ -61,19 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
               physics: NeverScrollableScrollPhysics(),
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate<Question>(
-                itemBuilder: (context, item, index) {
-                  Label label = item.labels.firstWhere((element) => element.name.startsWith('C-'), orElse: () => Label(name: 'C-No Category', color: '000000'));
-                  return Badge(
-                      position: BadgePosition.topEnd(top: 0, end: 0),
-                      toAnimate: false,
-                    shape: BadgeShape.square,
-                    badgeColor: Color(int.parse('FF'+ label.color, radix: 16)),
-                    borderRadius: BorderRadius.circular(8),
-                    badgeContent:
-                        Text(label.name.substring(2),),
-                      child: QuestionCard(question: item) 
-                    );
-                },
+                itemBuilder: (context, item, index) => QuestionCard(question: item)
               ),
             ),
           ],

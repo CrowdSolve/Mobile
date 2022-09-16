@@ -84,6 +84,10 @@ class _QuestionDetailsState extends State<QuestionDetails> {
               },
             ),
             Divider(thickness: 2,),
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+              child: Text('Comments', style: Theme.of(context).textTheme.headline6,),
+            ),
             PagedListView<int, Comment>.separated(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),

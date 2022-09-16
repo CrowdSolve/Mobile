@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "206057750523",
+    "project_id": "crowd-solve",
+    "storage_bucket": "crowd-solve.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206057750523:android:08461f91d18120cb8d555e",
+        "android_client_info": {
+          "package_name": "com.example.cs_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "206057750523-2tg6opqtm1282ido3lq28f7u86al8ju1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpSBeatjgeYwI87BxUMsDFUxpjloAOvYk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "206057750523-2tg6opqtm1282ido3lq28f7u86al8ju1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206057750523:android:829b36dcbd89c1718d555e",
+        "android_client_info": {
+          "package_name": "dev.lasheen.crowdsolve"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "206057750523-2tg6opqtm1282ido3lq28f7u86al8ju1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpSBeatjgeYwI87BxUMsDFUxpjloAOvYk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "206057750523-2tg6opqtm1282ido3lq28f7u86al8ju1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

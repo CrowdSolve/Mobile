@@ -6,9 +6,9 @@ import 'package:cs_mobile/screens/main_screen/models/label.dart';
 import 'package:http/http.dart' as http;
 
 
-Future<List<Label>> fetchLabels() async {
+Future<List<Label>> fetchLabels(searchTerm) async {
   final response = await http.get(
-    Uri.parse('https://api.github.com/search/labels?q=C-&repository_id=473928724'),
+    Uri.parse('https://api.github.com/search/labels?q=$searchTerm&repository_id=473928724'),
   );
 
   if (response.statusCode == 200) {

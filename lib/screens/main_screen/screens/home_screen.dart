@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:cs_mobile/screens/main_screen/models/label.dart';
 import 'package:cs_mobile/screens/main_screen/services/questions_service.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/question_card.dart';

@@ -1,10 +1,11 @@
-import 'package:badges/badges.dart';
 import 'package:cs_mobile/screens/main_screen/models/label.dart';
 import 'package:cs_mobile/screens/main_screen/models/question.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
+
+import 'package:collection/collection.dart';
 
 class QuestionCard extends StatelessWidget {
   final Question question;
@@ -17,38 +18,57 @@ class QuestionCard extends StatelessWidget {
     );
     String body = question.body.replaceAll(exp, ' *image* ');
     bool isWithImage = question.imageUrl!.isNotEmpty;
-    Label label = question.labels.firstWhere(
-        (element) => element.name.startsWith('C-'),
-        orElse: () => Label(name: 'C-No Category', color: '000000'));
-    return Badge(
-      position: BadgePosition.topEnd(top: 0, end: 0),
-      toAnimate: false,
-      shape: BadgeShape.square,
-      badgeColor: Color(int.parse('FF' + label.color, radix: 16)),
-      borderRadius: BorderRadius.circular(8),
-      badgeContent: Text(
-        label.name.substring(2),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: ConstrainedBox(
-          constraints: BoxConstraints.tightFor(height: isWithImage ? 400 : 200),
-          child: Hero(
-            tag: 'question' + question.id.toString(),
-            child: Card(
-              clipBehavior: Clip.antiAlias,
-              child: InkWell(
-                onTap: () => context.go('/questions/q', extra: question),
-                child: isWithImage
-                    ? _buildCardWithImage(context, body)
-                    : _buildCard(context, body),
+    List<Label>? labels = generateLabels();
+    return Stack(
+      fit: StackFit.loose,
+      alignment: Alignment.center,
+      clipBehavior: Clip.none,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: ConstrainedBox(
+            constraints: BoxConstraints.tightFor(height: isWithImage ? 400 : 200),
+            child: Hero(
+              tag: 'question' + question.id.toString(),
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  onTap: () => context.go('/questions/q', extra: question),
+                  child: isWithImage
+                      ? _buildCardWithImage(context, body)
+                      : _buildCard(context, body),
+                ),
               ),
             ),
           ),
         ),
-      ),
+        PositionedDirectional(
+          top: 0,
+          end: 0,
+          child: Row(
+            children: [
+              if(labels != null)
+              for ( var label in labels ) CustomBadge(label: label),
+            ],
+          )
+        ),
+      ],
     );
   }
+  List<Label> generateLabels() {
+    List unfilteredLabelList = [];
+    List<String> prefixes = ['S', 'C', 'B'];
+    for (var prefix in prefixes) {
+      unfilteredLabelList.add(
+        question.labels.firstWhereOrNull(
+        (element) => element.name.startsWith(prefix + '-'),
+      ));
+    }
+  
+
+  return unfilteredLabelList.whereType<Label>().toList();
+  }
+  
 
   Widget _buildCard(BuildContext context, String body) {
     return Padding(
@@ -219,6 +239,36 @@ class QuestionCard extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+}
+
+class CustomBadge extends StatelessWidget {
+  const CustomBadge({
+    Key? key,
+    required this.label,
+  }) : super(key: key);
+
+  final Label label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0),
+      child: Material(
+        shape: RoundedRectangleBorder(
+          side: BorderSide.none,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        elevation: 2,
+        color: Color(int.parse('FF' + label.color, radix: 16)),
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Text(
+            label.name.substring(2),
+          ),
+        ),
+      ),
     );
   }
 }

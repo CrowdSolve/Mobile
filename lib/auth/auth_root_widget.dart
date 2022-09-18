@@ -30,7 +30,7 @@ class AuthWidget extends ConsumerWidget {
               routes: [
                 GoRoute(
                   path: 'questions/:id',
-                  builder: (context, state) => QuestionDetails(id: state.params['id']!, question: state.extra! as Question,),
+                  builder: (context, state) => state.extra != null? QuestionDetails(id: state.params['id']!, question: state.extra! as Question,):QuestionDetails(id: state.params['id']!),
                 ),
               ],
             ),

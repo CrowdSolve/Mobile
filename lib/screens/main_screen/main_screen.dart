@@ -1,4 +1,5 @@
 import 'package:cs_mobile/screens/main_screen/screens/categories_screen.dart';
+import 'package:cs_mobile/screens/main_screen/screens/course_screen.dart';
 import 'package:cs_mobile/screens/main_screen/widgets/search_button/widgets/search_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,7 +24,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       floatingActionButton: AnimatedFAB(openWidget: MDEditor.question()),
       body: SafeArea(
         child: DefaultTabController(
-          length: 2,
+          length: 3,
           child: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
         return <Widget>[
@@ -48,6 +49,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     ),
                     Tab(
                       text: "Categories",
+                    ),
+                    Tab(
+                      text: "Course & College",
                     )
                   ],
                 ),
@@ -63,7 +67,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         child: TabBarView(
           children: <Widget>[
             HomeScreen(),
-            CategoriesScreen()
+            CategoriesScreen(),
+            CourseScreen()
           ],
         ),
         ),

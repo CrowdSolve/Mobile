@@ -35,12 +35,9 @@ class AuthAvatarButton extends ConsumerWidget {
             },
             child: Padding(
               padding: const EdgeInsets.all(1.0),
-              child: Hero(
-                tag: 'avatar',
-                child: CircleAvatar(
-                  maxRadius: 15,
-                  backgroundImage: NetworkImage(snapshot.data!.avatarUrl,),
-                ),
+              child: CircleAvatar(
+                maxRadius: 15,
+                backgroundImage: NetworkImage(snapshot.data!.avatarUrl,),
               ),
             ),
           );

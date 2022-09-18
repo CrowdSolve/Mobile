@@ -74,12 +74,9 @@ class ProfileDialog extends ConsumerWidget  {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Hero(
-                            tag: 'avatar',
-                            child: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              backgroundImage: NetworkImage(user.avatarUrl),
-                            ),
+                          CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            backgroundImage: NetworkImage(user.avatarUrl),
                           ),
                           SizedBox(
                             width: 22,

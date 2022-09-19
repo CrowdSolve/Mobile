@@ -1,6 +1,6 @@
-import 'package:cs_mobile/screens/main_screen/main_screen.dart';
-import 'package:cs_mobile/screens/main_screen/models/question.dart';
-import 'package:cs_mobile/screens/main_screen/widgets/question_details/question_details.dart';
+import 'package:cs_mobile/models/question.dart';
+import 'package:cs_mobile/screens/questions_screen/main_screen.dart';
+import 'package:cs_mobile/screens/questions_screen/shared_components/question_details/question_details.dart';
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,7 @@ class AuthWidget extends ConsumerWidget {
           routes: [
             GoRoute(
               path: '/',
-              builder: (context, state) => MainScreen(),
+              builder: (context, state) => QuestionsScreen(),
               routes: [
                 GoRoute(
                   path: 'questions/:id',

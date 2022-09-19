@@ -179,6 +179,12 @@ class ProfileDialog extends ConsumerWidget  {
                         ),
                       ),
                     ),
+                    ListTile(
+                      leading: Icon(Icons.help_outline_rounded),
+                      title: Text('Help & Feedback'),
+                      onTap: ()=> launchUrl(Uri.parse(
+                            'https://github.com/CrowdSolve/Mobile/discussions')),
+                    ),
                     Spacer(),
                     Center(
                       child: TextButton(

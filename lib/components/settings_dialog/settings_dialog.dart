@@ -61,15 +61,26 @@ class ProfileDialog extends ConsumerWidget  {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: IconButton(
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.zero,
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: Icon(Icons.close_rounded)),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: IconButton(
+                            alignment: Alignment.centerLeft,
+                            padding: EdgeInsets.zero,
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              icon: Icon(Icons.close_rounded)),
+                        ),
+                        Expanded(
+                          child: Image.asset(
+                              'assets/LLLogo.png',
+                              height: 25,
+                              width: 25,
+                            ),
+                        ),
+                        Spacer()
+                      ],
                     ),
                     SizedBox(height: 20,),
                     SizedBox(

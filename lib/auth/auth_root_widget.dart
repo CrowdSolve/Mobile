@@ -18,6 +18,7 @@ class AuthWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authStateChanges = ref.watch(authStateChangesProvider);
     final firebaseAuth = ref.watch(firebaseAuthProvider);
+    final themeMode = ref.watch(themeModeProvider);
     return authStateChanges.when(
       data: (user) {
         bool isSignedIn = user != null;
@@ -49,8 +50,10 @@ class AuthWidget extends ConsumerWidget {
             return null;
           },
         );
-        return DynamicColorBuilder(builder: (ightDynamic, darkDynamic) {
+        return DynamicColorBuilder(builder: (lightDynamic, darkDynamic) {
           ColorScheme darkColorScheme;
+          ColorScheme lightColorScheme;
+
 
           if (darkDynamic != null) {
             darkColorScheme = darkDynamic.harmonized();
@@ -60,13 +63,26 @@ class AuthWidget extends ConsumerWidget {
               brightness: Brightness.dark,
             );
           }
+
+          if (lightDynamic != null) {
+            lightColorScheme = lightDynamic.harmonized();
+          } else {
+            lightColorScheme = ColorScheme.fromSeed(
+              seedColor: Colors.blue,
+              brightness: Brightness.light,
+            );
+          }
           return MaterialApp.router(
+            theme: ThemeData(
+              useMaterial3: true,
+              colorScheme: lightColorScheme,
+            ),
             darkTheme: ThemeData(
               useMaterial3: true,
               colorScheme: darkColorScheme,
             ),
             debugShowCheckedModeBanner: false,
-            themeMode: ThemeMode.dark,
+            themeMode: themeMode? ThemeMode.dark: ThemeMode.light,
             routeInformationProvider: _router.routeInformationProvider,
             routeInformationParser: _router.routeInformationParser,
             routerDelegate: _router.routerDelegate,

@@ -28,16 +28,13 @@ class QuestionCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: ConstrainedBox(
             constraints: BoxConstraints.tightFor(height: isWithImage ? 400 : 200),
-            child: Hero(
-              tag: 'question' + question.id.toString(),
-              child: Card(
-                clipBehavior: Clip.antiAlias,
-                child: InkWell(
-                  onTap: () => context.go('/questions/q', extra: question),
-                  child: isWithImage
-                      ? _buildCardWithImage(context, body)
-                      : _buildCard(context, body),
-                ),
+            child: Card(
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: () => context.go('/questions/q', extra: question),
+                child: isWithImage
+                    ? _buildCardWithImage(context, body)
+                    : _buildCard(context, body),
               ),
             ),
           ),

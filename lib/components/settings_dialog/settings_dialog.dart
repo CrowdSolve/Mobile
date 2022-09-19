@@ -6,6 +6,7 @@ import 'package:cs_mobile/top_level_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'screens/my_answers/my_answers.dart';
 import 'screens/my_notifications/my_notifications.dart';
@@ -48,7 +49,7 @@ class ProfileDialog extends ConsumerWidget  {
       child: SingleChildScrollView(
         child: Center(
           child: SizedBox(
-            height: 500,
+            height: 1000,
             width: double.infinity,
             child: Dialog(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
@@ -152,6 +153,30 @@ class ProfileDialog extends ConsumerWidget  {
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyAnswers(githubOAuthKeyModel)),
+                      ),
+                    ),
+                    Divider(),
+                    ListTile(
+                        leading: Icon(Icons.privacy_tip_rounded),
+                        title: Text('Privacy Policy'),
+                        onTap: () => launchUrl(Uri.parse(
+                            'https://raw.githubusercontent.com/CrowdSolve/privacy-policy/main/README.md'))),
+                    ListTile(
+                      leading: Icon(Icons.gavel_rounded),
+                      title: Text('Open Source Licenses'),
+                      //TODO: Check for version and add it
+                      onTap: () => showLicensePage(
+                        context: context,
+                        applicationName: 'CrowdSolve',
+                        applicationLegalese: '© 2022 Lasheen LLC',
+                        applicationIcon: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            'assets/icon.png',
+                            height: 100,
+                            width: 100,
+                          ),
+                        ),
                       ),
                     ),
                     Spacer(),

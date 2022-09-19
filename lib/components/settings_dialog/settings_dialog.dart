@@ -45,11 +45,12 @@ class ProfileDialog extends ConsumerWidget  {
   Widget build(BuildContext context, ref) {
     final firebaseAuth = ref.watch(firebaseAuthProvider);
     final githubOAuthKeyModel = ref.watch(githubOAuthKeyModelProvider);
+    final double height = MediaQuery. of(context). size. height - MediaQuery.of(context).viewPadding.top;
     return SafeArea(
       child: SingleChildScrollView(
         child: Center(
           child: SizedBox(
-            height: 1000,
+            height: height + 1,
             width: double.infinity,
             child: Dialog(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
@@ -185,17 +186,15 @@ class ProfileDialog extends ConsumerWidget  {
                       onTap: ()=> launchUrl(Uri.parse(
                             'https://github.com/CrowdSolve/Mobile/discussions')),
                     ),
-                    Spacer(),
-                    Center(
-                      child: TextButton(
-                        style: TextButton.styleFrom(),
-                        child: Text(
-                          "Logout",
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        onPressed: () => _confirmSignOut(context, firebaseAuth),
-                      ),
+                    Divider(),
+                    ListTile(
+                      leading: Icon(Icons.logout, color: Colors.red,),
+                      title: Text('Logout', style: TextStyle(color: Colors.red),),
+                      onTap: () => _confirmSignOut(context, firebaseAuth),
                     ),
+                    Spacer(),
+                    //TODO: Add current version
+                    Center(child: Text('CrowdSolve Mobile v1.0.0',style: Theme.of(context).textTheme.caption),)
                   ],
                 ),
               ),

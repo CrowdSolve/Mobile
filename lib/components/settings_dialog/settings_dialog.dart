@@ -45,6 +45,7 @@ class ProfileDialog extends ConsumerWidget  {
   Widget build(BuildContext context, ref) {
     final firebaseAuth = ref.watch(firebaseAuthProvider);
     final githubOAuthKeyModel = ref.watch(githubOAuthKeyModelProvider);
+    final themeMode = ref.watch(themeModeProvider);
     final double height = MediaQuery. of(context). size. height - MediaQuery.of(context).viewPadding.top;
     return SafeArea(
       child: SingleChildScrollView(
@@ -165,6 +166,34 @@ class ProfileDialog extends ConsumerWidget  {
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyAnswers(githubOAuthKeyModel)),
+                      ),
+                    ),
+                    Divider(),
+                    ListTile(
+                      leading: Icon(Icons.color_lens),
+                      title: Text('Theme'),
+                      subtitle: Text(themeMode?'Dark':'Light', style: TextStyle(fontSize: 12),),
+                      onTap: ()=> showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Theme'),
+                          content: Text('Do you want to switch to the ${themeMode?'Light':'Dark'} theme?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                ref.read(themeModeProvider.notifier).toggle();
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Toggle Theme'),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Divider(),

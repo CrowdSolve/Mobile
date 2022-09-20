@@ -1,4 +1,5 @@
 import 'package:cs_mobile/models/answer.dart';
+import 'package:cs_mobile/screens/questions_screen/tabs/widgets/error_indicator.dart';
 import 'package:cs_mobile/services/answers_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,6 +55,9 @@ class _MyAnswersState extends ConsumerState<MyAnswers> {
               child: PagedListView<int, Answer>(
                     pagingController: _pagingController,
                     builderDelegate: PagedChildBuilderDelegate<Answer>(
+                      firstPageErrorIndicatorBuilder:(context) => ErrorIndicator(
+                  onTryAgain: () => _pagingController.refresh(),
+                ),
                       itemBuilder: (context, item, index) {
                         return Text(item.title);
                       },

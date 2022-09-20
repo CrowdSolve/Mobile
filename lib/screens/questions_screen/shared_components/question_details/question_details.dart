@@ -4,6 +4,7 @@ import 'package:cs_mobile/models/comment.dart';
 import 'package:cs_mobile/models/question.dart';
 import 'package:cs_mobile/screens/questions_screen/shared_components/question_details/widgets/comment_card.dart';
 import 'package:cs_mobile/screens/questions_screen/shared_components/question_details/widgets/expanded_question_card.dart';
+import 'package:cs_mobile/screens/questions_screen/tabs/widgets/error_indicator.dart';
 import 'package:cs_mobile/services/questions_service.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -94,6 +95,9 @@ class _QuestionDetailsState extends State<QuestionDetails> {
               pagingController: _pagingController,
               separatorBuilder: (context, index) => Divider(thickness: 1,),
               builderDelegate: PagedChildBuilderDelegate<Comment>(
+                firstPageErrorIndicatorBuilder:(context) => ErrorIndicator(
+                  onTryAgain: () => _pagingController.refresh(),
+                ),
                 itemBuilder: (context, item, index) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: CommentCard(comment: item),

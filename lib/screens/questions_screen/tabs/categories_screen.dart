@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import 'widgets/categories_dialog.dart';
+import 'widgets/error_indicator.dart';
 
 
 class CategoriesScreen extends StatefulWidget {
@@ -79,6 +80,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               physics: NeverScrollableScrollPhysics(),
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate<Question>(
+                firstPageErrorIndicatorBuilder:(context) => ErrorIndicator(
+                  onTryAgain: () => _pagingController.refresh(),
+                ),
                 itemBuilder: (context, item, index) => QuestionCard(question: item,)
               ),
             ),

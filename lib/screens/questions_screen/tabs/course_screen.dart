@@ -8,6 +8,8 @@ import 'package:cs_mobile/services/questions_service.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
+import 'widgets/error_indicator.dart';
+
 
 
 class CourseScreen extends StatefulWidget {
@@ -130,6 +132,9 @@ class _CourseScreenState extends State<CourseScreen> {
               physics: NeverScrollableScrollPhysics(),
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate<Question>(
+                firstPageErrorIndicatorBuilder:(context) => ErrorIndicator(
+                  onTryAgain: () => _pagingController.refresh(),
+                ),
                 itemBuilder: (context, item, index) => QuestionCard(question: item,)
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:cs_mobile/models/question.dart';
+import 'package:cs_mobile/screens/questions_screen/tabs/widgets/error_indicator.dart';
 import 'package:cs_mobile/services/questions_service.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -42,6 +43,9 @@ class Search extends SearchDelegate {
       child: PagedListView<int, Question>(
         pagingController: _pagingController,
         builderDelegate: PagedChildBuilderDelegate<Question>(
+          firstPageErrorIndicatorBuilder:(context) => ErrorIndicator(
+                  onTryAgain: () => _pagingController.refresh(),
+                ),
           itemBuilder: (context, item, index) => QuestionCard(question: item),
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:cs_mobile/screens/questions_screen/tabs/widgets/error_indicator.dart';
 import 'package:cs_mobile/services/notifications_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,6 +57,9 @@ class _MyNotificationsState extends ConsumerState<MyNotifications> {
               child: PagedListView<int, NotificationModel>(
                     pagingController: _pagingController,
                     builderDelegate: PagedChildBuilderDelegate<NotificationModel>(
+                      firstPageErrorIndicatorBuilder:(context) => ErrorIndicator(
+                  onTryAgain: () => _pagingController.refresh(),
+                ),
                       itemBuilder: (context, item, index) {
                         return Text(item.title);
                       },

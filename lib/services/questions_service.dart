@@ -167,7 +167,7 @@ Future<void> lockQuestion(String authKey, int questionId) async {
     // then throw an exception.
   }
 }
-Future<void> addComment(String authKey, Map data, int questionId) async {
+Future<void> addComment(String authKey, Map data, String questionId) async {
   final response = await http.post(
     Uri.parse(
         'https://api.github.com/repos/CrowdSolve/data/issues/${questionId}/comments'),

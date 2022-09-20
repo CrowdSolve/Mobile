@@ -96,7 +96,7 @@ Future<void> confirmSubmitComment(
   Future<void> _trySubmit() async {
     try {
       await addComment(
-          githubOAuthKeyModel, <String, String>{'body': body}, questionId);
+          githubOAuthKeyModel, <String, String>{'body': body}, questionId.toString());
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,

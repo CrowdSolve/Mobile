@@ -250,6 +250,7 @@ class CustomBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color bgColor = Color(int.parse('FF' + label.color, radix: 16));
     return Padding(
       padding: const EdgeInsets.only(left: 8.0),
       child: Material(
@@ -258,11 +259,11 @@ class CustomBadge extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         elevation: 2,
-        color: Color(int.parse('FF' + label.color, radix: 16)),
+        color: bgColor,
         child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Text(
-            label.name.substring(2),
+            label.name.substring(2), style: TextStyle(color: bgColor.computeLuminance() > 0.5 ? Colors.black : Colors.white),
           ),
         ),
       ),

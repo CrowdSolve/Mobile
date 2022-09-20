@@ -43,6 +43,9 @@ class _MainScreenState extends ConsumerState<QuestionsScreen> {
                   padding: EdgeInsets.only(left: 16),
                   isScrollable: true,
                   indicatorSize: TabBarIndicatorSize.label,
+                  indicatorColor: Theme.of(context).colorScheme.primary,
+                  labelColor: Theme.of(context).colorScheme.primary,
+                  unselectedLabelColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
                   tabs: <Widget>[
                     Tab(
                       text: "Home",

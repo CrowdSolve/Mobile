@@ -24,7 +24,7 @@ class SearchButton extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 5),
                   child: Text(
                     'Search',
-                    style: TextStyle(color: Colors.white54),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSecondaryContainer),
                   ),
                 ),
               ),
@@ -33,7 +33,7 @@ class SearchButton extends StatelessWidget {
           ),
         ),
         style: TextButton.styleFrom(
-          backgroundColor: Theme.of(context).colorScheme.onSecondary,
+          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
             side: BorderSide.none,

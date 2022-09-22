@@ -11,7 +11,7 @@ class AuthAvatarButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final githubOAuthKeyModel = ref.watch(githubOAuthKeyModelProvider);
-    return FutureBuilder<UserModel>(
+    return FutureBuilder<FullUserModel>(
       future: fetchAuthenticatedUser(githubOAuthKeyModel),
       builder: (context, snapshot) {
         if (snapshot.hasData) {

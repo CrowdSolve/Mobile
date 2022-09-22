@@ -1,10 +1,12 @@
 import 'package:cs_mobile/markdown/markdown_renderer.dart';
 import 'package:cs_mobile/models/question.dart';
+import 'package:cs_mobile/models/user.dart';
 import 'package:cs_mobile/services/questions_service.dart';
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:like_button/like_button.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -36,19 +38,27 @@ class ExpandedQuestionCard extends ConsumerWidget {
                       onPressed: (() => Navigator.pop(context)),
                       icon: Icon(Icons.arrow_back_ios_rounded)),
                 ),
-                CircleAvatar(
-                  backgroundImage: NetworkImage(question.posterAvatarUrl),
-                  radius: 10,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  question.posterName,
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                Text(' ● ${timeago.format(DateTime.now().subtract(DateTime.now().difference(DateTime.parse(question.createdAt))))}',
-                    style: Theme.of(context).textTheme.labelSmall),
+                InkWell(
+                  onTap: () => context.go('/users/s', extra: UserModel(login: question.posterName, avatarUrl: question.posterAvatarUrl, id: question.posterName,)),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(question.posterAvatarUrl),
+                        radius: 10,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        question.posterName,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      Text(
+                          ' ● ${timeago.format(DateTime.now().subtract(DateTime.now().difference(DateTime.parse(question.createdAt))))}',
+                          style: Theme.of(context).textTheme.labelSmall),
+                    ],
+                  ),
+                )
               ],
             ),
             SizedBox(

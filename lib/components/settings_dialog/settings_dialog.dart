@@ -6,6 +6,7 @@ import 'package:cs_mobile/top_level_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'screens/my_answers/my_answers.dart';
@@ -13,7 +14,7 @@ import 'screens/my_notifications/my_notifications.dart';
 import 'screens/my_questions/my_questions.dart';
 
 class ProfileDialog extends ConsumerWidget  {
-  final UserModel user;
+  final FullUserModel user;
   const ProfileDialog({Key? key, required this.user}) : super(key: key);
   Future<void> _signOut(BuildContext context, FirebaseAuth firebaseAuth) async {
     try {
@@ -83,62 +84,68 @@ class ProfileDialog extends ConsumerWidget  {
                         Spacer()
                       ],
                     ),
-                    SizedBox(height: 20,),
-                    SizedBox(
-                      height: 35,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.transparent,
-                            backgroundImage: NetworkImage(user.avatarUrl),
-                          ),
-                          SizedBox(
-                            width: 22,
-                          ),
-                          user.name!=""?
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    user.name,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        fontSize: 15, fontWeight: FontWeight.normal,),
-                                  ),
+                    SizedBox(height: 10,),
+                    InkWell(
+                      onTap: () => context.go('/users/s', extra: UserModel(login: user.login, avatarUrl: user.avatarUrl, id: user.id,)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: SizedBox(
+                          height: 35,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                backgroundImage: NetworkImage(user.avatarUrl),
+                              ),
+                              SizedBox(
+                                width: 22,
+                              ),
+                              user.name!=""?
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        user.name,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                            fontSize: 15, fontWeight: FontWeight.normal,),
+                                      ),
+                                    ),
+                                    Flexible(
+                                      child: Text(
+                                        user.login,
+                                          overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.grey),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Flexible(
-                                  child: Text(
-                                    user.login,
+                              ):Flexible(
+                                child: Text(
+                                      user.login,
                                       overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.grey),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ):Flexible(
-                            child: Text(
-                                  user.login,
-                                  overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  style: TextStyle(
-                                      fontSize: 15, fontWeight: FontWeight.normal),
-                                ),
+                                        maxLines: 1,
+                                      style: TextStyle(
+                                          fontSize: 15, fontWeight: FontWeight.normal),
+                                    ),
+                              ),
+                              
+                              
+                            ],
                           ),
-                          
-                          
-                        ],
+                        ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.only(bottom: 10),
                       child: Divider(),
                     ),
                     ListTile(

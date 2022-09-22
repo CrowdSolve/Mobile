@@ -1,4 +1,6 @@
+import 'package:cs_mobile/components/profile_screen/profile_screen.dart';
 import 'package:cs_mobile/models/question.dart';
+import 'package:cs_mobile/models/user.dart';
 import 'package:cs_mobile/screens/questions_screen/main_screen.dart';
 import 'package:cs_mobile/screens/questions_screen/shared_components/question_details/question_details.dart';
 import 'package:cs_mobile/top_level_provider.dart';
@@ -33,6 +35,9 @@ class AuthWidget extends ConsumerWidget {
                   path: 'questions/:id',
                   builder: (context, state) => state.extra != null? QuestionDetails(id: state.params['id']!, question: state.extra! as Question,):QuestionDetails(id: state.params['id']!),
                 ),
+                GoRoute(
+                  path: 'users/:id',
+                  builder: (context, state) => state.extra != null? ProfileScreen( user: state.extra! as UserModel,):ProfileScreen(userId: state.params['id']!),),
               ],
             ),
             GoRoute(

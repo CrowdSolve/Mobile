@@ -15,7 +15,8 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
   bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+      body: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topRight,
@@ -53,6 +54,7 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
                     }),
         ),
       ),
+    ),
     );
   }
 
@@ -69,10 +71,25 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
 
 
   void _showSignInError(Object exception) {
-    showExceptionAlertDialog(
-      context: context,
-      title: "Failed",
-      exception: exception,
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        action: SnackBarAction(
+          label: 'More info',
+          textColor: Theme.of(context).colorScheme.onErrorContainer,
+          onPressed: () {
+            showExceptionAlertDialog(
+              context: context,
+              title: 'Sign in failed',
+              exception: exception,
+            );
+          },
+        ),
+        content: Text(
+          'Sign in failed',
+          style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.errorContainer,
+      ),
     );
   }
 

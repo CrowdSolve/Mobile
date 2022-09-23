@@ -37,7 +37,7 @@ class AuthWidget extends ConsumerWidget {
                 ),
                 GoRoute(
                   path: 'users/:id',
-                  builder: (context, state) => state.extra != null? ProfileScreen( user: state.extra! as UserModel,):ProfileScreen(userId: state.params['id']!),),
+                  builder: (context, state) => ProfileScreen( user: state.extra! as UserModel,),)
               ],
             ),
             GoRoute(
@@ -77,7 +77,7 @@ class AuthWidget extends ConsumerWidget {
               brightness: Brightness.light,
             );
           }
-          return MaterialApp.router(
+          return MaterialApp(
             theme: ThemeData(
               useMaterial3: true,
               colorScheme: lightColorScheme,
@@ -88,9 +88,10 @@ class AuthWidget extends ConsumerWidget {
             ),
             debugShowCheckedModeBanner: false,
             themeMode: themeMode? ThemeMode.dark: ThemeMode.light,
-            routeInformationProvider: _router.routeInformationProvider,
-            routeInformationParser: _router.routeInformationParser,
-            routerDelegate: _router.routerDelegate,
+            home: ProfileScreen( user: UserModel(id: 'yousseflasheen', login: 'yousseflasheen', avatarUrl: 'https://avatars.githubusercontent.com/u/28854622?v=4'),),
+            //routeInformationProvider: _router.routeInformationProvider,
+            //routeInformationParser: _router.routeInformationParser,
+            //routerDelegate: _router.routerDelegate,
           );
         });
       },

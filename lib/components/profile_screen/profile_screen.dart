@@ -102,10 +102,18 @@ class _UserQuestionsState extends State<UserQuestions> {
           ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        child: Column(
-          children: [
-            if (_pagingController.itemList != null)
-              Align(
+        child: PagedListView<int, Question>(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          pagingController: _pagingController,
+          builderDelegate: PagedChildBuilderDelegate<Question>(
+              firstPageErrorIndicatorBuilder: (context) => ErrorIndicator(
+                    onTryAgain: () => _pagingController.refresh(),
+                  ),
+              itemBuilder: (context, item, index) =>
+              index==0?Column(
+                children: [
+                  Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 44.0, bottom: 8.0),
@@ -120,19 +128,9 @@ class _UserQuestionsState extends State<UserQuestions> {
                   ),
                 ),
               ),
-            PagedListView<int, Question>(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              pagingController: _pagingController,
-              builderDelegate: PagedChildBuilderDelegate<Question>(
-                  firstPageErrorIndicatorBuilder: (context) => ErrorIndicator(
-                        onTryAgain: () => _pagingController.refresh(),
-                      ),
-                  itemBuilder: (context, item, index) =>
-                      QuestionCard(question: item)),
-            ),
-            
-          ],
+                  QuestionCard(question: item,),
+                ],
+              ):QuestionCard(question: item,)),
         ),
       ),
     );

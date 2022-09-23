@@ -77,7 +77,7 @@ class AuthWidget extends ConsumerWidget {
               brightness: Brightness.light,
             );
           }
-          return MaterialApp(
+          return MaterialApp.router(
             theme: ThemeData(
               useMaterial3: true,
               colorScheme: lightColorScheme,
@@ -88,10 +88,9 @@ class AuthWidget extends ConsumerWidget {
             ),
             debugShowCheckedModeBanner: false,
             themeMode: themeMode? ThemeMode.dark: ThemeMode.light,
-            home: ProfileScreen( user: UserModel(id: 'yousseflasheen', login: 'yousseflasheen', avatarUrl: 'https://avatars.githubusercontent.com/u/28854622?v=4'),),
-            //routeInformationProvider: _router.routeInformationProvider,
-            //routeInformationParser: _router.routeInformationParser,
-            //routerDelegate: _router.routerDelegate,
+            routeInformationProvider: _router.routeInformationProvider,
+            routeInformationParser: _router.routeInformationParser,
+            routerDelegate: _router.routerDelegate,
           );
         });
       },

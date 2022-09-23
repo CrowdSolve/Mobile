@@ -1,29 +1,16 @@
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:github_sign_in/github_sign_in.dart';
 
-class AuthModel with ChangeNotifier {
-  final FirebaseAuth firebaseAuth;
-  bool isLoading;
-  bool submitted;
 
-  AuthModel({
-    required this.firebaseAuth,
-    this.isLoading = false,
-    this.submitted = false,
-  });
+class AuthModel {
   Future<void> authenticate(context, ref) async {
     final GitHubSignIn gitHubSignIn = GitHubSignIn(
       scope: 'public_repo, user, notifications',
       clientId: '4b4d462397a576ac86fd',
       clientSecret: '7bbde3c03020db1b1f31f6080e6823cc415086cd',
       redirectUrl: 'crowdsolve.lasheen.dev://oauth2redirect');
-
-    
     try {
-      updateWith(isLoading: true);
-
       //Show the sign in webview and get the token from it
       final GitHubSignInResult signInResult = await gitHubSignIn.signIn(context);
 
@@ -37,19 +24,8 @@ class AuthModel with ChangeNotifier {
       await FirebaseAuth.instance
           .signInWithCredential(GithubAuthProvider.credential(signInResult.token!));
 
-
     } catch (e) {
-      updateWith(isLoading: false);
       rethrow;
     }
-  }
-
-  void updateWith({
-    bool? isLoading,
-    bool? submitted,
-  }) {
-    this.isLoading = isLoading ?? this.isLoading;
-    this.submitted = submitted ?? this.submitted;
-    notifyListeners();
   }
 }

@@ -1,53 +1,21 @@
 import 'package:alert_dialogs/alert_dialogs.dart';
 import 'package:awesome_icons/awesome_icons.dart';
 import 'package:cs_mobile/auth/auth_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GithubAuthScreen extends ConsumerStatefulWidget {
-  final AuthModel model;
-  final VoidCallback? onSignedIn;
-  const GithubAuthScreen({
-    Key? key,
-    this.onSignedIn,
-    required this.model,
-  }) : super(key: key);
-
-  factory GithubAuthScreen.withFirebaseAuth(FirebaseAuth firebaseAuth,
-      {VoidCallback? onSignedIn}) {
-    return GithubAuthScreen(
-      model: AuthModel(firebaseAuth: firebaseAuth),
-      onSignedIn: onSignedIn,
-    );
-  }
 
   @override
   _GithubAuthScreenState createState() => _GithubAuthScreenState();
 }
 
 class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
-   AuthModel get model => widget.model;
-
-  @override
-  void initState() {
-    super.initState();
-    // Temporary workaround to update state until a replacement for ChangeNotifierProvider is found
-    model.addListener(() => setState(() {}));
-  }
-
-  @override
-  void dispose() {
-    model.dispose();
-    super.dispose();
-  }
+  bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
-    return widget.model.isLoading
-        ? Center(
-            child: CircularProgressIndicator(),
-          )
-        : Container(
+    return Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topRight,
@@ -65,8 +33,9 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
             child: Center(
         child: SizedBox(
           width: 200,
+          height: 50,
           child: ElevatedButton(
-            child: Row(
+            child: _isLoading?CircularProgressIndicator(): Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(FontAwesomeIcons.github,),
@@ -74,8 +43,14 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
                 Text("Sign in with Github",)
               ],
             ),
-            onPressed: model.isLoading ? null : _submit,
-          ),
+            onPressed: _isLoading
+                  ? null
+                  : () {
+                      _submit();
+                      setState(() {
+                        _isLoading = true;
+                      });
+                    }),
         ),
       ),
     );
@@ -83,17 +58,17 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
 
   Future<void> _submit() async {
     try {
-      await model.authenticate(context, ref);
-      if (widget.onSignedIn != null) {
-        widget.onSignedIn?.call();
-      }
+      await AuthModel().authenticate(context, ref);
     } catch (e) {
-      _showSignInError(model, e);
+      setState(() {
+        _isLoading = false;
+      });
+      _showSignInError(e);
     }
   }
 
 
-  void _showSignInError(AuthModel model, dynamic exception) {
+  void _showSignInError(Object exception) {
     showExceptionAlertDialog(
       context: context,
       title: "Failed",

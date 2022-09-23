@@ -19,7 +19,6 @@ class AuthWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authStateChanges = ref.watch(authStateChangesProvider);
-    final firebaseAuth = ref.watch(firebaseAuthProvider);
     final themeMode = ref.watch(themeModeProvider);
     return authStateChanges.when(
       data: (user) {
@@ -43,7 +42,7 @@ class AuthWidget extends ConsumerWidget {
             GoRoute(
               path: '/login',
               builder: (context, state) =>
-                  GithubAuthScreen.withFirebaseAuth(firebaseAuth),
+                  GithubAuthScreen(),
             ),
           ],
           redirect: (state) {

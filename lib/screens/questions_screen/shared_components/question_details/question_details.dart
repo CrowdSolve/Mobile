@@ -67,7 +67,7 @@ class _QuestionDetailsState extends State<QuestionDetails> {
       ),
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        floatingActionButton: AnimatedFAB(openWidget: MDEditor.comment(questionId: widget.id,)),
+        floatingActionButton: AnimatedFAB(openWidget: MDEditor.comment(questionId: widget.id,), label: 'Answer the question', icon: Icons.add_comment ,),
         body: ListView(
           children: [
             widget.question != null?ExpandedQuestionCard(question: widget.question!):

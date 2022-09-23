@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 
 class AnimatedFAB extends StatelessWidget {
   final Widget openWidget;
+  final String label;
+  final IconData icon;
   const AnimatedFAB({
-    Key? key, required this.openWidget,
+    Key? key,
+    required this.openWidget,
+    required this.label,
+    required this.icon,
   }) : super(key: key);
 
   @override
@@ -17,19 +22,40 @@ class AnimatedFAB extends StatelessWidget {
       openElevation: 0,
       closedColor: Theme.of(context).colorScheme.primaryContainer,
       closedElevation: 6,
-      closedShape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0), bottomLeft: Radius.circular(16.0), bottomRight: Radius.circular(16.0))),
-      closedBuilder: (context, openContainer) =>  ConstrainedBox(
-          constraints: const BoxConstraints.tightFor(
-        width: 56.0,
-        height: 56.0,
-      ),
-          child: Center(
-            child: Icon(
-              Icons.add_comment_rounded,
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
+      tappable: false,
+      closedShape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+        Radius.circular(16.0),
+      )),
+      closedBuilder: (context, openContainer) {
+        return InkWell(
+          onTap: openContainer,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints.tightFor(
+              height: 56.0,
+            ),
+            child: Padding(
+              padding: EdgeInsetsDirectional.only(start: 16.0, end: 20.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    icon,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    size: 24,
+                  ),
+                      SizedBox(width: 8.0),
+                  Text(
+                    label,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimaryContainer),
+                  ),
+                ],
+              ),
             ),
           ),
-        )
+        );
+      },
     );
   }
 }

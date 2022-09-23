@@ -21,7 +21,7 @@ class _MainScreenState extends ConsumerState<QuestionsScreen> {
     return Scaffold(
       appBar: AppBar(toolbarHeight: 0,surfaceTintColor: Colors.transparent,),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      floatingActionButton: AnimatedFAB(openWidget: MDEditor.question()),
+      floatingActionButton: AnimatedFAB(openWidget: MDEditor.question(), label: 'Ask a question', icon: Icons.add_comment),
       body: SafeArea(
         child: DefaultTabController(
           length: 3,

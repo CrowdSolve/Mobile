@@ -26,67 +26,67 @@ class _FullUserInfoState extends State<FullUserInfo> {
         color: Theme.of(context).colorScheme.secondaryContainer,
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(40)),
       ),
-      child: Column(
-        children: [
-          Container(
-            height: 40,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(40)),
-              boxShadow: [
-                BoxShadow(
-                  offset: Offset(0, 5),
-                  color: Theme.of(context).colorScheme.shadow.withOpacity(0.5),
-                )
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 100,
-            child: Center(
-              child: FutureBuilder<FullUserModel>(
-                future: fullUser,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    FullUserModel user = snapshot.data!;
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        if (user.email.isNotEmpty)
-                          InfoTile(info: user.email, icon: Icons.email_rounded),
-                        SizedBox(
-                          width: 20,
+      child: SizedBox(
+        height: 130,
+        child: FutureBuilder<FullUserModel>(
+          future: fullUser,
+          builder: (context, snapshot) {
+            FullUserModel? user= snapshot.data; 
+            return Column(
+              children: [
+              Container(
+                height: 40,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.background,
+                  borderRadius:
+                      BorderRadius.vertical(bottom: Radius.circular(40)),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(0, 5),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .shadow
+                          .withOpacity(0.5),
+                    ),
+                  ],
+                ),
+                child: user != null? Center(
+                  child: Text(
+                    user.name,
+                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                          color: Theme.of(context).colorScheme.onBackground,
                         ),
-                        if (user.name.isNotEmpty)
-                          InfoTile(info: user.name, icon: Icons.person),
-                          SizedBox(
-                          width: 20,
-                        ),
-                        if (user.location.isNotEmpty)
-                          InfoTile(
-                              info: user.location,
-                              icon: Icons.location_on_rounded),
-                              SizedBox(
-                          width: 20,
-                        ),
-                        if (user.bio.isNotEmpty)
-                          InfoTile(info: user.bio, icon: Icons.article_rounded),
-                      ],
-                    );
-                  } else if (snapshot.hasError) {
-                    return SizedBox.shrink();
-                  }
-
-                  // By default, show a loading spinner.
-                  return const Center(child: CircularProgressIndicator());
-                },
+                  ),
+                ):SizedBox.shrink(),
               ),
-            ),
-          ),
-        ],
+              Spacer(),
+              if (user != null)
+                Row(
+                  children: [
+                    if (user.email.isNotEmpty)
+                      InfoTile(info: user.email, icon: Icons.email_rounded),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    if (user.location.isNotEmpty)
+                      InfoTile(
+                          info: user.location,
+                          icon: Icons.location_on_rounded),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    if (user.bio.isNotEmpty)
+                      InfoTile(info: user.bio, icon: Icons.article_rounded),
+                  ],
+                )
+              else
+                const Center(child: CircularProgressIndicator())
+
+              ,Spacer()
+            ]);
+          },
+        ),
       ),
     );
   }
@@ -101,11 +101,13 @@ class InfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Icon(icon),
-        Text(info),
-      ],
+    return Expanded(
+      child: Column(
+        children: [
+          Icon(icon, color: Theme.of(context).colorScheme.onSecondaryContainer,),
+          Text(info,style: TextStyle(color: Theme.of(context).colorScheme.onSecondaryContainer),),
+        ],
+      ),
     );
   }
 }

@@ -10,9 +10,8 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ProfileScreen extends StatefulWidget {
   final UserModel? user;
-  final String? userId;
 
-  const ProfileScreen({Key? key, this.user, this.userId}) : super(key: key);
+  const ProfileScreen({Key? key, this.user}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -51,8 +50,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-                  FullUserInfo(userId: widget.userId??widget.user!.id),
-          UserQuestions(userId: widget.userId??widget.user!.id),
+          FullUserInfo(userId: widget.user!.id),
+          UserQuestions(userId: widget.user!.id),
         ],
       ),
     );
@@ -94,38 +93,47 @@ class _UserQuestionsState extends State<UserQuestions> {
       _pagingController.error = error;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () => Future.sync(
             () => _pagingController.refresh(),
           ),
-      child: Column(
-        children: [
-          if(_pagingController.itemList != null)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Questions by this user (" + _pagingController.itemList!.length.toString() + ')',
-              style: GoogleFonts.roboto(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: Column(
+          children: [
+            if (_pagingController.itemList != null)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 44.0, bottom: 8.0),
+                  child: Text(
+                    "Questions by this user (" +
+                        _pagingController.itemList!.length.toString() +
+                        ')',
+                    style: GoogleFonts.roboto(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-          PagedListView<int, Question>(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            pagingController: _pagingController,
-            builderDelegate: PagedChildBuilderDelegate<Question>(
-              firstPageErrorIndicatorBuilder:(context) => ErrorIndicator(
-                onTryAgain: () => _pagingController.refresh(),
-              ),
-              itemBuilder: (context, item, index) => QuestionCard(question: item)
+            PagedListView<int, Question>(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              pagingController: _pagingController,
+              builderDelegate: PagedChildBuilderDelegate<Question>(
+                  firstPageErrorIndicatorBuilder: (context) => ErrorIndicator(
+                        onTryAgain: () => _pagingController.refresh(),
+                      ),
+                  itemBuilder: (context, item, index) =>
+                      QuestionCard(question: item)),
             ),
             
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCpSBeatjgeYwI87BxUMsDFUxpjloAOvYk',
-    appId: '1:206057750523:android:829b36dcbd89c1718d555e',
+    appId: '1:206057750523:android:88b6dd564fd5d8218d555e',
     messagingSenderId: '206057750523',
     projectId: 'crowd-solve',
     storageBucket: 'crowd-solve.appspot.com',

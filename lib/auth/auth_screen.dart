@@ -12,9 +12,8 @@ class GithubAuthScreen extends ConsumerStatefulWidget {
 class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-            decoration: BoxDecoration(
+    return Container(
+       decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
@@ -22,20 +21,23 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
                   0.3,0.9,1
                 ],
                 colors: [
-                  Theme.of(context).colorScheme.onPrimary,
-                  Theme.of(context).colorScheme.onSecondary,
-                  Theme.of(context).colorScheme.onTertiary,
+                  Theme.of(context).colorScheme.primaryContainer,
+                  Theme.of(context).colorScheme.secondaryContainer,
+                  Theme.of(context).colorScheme.tertiaryContainer,
                 ],
               ),
             ),
-            child: Center(
-        child: SizedBox(
-          width: 300,
-          height: 50,
-          child: AuthButton()
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        resizeToAvoidBottomInset: true,
+        body: Center(
+          child: SizedBox(
+            width: 300,
+            height: 50,
+            child: AuthButton()
+          ),
         ),
       ),
-    ),
     );
   } 
 }

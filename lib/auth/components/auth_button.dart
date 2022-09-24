@@ -79,6 +79,9 @@ class _AuthButtonState extends ConsumerState<AuthButton> {
           Expanded(
             flex: 3,
             child: TextField(
+              onSubmitted: (_) => _submit(),
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.go,
               controller: controller,
               decoration: InputDecoration(
                   hintText: 'Username or email',

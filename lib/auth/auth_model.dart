@@ -1,15 +1,18 @@
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:github_sign_in/github_sign_in.dart';
+//import 'package:github_sign_in/github_sign_in.dart';
+import 'package:cs_mobile/auth/auth_service.dart';
+
 
 
 class AuthModel {
-  Future<void> authenticate(context, ref) async {
+  Future<void> authenticate(context, ref, String? initialLogin) async {
     final GitHubSignIn gitHubSignIn = GitHubSignIn(
       scope: 'public_repo, user, notifications',
       clientId: '4b4d462397a576ac86fd',
       clientSecret: '7bbde3c03020db1b1f31f6080e6823cc415086cd',
-      redirectUrl: 'https://crowd-solve.firebaseapp.com/__/auth/handler');
+      redirectUrl: 'https://crowd-solve.firebaseapp.com/__/auth/handler',
+      initialLogin: initialLogin);
     try {
       //Show the sign in webview and get the token from it
       final GitHubSignInResult signInResult = await gitHubSignIn.signIn(context);

@@ -5,6 +5,7 @@ import 'package:cs_mobile/screens/questions_screen/tabs/widgets/categories_dialo
 import 'package:cs_mobile/services/questions_service.dart';
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:text_selection_controls/text_selection_controls.dart';
@@ -58,6 +59,7 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
   }
 
   String query = "";
+  bool preview = false;
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +69,12 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
     return WillPopScope(
       onWillPop: (() => onWillPop(context)),
       child: Scaffold(
+        floatingActionButton: IconButton(
+            icon: Icon(preview?Icons.edit:Icons.preview),
+            onPressed: () {
+              if(!preview)FocusManager.instance.primaryFocus!.unfocus();
+              setState(() => preview = !preview);
+            }),
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
           title: Text(widget.isTitleIncluded?'Ask a question':'Add a comment'),
@@ -147,50 +155,62 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
                   style: TextStyle(fontSize: 20),
                 ):SizedBox.shrink(),
                 Expanded(
-                  child: TextFormField(
-                    selectionControls: FlutterSelectionControls(
-                        verticalPadding: 14,
-                        horizontalPadding: 12,
-                        toolBarItems: <ToolBarItem>[
-                          ToolBarItem(
-                              item: Icon(Icons.cut_rounded),
-                              itemControl: ToolBarItemControl.cut),
-                          ToolBarItem(
-                              item: Icon(Icons.copy_rounded),
-                              itemControl: ToolBarItemControl.copy),
-                          ToolBarItem(
-                              item: Icon(Icons.paste_rounded),
-                              itemControl: ToolBarItemControl.paste),
-                          ToolBarItem(
-                              item: Icon(Icons.select_all_rounded),
-                              itemControl: ToolBarItemControl.selectAll),
-                          ToolBarItem(
-                            item: Icon(Icons.format_bold_rounded),
-                            onItemPressed: (content, start, end) => wrapText(
-                                _bodyController, content, start, end, '**'),
-                          ),
-                          ToolBarItem(
-                            item: Icon(Icons.format_italic_rounded),
-                            onItemPressed: (content, start, end) => wrapText(
-                                _bodyController, content, start, end, '*'),
-                          ),
-                          ToolBarItem(
-                            item: Icon(Icons.format_strikethrough_rounded),
-                            onItemPressed: (content, start, end) => wrapText(
-                                _bodyController, content, start, end, '~~'),
-                          ),
-                          ToolBarItem(
-                            item: !_loading
-                                ? Icon(Icons.add_photo_alternate_rounded)
-                                : CircularProgressIndicator(),
-                            onItemPressed: (content, start, end) =>
-                                !_loading ? _onImageButtonPressed() : null,
-                          ),
-                        ]),
-                    controller: _bodyController,
-                    focusNode: _bodyFocusNode,
-                    maxLines: 99,
-                    decoration: inputDecoration.copyWith(hintText: "Body"),
+                  child: IndexedStack(
+                    index: preview?0:1,
+                    children: [
+                      Markdown(
+                        selectable: true,
+                        styleSheet: MarkdownStyleSheet(p: Theme.of(context).textTheme.bodyText1,),
+                        data: _bodyController.text,
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      TextFormField(
+                        style: Theme.of(context).textTheme.bodyText1,
+                        selectionControls: FlutterSelectionControls(
+                            verticalPadding: 14,
+                            horizontalPadding: 12,
+                            toolBarItems: <ToolBarItem>[
+                              ToolBarItem(
+                                  item: Icon(Icons.cut_rounded),
+                                  itemControl: ToolBarItemControl.cut),
+                              ToolBarItem(
+                                  item: Icon(Icons.copy_rounded),
+                                  itemControl: ToolBarItemControl.copy),
+                              ToolBarItem(
+                                  item: Icon(Icons.paste_rounded),
+                                  itemControl: ToolBarItemControl.paste),
+                              ToolBarItem(
+                                  item: Icon(Icons.select_all_rounded),
+                                  itemControl: ToolBarItemControl.selectAll),
+                              ToolBarItem(
+                                item: Icon(Icons.format_bold_rounded),
+                                onItemPressed: (content, start, end) => wrapText(
+                                    _bodyController, content, start, end, '**'),
+                              ),
+                              ToolBarItem(
+                                item: Icon(Icons.format_italic_rounded),
+                                onItemPressed: (content, start, end) => wrapText(
+                                    _bodyController, content, start, end, '*'),
+                              ),
+                              ToolBarItem(
+                                item: Icon(Icons.format_strikethrough_rounded),
+                                onItemPressed: (content, start, end) => wrapText(
+                                    _bodyController, content, start, end, '~~'),
+                              ),
+                              ToolBarItem(
+                                item: !_loading
+                                    ? Icon(Icons.add_photo_alternate_rounded)
+                                    : CircularProgressIndicator(),
+                                onItemPressed: (content, start, end) =>
+                                    !_loading ? _onImageButtonPressed() : null,
+                              ),
+                            ]),
+                        controller: _bodyController,
+                        focusNode: _bodyFocusNode,
+                        maxLines: 99,
+                        decoration: inputDecoration.copyWith(hintText: "Body"),
+                      ),
+                    ],
                   ),
                 ),
               ],

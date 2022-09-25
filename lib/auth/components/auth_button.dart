@@ -30,7 +30,7 @@ class _AuthButtonState extends ConsumerState<AuthButton> {
       _isLoading = true;
     });
     try {
-      await AuthModel().authenticate(context, ref, login);
+      await AuthModel().authenticate(context, ref, initialLogin: login, allowSignUp: false);
     } catch (e) {
       setState(() {
         _isLoading = false;

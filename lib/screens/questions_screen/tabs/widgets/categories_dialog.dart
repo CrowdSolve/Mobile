@@ -14,7 +14,7 @@ class CategoriesDialog extends StatelessWidget {
         },
         )),
       body: FutureBuilder<List<Label>>(
-  future: fetchLabels('C-'),
+  future: fetchLabels('S-'),
   builder: (context, snapshot) {
     if (snapshot.hasData) {
       return ListView.builder(

@@ -54,10 +54,10 @@ class ProfileDialog extends ConsumerWidget  {
           child: SizedBox(
             height: height + 1,
             width: double.infinity,
-            child: Dialog(
+            child: Card(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
               elevation: 10,
-              insetPadding: EdgeInsets.only(top: 75, right: 15, left: 15),
+              margin: EdgeInsets.only(top: 75, right: 15, left: 15),
               child: Padding(
                 padding: const EdgeInsets.only(top: 10, right: 15, left: 15),
                 child: Column(

@@ -3,6 +3,7 @@ import 'package:cs_mobile/screens/questions_screen/shared_components/question_ca
 import 'package:cs_mobile/services/questions_service.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'widgets/categories_dialog.dart';
 import 'widgets/error_indicator.dart';
@@ -21,6 +22,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   final PagingController<int, Question> _pagingController =
       PagingController(firstPageKey: 0);
+
+  late SharedPreferences prefs;
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
@@ -45,50 +48,62 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () => Future.sync(
-            () => _pagingController.refresh(),
+    return FutureBuilder<SharedPreferences>(
+      future: SharedPreferences.getInstance(),
+      builder: (context, snapshot) {
+        if(snapshot.hasData){
+          SharedPreferences prefs = snapshot.data!;
+          query = prefs.getString('category') ?? '';
+        return RefreshIndicator(
+          onRefresh: () => Future.sync(
+                () => _pagingController.refresh(),
+              ),
+          child: ListView(
+            padding: const EdgeInsets.only(top: 10),
+            children: 
+              [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: OutlinedButton(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(query.isEmpty ? "All Categories" : query.substring(2)),
+                        Icon(Icons.arrow_drop_down),
+                      ],
+                    ),
+                    style: OutlinedButton.styleFrom(),
+                    onPressed: () async {
+                      query = await Navigator.push(
+                context,
+                MaterialPageRoute(fullscreenDialog: true,builder: (context) => CategoriesDialog())
+              )??"";
+              _pagingController.refresh();
+              setState(() {
+                
+              });
+              prefs.setString('category', query);
+                    },
+                  ),
+                ),
+                PagedListView<int, Question>(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  pagingController: _pagingController,
+                  builderDelegate: PagedChildBuilderDelegate<Question>(
+                    firstPageErrorIndicatorBuilder:(context) => ErrorIndicator(
+                      onTryAgain: () => _pagingController.refresh(),
+                    ),
+                    itemBuilder: (context, item, index) => QuestionCard(question: item,)
+                  ),
+                ),
+              ],
           ),
-      child: ListView(
-        padding: const EdgeInsets.only(top: 10),
-        children: 
-          [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: OutlinedButton(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(query.isEmpty ? "All Categories" : query.substring(2)),
-                    Icon(Icons.arrow_drop_down),
-                  ],
-                ),
-                style: OutlinedButton.styleFrom(),
-                onPressed: () async {
-                  query = await Navigator.push(
-            context,
-            MaterialPageRoute(fullscreenDialog: true,builder: (context) => CategoriesDialog())
-          )??"";
-          _pagingController.refresh();
-          setState(() {
-            
-          });
-                },
-              ),
-            ),
-            PagedListView<int, Question>(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              pagingController: _pagingController,
-              builderDelegate: PagedChildBuilderDelegate<Question>(
-                firstPageErrorIndicatorBuilder:(context) => ErrorIndicator(
-                  onTryAgain: () => _pagingController.refresh(),
-                ),
-                itemBuilder: (context, item, index) => QuestionCard(question: item,)
-              ),
-            ),
-          ],
-      ),
+        );
+        }else{
+          return Center(child: CircularProgressIndicator(),);
+        }
+      }
     );
   }
   @override

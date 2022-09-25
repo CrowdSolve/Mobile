@@ -7,6 +7,7 @@ import 'package:cs_mobile/services/label_service.dart';
 import 'package:cs_mobile/services/questions_service.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'widgets/error_indicator.dart';
 
@@ -28,6 +29,9 @@ class _CourseScreenState extends State<CourseScreen> {
 
   final PagingController<int, Question> _pagingController =
       PagingController(firstPageKey: 0);
+
+  late SharedPreferences prefs;
+  
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
@@ -68,80 +72,99 @@ class _CourseScreenState extends State<CourseScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () => Future.sync(
-            () => _pagingController.refresh(),
-          ),
-      child: ListView(
-        padding: const EdgeInsets.only(top: 10),
-        children: 
-          [
-            Align(
-            alignment: Alignment.centerLeft,
-            child: Row(
-              children: [
-                OutlinedButton(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(institution.isEmpty
-                          ? "All Institutions"
-                          : institution),
-                      Icon(Icons.arrow_drop_down),
-                    ],
-                  ),
-                  style: OutlinedButton.styleFrom(),
-                  onPressed: () async {
-                    institution = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                fullscreenDialog: true,
-                                builder: (context) => InistitutionDialog(course: course,))) ??
-                        "";
-                    _pagingController.refresh();
-                    setState(() {});
-                  },
-                ),
-                SizedBox(width: 10,),
-                OutlinedButton(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(course.isEmpty
-                          ? "All Courses"
-                          : course),
-                      Icon(Icons.arrow_drop_down),
-                    ],
-                  ),
-                  style: OutlinedButton.styleFrom(),
-                  onPressed: () async {
-                    course = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                fullscreenDialog: true,
-                                builder: (context) => CourseDialog(institution: institution,))) ??
-                        "";
-                    _pagingController.refresh();
-                    setState(() {});
-                  },
-                ),
-              ],
-            ),
-          ),
-            PagedListView<int, Question>(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              pagingController: _pagingController,
-              builderDelegate: PagedChildBuilderDelegate<Question>(
-                firstPageErrorIndicatorBuilder:(context) => ErrorIndicator(
-                  onTryAgain: () => _pagingController.refresh(),
-                ),
-                itemBuilder: (context, item, index) => QuestionCard(question: item,)
+    return FutureBuilder<SharedPreferences>(
+        future: SharedPreferences.getInstance(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            prefs = snapshot.data!;
+            institution = prefs.getString('institution') ?? '';
+            course = prefs.getString('course') ?? '';
+            return RefreshIndicator(
+              onRefresh: () => Future.sync(
+                () => _pagingController.refresh(),
               ),
-            ),
-          ],
-      ),
-    );
+              child: ListView(
+                padding: const EdgeInsets.only(top: 10),
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: [
+                        OutlinedButton(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(institution.isEmpty
+                                  ? "All Institutions"
+                                  : institution),
+                              Icon(Icons.arrow_drop_down),
+                            ],
+                          ),
+                          style: OutlinedButton.styleFrom(),
+                          onPressed: () async {
+                            institution = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        fullscreenDialog: true,
+                                        builder: (context) =>
+                                            InistitutionDialog(
+                                              course: course,
+                                            ))) ??
+                                "";
+                            _pagingController.refresh();
+                            setState(() {});
+                            prefs.setString('institution', institution);
+                          },
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        OutlinedButton(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(course.isEmpty ? "All Courses" : course),
+                              Icon(Icons.arrow_drop_down),
+                            ],
+                          ),
+                          style: OutlinedButton.styleFrom(),
+                          onPressed: () async {
+                            course = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        fullscreenDialog: true,
+                                        builder: (context) => CourseDialog(
+                                              institution: institution,
+                                            ))) ??
+                                "";
+                            _pagingController.refresh();
+                            setState(() {});
+                            prefs.setString('course', course);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  PagedListView<int, Question>(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    pagingController: _pagingController,
+                    builderDelegate: PagedChildBuilderDelegate<Question>(
+                        firstPageErrorIndicatorBuilder: (context) =>
+                            ErrorIndicator(
+                              onTryAgain: () => _pagingController.refresh(),
+                            ),
+                        itemBuilder: (context, item, index) => QuestionCard(
+                              question: item,
+                            )),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        });
   }
   @override
   void dispose() {

@@ -120,3 +120,33 @@ Future<void> confirmSubmitComment(
     await _trySubmit();
   }
 }
+
+Future<void> confirmEditComment(
+    context, githubOAuthKeyModel, body, commentId) async {
+  Future<void> _trySubmit() async {
+    try {
+      await editComment(
+          githubOAuthKeyModel, body, commentId.toString());
+    } catch (e) {
+      unawaited(showExceptionAlertDialog(
+        context: context,
+        title: "Failed",
+        exception: e,
+      ));
+    } finally {
+      Navigator.pop(context);
+    }
+  }
+
+  final bool didRequestSignOut = await showAlertDialog(
+        context: context,
+        title: "Edit your comment",
+        content: "Are you sure?",
+        cancelActionText: "Cancel",
+        defaultActionText: "Edit",
+      ) ??
+      false;
+  if (didRequestSignOut == true) {
+    await _trySubmit();
+  }
+}

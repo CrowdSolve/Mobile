@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:alert_dialogs/alert_dialogs.dart';
+import 'package:cs_mobile/models/comment.dart';
 import 'package:cs_mobile/screens/questions_screen/tabs/widgets/categories_dialog.dart';
 import 'package:cs_mobile/services/questions_service.dart';
 import 'package:cs_mobile/top_level_provider.dart';
@@ -14,10 +15,14 @@ import 'helpers.dart';
 
 class MDEditor extends ConsumerStatefulWidget {
   final bool isTitleIncluded;
-  final String? questionId;
 
-  const MDEditor.question({Key? key,}) : questionId = null,isTitleIncluded = true, super(key: key);
-  const MDEditor.comment({Key? key, required this.questionId,}) : isTitleIncluded = false ,super(key: key);
+  final String? questionId;
+  final Comment? comment;
+
+  const MDEditor.question({Key? key,}) : this.questionId = null,this.isTitleIncluded = true, this.comment = null, super(key: key);
+  const MDEditor.comment({Key? key, required this.questionId,}) :  this.isTitleIncluded = false ,this.comment = null,super(key: key);
+
+  const MDEditor.editComment({Key? key, required this.comment}) : this.questionId=null, this. isTitleIncluded = false ,super(key: key);
 
 
   @override
@@ -117,7 +122,8 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
               onPressed:_validated && !_loading? () {
                   widget.isTitleIncluded
                       ? confirmSubmitQuestion(context, githubOAuthKeyModel,_titleController.text, _bodyController.text +'\n\n'+'[tags]:- "$query,"')
-                      : confirmSubmitComment(context, githubOAuthKeyModel,_bodyController.text, widget.questionId!);
+                      : widget.comment!=null?confirmEditComment(context, githubOAuthKeyModel,_bodyController.text,widget.comment!.id):
+                      confirmSubmitComment(context, githubOAuthKeyModel,_bodyController.text, widget.questionId!);
                   
               }:null,
               icon: Icon(

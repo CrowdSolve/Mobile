@@ -1,4 +1,6 @@
+import 'package:cs_mobile/components/md_editor/md_editor.dart';
 import 'package:cs_mobile/components/profile_screen/profile_screen.dart';
+import 'package:cs_mobile/models/comment.dart';
 import 'package:cs_mobile/models/question.dart';
 import 'package:cs_mobile/models/user.dart';
 import 'package:cs_mobile/screens/questions_screen/main_screen.dart';
@@ -36,7 +38,11 @@ class AuthWidget extends ConsumerWidget {
                 ),
                 GoRoute(
                   path: 'users/:id',
-                  builder: (context, state) => ProfileScreen( user: state.extra! as UserModel,),)
+                  builder: (context, state) => ProfileScreen( user: state.extra! as UserModel,),),
+                GoRoute(
+                      path: 'comments/:id/edit',
+                      builder: (context, state) => MDEditor.editComment(comment: state.extra! as Comment,),
+                    ),
               ],
             ),
             GoRoute(

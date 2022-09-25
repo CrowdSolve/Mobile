@@ -206,7 +206,24 @@ Future<bool> deleteComment(String authKey, int commentId) async {
     return false;
   }
 }
-
+Future<void> editComment(String authKey, String body, String commentId) async {
+  final response = await http.patch(
+    Uri.parse(
+        'https://api.github.com/repos/CrowdSolve/data/issues/comments/$commentId'),
+    headers: <String, String>{
+      'Accept': 'application/vnd.github+json',
+      'Authorization': 'Bearer ' + authKey,
+    },
+    body: '{"body": "$body"}',
+  );
+  if (response.statusCode == 201) {
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+  }
+}
 Future<String> uploadImage(filepath) async {
   var url = Uri.parse('https://api.imgur.com/3/image');
   var request = http.MultipartRequest('POST', url,);

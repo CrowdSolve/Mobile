@@ -1,9 +1,11 @@
+import 'package:cs_mobile/components/md_editor/md_editor.dart';
 import 'package:cs_mobile/models/comment.dart';
 import 'package:cs_mobile/services/questions_service.dart';
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -45,6 +47,10 @@ class CommentCard extends ConsumerWidget {
                       PopupMenuItem(
                         child: Text('Delete'),
                         onTap: () => deleteComment(githubOAuthKeyModel, comment.id),
+                      ),
+                      PopupMenuItem(
+                        child: Text('Edit'),
+                        onTap: () => context.push('/comments/${comment.id}/edit', extra: comment),
                       ),
                     ],
                   )

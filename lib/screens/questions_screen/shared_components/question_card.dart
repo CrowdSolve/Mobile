@@ -14,9 +14,11 @@ class QuestionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     RegExp exp = RegExp(
-      r"!\[]\(.*\)\n",
+      r"\!\[\]\((.*)\)",
     );
-    String body = question.body.replaceAll(exp, ' *image* ');
+    String body = question.body.replaceAll(exp, '');
+    body = body.substring(0,body.indexOf('[tags]:-')).trim();
+    body = body.substring(0, body.length.clamp(0, 150));
     bool isWithImage = question.imageUrl!.isNotEmpty;
     List<Label>? labels = generateLabels();
     return Stack(

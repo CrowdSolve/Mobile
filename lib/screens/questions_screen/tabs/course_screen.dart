@@ -73,6 +73,7 @@ class _CourseScreenState extends State<CourseScreen> {
             () => _pagingController.refresh(),
           ),
       child: ListView(
+        padding: const EdgeInsets.only(top: 10),
         children: 
           [
             Align(

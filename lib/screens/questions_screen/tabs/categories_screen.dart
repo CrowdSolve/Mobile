@@ -50,6 +50,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             () => _pagingController.refresh(),
           ),
       child: ListView(
+        padding: const EdgeInsets.only(top: 10),
         children: 
           [
             Align(

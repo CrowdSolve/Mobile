@@ -13,17 +13,31 @@ import 'package:text_selection_controls/text_selection_controls.dart';
 
 import 'helpers.dart';
 
-class MDEditor extends ConsumerStatefulWidget {
-  final bool isTitleIncluded;
+enum _MDEditorMode { addQuestion, addComment, editComment }
 
+class MDEditor extends ConsumerStatefulWidget {
   final String? questionId;
   final Comment? comment;
+  final String title;
 
-  const MDEditor.question({Key? key,}) : this.questionId = null,this.isTitleIncluded = true, this.comment = null, super(key: key);
-  const MDEditor.comment({Key? key, required this.questionId,}) :  this.isTitleIncluded = false ,this.comment = null,super(key: key);
+  final _MDEditorMode mode;
 
-  const MDEditor.editComment({Key? key, required this.comment}) : this.questionId=null, this. isTitleIncluded = false ,super(key: key);
+  const MDEditor.question()
+      : this.mode = _MDEditorMode.addQuestion,
+        this.title = 'Add Question',
+        this.questionId = null,
+        this.comment = null;
+  const MDEditor.comment({
+    required this.questionId,
+  })  : this.mode = _MDEditorMode.addComment,
+        this.title = 'Add Comment',
+        this.comment = null;
 
+  const MDEditor.editComment({
+    required this.comment,
+  })  : this.mode = _MDEditorMode.editComment,
+        this.title = 'Edit Comment',
+        this.questionId = null;
 
   @override
   _AddQuestionState createState() => _AddQuestionState();
@@ -75,14 +89,14 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
       onWillPop: (() => onWillPop(context)),
       child: Scaffold(
         floatingActionButton: IconButton(
-            icon: Icon(preview?Icons.edit:Icons.preview),
+            icon: Icon(preview ? Icons.edit : Icons.preview),
             onPressed: () {
-              if(!preview)FocusManager.instance.primaryFocus!.unfocus();
+              if (!preview) FocusManager.instance.primaryFocus!.unfocus();
               setState(() => preview = !preview);
             }),
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
-          title: Text(widget.isTitleIncluded?'Ask a question':'Add a comment'),
+          title: Text(widget.title),
           leading: IconButton(
               icon: const Icon(
                 Icons.close_rounded,
@@ -92,40 +106,68 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
                   await onWillPop(context) ? Navigator.pop(context) : null),
           titleSpacing: 6,
           actions: [
-            if(widget.isTitleIncluded)
-            TextButton(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-                children: [
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 100),
-                    child: Text(query.isEmpty
-                        ? "No Label"
-                        : query.substring(2), style: TextStyle(fontSize: 12),overflow: TextOverflow.ellipsis),
-                  ),
-                  Icon(Icons.arrow_drop_down),
-                ],
+            if (widget.mode == _MDEditorMode.addQuestion)
+              TextButton(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 100),
+                      child: Text(
+                          query.isEmpty ? "No Label" : query.substring(2),
+                          style: TextStyle(fontSize: 12),
+                          overflow: TextOverflow.ellipsis),
+                    ),
+                    Icon(Icons.arrow_drop_down),
+                  ],
+                ),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: () async {
+                  query = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              fullscreenDialog: true,
+                              builder: (context) => CategoriesDialog())) ??
+                      "";
+                  setState(() {});
+                },
               ),
-              style: TextButton.styleFrom(padding: EdgeInsets.zero,),
-              onPressed: () async {
-                query = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            fullscreenDialog: true,
-                            builder: (context) => CategoriesDialog())) ??
-                    "";
-                setState(() {});
-              },
-            ),
             IconButton(
-              style: TextButton.styleFrom(visualDensity: VisualDensity.compact,),
-              onPressed:_validated && !_loading? () {
-                  widget.isTitleIncluded
-                      ? confirmSubmitQuestion(context, githubOAuthKeyModel,_titleController.text, _bodyController.text +'\n\n'+'[tags]:- "$query,"')
-                      : widget.comment!=null?confirmEditComment(context, githubOAuthKeyModel,_bodyController.text,widget.comment!.id):
-                      confirmSubmitComment(context, githubOAuthKeyModel,_bodyController.text, widget.questionId!);
-                  
-              }:null,
+              style: TextButton.styleFrom(
+                visualDensity: VisualDensity.compact,
+              ),
+              onPressed: !(_validated && !_loading)
+                  ? null
+                  : () {
+                      switch (widget.mode) {
+                        case _MDEditorMode.addQuestion:
+                          {
+                            confirmSubmitQuestion(
+                                context,
+                                githubOAuthKeyModel,
+                                _titleController.text,
+                                _bodyController.text +
+                                    '\n\n' +
+                                    '[tags]:- "$query,"');
+                          }
+                          break;
+
+                        case _MDEditorMode.addComment:
+                          {
+                            confirmSubmitComment(context, githubOAuthKeyModel,
+                                _bodyController.text, widget.questionId!);
+                          }
+                          break;
+                        case _MDEditorMode.editComment:
+                          {
+                            confirmEditComment(context, githubOAuthKeyModel,
+                                _bodyController.text, widget.comment!.id);
+                          }
+                          break;
+                      }
+                    },
               icon: Icon(
                 Icons.send_rounded,
                 size: 22,
@@ -140,7 +182,9 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             onChanged: () {
               //Check if form is validated and update state
-              bool _condition = (_bodyController.text.isNotEmpty && (_titleController.text.isNotEmpty||!widget.isTitleIncluded));
+              bool _condition = (_bodyController.text.isNotEmpty &&
+                  (_titleController.text.isNotEmpty ||
+                      widget.mode == _MDEditorMode.addQuestion));
               if (_validated != _condition) {
                 setState(() {
                   _validated = _condition;
@@ -149,24 +193,26 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
             },
             child: Column(
               children: [
-                widget.isTitleIncluded?
-                TextFormField(
-                  controller: _titleController,
-                  focusNode: _titleFocusNode,
-                  maxLength: 20,
-                  maxLines: 1,
-                  decoration: inputDecoration.copyWith(
-                    hintText: "Title",
+                if (widget.mode == _MDEditorMode.addQuestion)
+                  TextFormField(
+                    controller: _titleController,
+                    focusNode: _titleFocusNode,
+                    maxLength: 20,
+                    maxLines: 1,
+                    decoration: inputDecoration.copyWith(
+                      hintText: "Title",
+                    ),
+                    style: TextStyle(fontSize: 20),
                   ),
-                  style: TextStyle(fontSize: 20),
-                ):SizedBox.shrink(),
                 Expanded(
                   child: IndexedStack(
-                    index: preview?0:1,
+                    index: preview ? 0 : 1,
                     children: [
                       Markdown(
                         selectable: true,
-                        styleSheet: MarkdownStyleSheet(p: Theme.of(context).textTheme.bodyText1,),
+                        styleSheet: MarkdownStyleSheet(
+                          p: Theme.of(context).textTheme.bodyText1,
+                        ),
                         data: _bodyController.text,
                         padding: EdgeInsets.only(top: 12),
                       ),
@@ -190,18 +236,21 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
                                   itemControl: ToolBarItemControl.selectAll),
                               ToolBarItem(
                                 item: Icon(Icons.format_bold_rounded),
-                                onItemPressed: (content, start, end) => wrapText(
-                                    _bodyController, content, start, end, '**'),
+                                onItemPressed: (content, start, end) =>
+                                    wrapText(_bodyController, content, start,
+                                        end, '**'),
                               ),
                               ToolBarItem(
                                 item: Icon(Icons.format_italic_rounded),
-                                onItemPressed: (content, start, end) => wrapText(
-                                    _bodyController, content, start, end, '*'),
+                                onItemPressed: (content, start, end) =>
+                                    wrapText(_bodyController, content, start,
+                                        end, '*'),
                               ),
                               ToolBarItem(
                                 item: Icon(Icons.format_strikethrough_rounded),
-                                onItemPressed: (content, start, end) => wrapText(
-                                    _bodyController, content, start, end, '~~'),
+                                onItemPressed: (content, start, end) =>
+                                    wrapText(_bodyController, content, start,
+                                        end, '~~'),
                               ),
                               ToolBarItem(
                                 item: !_loading

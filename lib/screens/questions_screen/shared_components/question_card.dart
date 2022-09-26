@@ -13,12 +13,7 @@ class QuestionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    RegExp exp = RegExp(
-      r"\!\[\]\((.*)\)",
-    );
-    String body = question.body.replaceAll(exp, '');
-    body = body.substring(0,body.indexOf('[tags]:-')).trim();
-    body = body.substring(0, body.length.clamp(0, 150));
+    String body = _generatePreview(question.body);
     bool isWithImage = question.imageUrl!.isNotEmpty;
     List<Label>? labels = generateLabels();
     return Stack(
@@ -58,14 +53,27 @@ class QuestionCard extends StatelessWidget {
     List unfilteredLabelList = [];
     List<String> prefixes = ['S', 'C', 'B'];
     for (var prefix in prefixes) {
-      unfilteredLabelList.add(
-        question.labels.firstWhereOrNull(
+      unfilteredLabelList.add(question.labels.firstWhereOrNull(
         (element) => element.name.startsWith(prefix + '-'),
       ));
     }
-  
 
-  return unfilteredLabelList.whereType<Label>().toList();
+    return unfilteredLabelList.whereType<Label>().toList();
+  }
+  String _generatePreview(_body) {
+    // Remove all images
+    _body = _body.replaceAll(RegExp(r"\!\[\]\((.*)\)",),'');
+    // Remove all the trailing tags
+    int index = _body.indexOf('[tags]:-');
+    if (index != -1) {
+      _body = _body.substring(0, index);
+    }
+    // Remove all the trailing spaces
+    _body.trim();
+    // Clamp to 150 characters
+    _body = _body.substring(0, _body.length.clamp(0, 150));
+
+    return _body;
   }
   
 

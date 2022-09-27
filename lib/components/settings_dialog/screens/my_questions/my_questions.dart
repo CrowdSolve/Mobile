@@ -60,7 +60,22 @@ class _MyQuestionsState extends ConsumerState<MyQuestions> {
                       firstPageErrorIndicatorBuilder:(context) => ErrorIndicator(
                   onTryAgain: () => _pagingController.refresh(),
                 ),
-                      itemBuilder: (context, item, index) =>QuestionCard(question: item)
+                      itemBuilder: (context, item, index) {
+                        if(index == 0)
+                        return Column(
+                          children: [
+                            SizedBox(height: 20,),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text('Questions you asked', style: Theme.of(context).textTheme.headline4,),
+                            ),
+                            SizedBox(height: 20,),
+                            QuestionCard(question: item,),
+                          ],
+                        );
+                        else
+                        return QuestionCard(question: item,);
+                      }
                     ),
                   ),
             ),

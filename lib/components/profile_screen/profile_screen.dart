@@ -50,8 +50,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-          FullUserInfo(userId: widget.user!.id),
-          UserQuestions(userId: widget.user!.id),
+          FullUserInfo(userLogin: widget.user!.login),
+          UserQuestions(userLogin: widget.user!.login),
         ],
       ),
     );
@@ -59,9 +59,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 }
 
 class UserQuestions extends StatefulWidget {
-  final String userId;
+  final String userLogin;
 
-  const UserQuestions({Key? key, required this.userId}) : super(key: key);
+  const UserQuestions({Key? key, required this.userLogin}) : super(key: key);
   @override
   State<UserQuestions> createState() => _UserQuestionsState();
 }
@@ -74,14 +74,14 @@ class _UserQuestionsState extends State<UserQuestions> {
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
+      _fetchPage(pageKey, widget.userLogin);
     });
     super.initState();
   }
 
-  Future<void> _fetchPage(int pageKey) async {
+  Future<void> _fetchPage(int pageKey, userLogin) async {
     try {
-      final newItems = await fetch(pageKey, searchTerm: 'user:' + widget.userId + '+labels=visible');
+      final newItems = await fetchWithQuery(pageKey, searchTerm: 'author:' + userLogin + '&labels=visible');
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);
@@ -110,6 +110,7 @@ class _UserQuestionsState extends State<UserQuestions> {
               firstPageErrorIndicatorBuilder: (context) => ErrorIndicator(
                     onTryAgain: () => _pagingController.refresh(),
                   ),
+                  noItemsFoundIndicatorBuilder: (context) => Text('No questions found'),
               itemBuilder: (context, item, index) =>
               index==0?Column(
                 children: [

@@ -99,18 +99,21 @@ Future<bool> likeQuestion(String authKey, String questionId) async {
     return false;
   }
 }
-
-Future<bool> unlikeQuestion(String authKey, String questionId, int userId) async {
+//TODO: Find a better way to unlike questions
+Future<bool> unlikeQuestion(String authKey, String questionId, String userId) async {
   final reactionsResponse = await http.get(
     Uri.parse(
         'https://api.github.com/repos/CrowdSolve/data/issues/$questionId/reactions'),
+        headers: <String, String>{
+            'Authorization': 'token ' + authKey,
+          },
   );
 
   if (reactionsResponse.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then return true.
     for (final reaction in jsonDecode(reactionsResponse.body)) {
-      if (reaction['user']['id'] == userId || reaction['content'] == 'heart') {
+      if (reaction['user']['id'].toString() == userId && reaction['content'] == 'heart') {
         final response = await http.delete(
           Uri.parse(
               'https://api.github.com/repos/CrowdSolve/data/issues/$questionId/reactions/${reaction['id']}'),

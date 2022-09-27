@@ -10,6 +10,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'auth_screen.dart';
 
@@ -22,6 +23,7 @@ class AuthWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authStateChanges = ref.watch(authStateChangesProvider);
     final themeMode = ref.watch(themeModeProvider);
+    final githubOAuthKeyModel = ref.watch(githubOAuthKeyModelProvider);
     return authStateChanges.when(
       data: (user) {
         bool isSignedIn = user != null;
@@ -82,20 +84,34 @@ class AuthWidget extends ConsumerWidget {
               brightness: Brightness.light,
             );
           }
-          return MaterialApp.router(
-            theme: ThemeData(
-              useMaterial3: true,
-              colorScheme: lightColorScheme,
+          return GraphQLProvider(
+            client: ValueNotifier(
+        GraphQLClient(
+                  link: AuthLink(
+                    getToken: () => 'Bearer ' + githubOAuthKeyModel,
+                  ).concat(
+                    HttpLink(
+                      'https://api.github.com/graphql',
+                    ),
+                  ),
+                  cache: GraphQLCache(store: HiveStore()),
+                ),
+              ),
+            child: MaterialApp.router(
+              theme: ThemeData(
+                useMaterial3: true,
+                colorScheme: lightColorScheme,
+              ),
+              darkTheme: ThemeData(
+                useMaterial3: true,
+                colorScheme: darkColorScheme,
+              ),
+              debugShowCheckedModeBanner: false,
+              themeMode: themeMode? ThemeMode.dark: ThemeMode.light,
+              routeInformationProvider: _router.routeInformationProvider,
+              routeInformationParser: _router.routeInformationParser,
+              routerDelegate: _router.routerDelegate,
             ),
-            darkTheme: ThemeData(
-              useMaterial3: true,
-              colorScheme: darkColorScheme,
-            ),
-            debugShowCheckedModeBanner: false,
-            themeMode: themeMode? ThemeMode.dark: ThemeMode.light,
-            routeInformationProvider: _router.routeInformationProvider,
-            routeInformationParser: _router.routeInformationParser,
-            routerDelegate: _router.routerDelegate,
           );
         });
       },

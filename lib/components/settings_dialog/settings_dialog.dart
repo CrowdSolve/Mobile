@@ -148,9 +148,22 @@ class ProfileDialog extends ConsumerWidget  {
                       padding: const EdgeInsets.only(bottom: 10),
                       child: Divider(),
                     ),
+                    //TODO: Add the page back
+                    /*
+                    ListTile(
+                      leading: Icon(Icons.notifications),
+                      title: Text('Notifications'),
+                      onTap: ()=> Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyNotifications(githubOAuthKeyModel)),
+                      ),
+                    ),
+                    */
                     ListTile(
                       leading: Icon(Icons.my_library_books),
-                      title: Text('My questions'),
+                      title: Text('Asked questions'),
+
                       onTap: ()=> Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -158,21 +171,12 @@ class ProfileDialog extends ConsumerWidget  {
                       ),
                     ),
                     ListTile(
-                      leading: Icon(Icons.notifications),
-                      title: Text('My Notifications'),
-                      onTap: ()=> Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MyNotifications(githubOAuthKeyModel)),
-                      ),
-                    ),
-                    ListTile(
                       leading: Icon(Icons.question_answer_rounded),
-                      title: Text('My Answers'),
+                      title: Text('Answered questions'),
                       onTap: ()=> Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MyAnswers(githubOAuthKeyModel)),
+                            builder: (context) => MyAnswers(user.login)),
                       ),
                     ),
                     Divider(),

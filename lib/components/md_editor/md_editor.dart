@@ -8,10 +8,12 @@ import 'package:cs_mobile/top_level_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:text_selection_controls/text_selection_controls.dart';
 
 import 'helpers.dart';
+
+import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
+
 
 enum _MDEditorMode { addQuestion, addComment, editComment }
 
@@ -47,24 +49,21 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
   bool _validated = false;
   bool _loading = false;
 
-  TextEditingController _titleController = TextEditingController(),
-      _bodyController = TextEditingController();
-  FocusNode _titleFocusNode = FocusNode(), _bodyFocusNode = FocusNode();
+  TextEditingController _titleController = TextEditingController();
+  final QuillController controller = QuillController.basic();
+
+  FocusNode _titleFocusNode = FocusNode();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final ImagePicker _picker = ImagePicker();
 
-  Future<void> _onImageButtonPressed() async {
+  Future<String?> _onImageButtonPressed(pickedFile) async {
+    String? pickedImagePath;
     try {
       setState(() {
         _loading = true;
       });
-      final XFile? pickedFile = await _picker.pickImage(
-        source: ImageSource.gallery,
-      );
-      String pickedImagePath = await uploadImage(pickedFile!.path);
-      insertText('![]($pickedImagePath)', _bodyController);
+      pickedImagePath = await uploadImage(pickedFile.path);
       setState(() {
         _loading = false;
       });
@@ -75,6 +74,7 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
             context: context, title: 'Error occured', exception: e);
       });
     }
+  return pickedImagePath;
   }
 
   String query = "";
@@ -88,12 +88,6 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
     return WillPopScope(
       onWillPop: (() => onWillPop(context)),
       child: Scaffold(
-        floatingActionButton: IconButton(
-            icon: Icon(preview ? Icons.edit : Icons.preview),
-            onPressed: () {
-              if (!preview) FocusManager.instance.primaryFocus!.unfocus();
-              setState(() => preview = !preview);
-            }),
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
           title: Text(widget.title),
@@ -148,7 +142,7 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
                                 context,
                                 githubOAuthKeyModel,
                                 _titleController.text,
-                                _bodyController.text +
+                                getMarkdown(controller.document) +
                                     '\n\n' +
                                     '[tags]:- "$query,"');
                           }
@@ -157,13 +151,13 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
                         case _MDEditorMode.addComment:
                           {
                             confirmSubmitComment(context, githubOAuthKeyModel,
-                                _bodyController.text, widget.questionId!);
+                                getMarkdown(controller.document), widget.questionId!);
                           }
                           break;
                         case _MDEditorMode.editComment:
                           {
                             confirmEditComment(context, githubOAuthKeyModel,
-                                _bodyController.text, widget.comment!.id);
+                                getMarkdown(controller.document), widget.comment!.id);
                           }
                           break;
                       }
@@ -175,104 +169,109 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
             )
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            onChanged: () {
-              //Check if form is validated and update state
-              bool _condition = (_bodyController.text.isNotEmpty &&
-                  (_titleController.text.isNotEmpty ||
-                      widget.mode == _MDEditorMode.addQuestion));
-              if (_validated != _condition) {
-                setState(() {
-                  _validated = _condition;
-                });
-              }
-            },
-            child: Column(
-              children: [
-                if (widget.mode == _MDEditorMode.addQuestion)
-                  TextFormField(
-                    controller: _titleController,
-                    focusNode: _titleFocusNode,
-                    maxLength: 20,
-                    maxLines: 1,
-                    decoration: inputDecoration.copyWith(
-                      hintText: "Title",
-                    ),
-                    style: TextStyle(fontSize: 20),
-                  ),
-                Expanded(
-                  child: IndexedStack(
-                    index: preview ? 0 : 1,
+        body: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  onChanged: () {
+                    //Check if form is validated and update state
+                    bool _condition = (!controller.document.isEmpty() &&
+                        (_titleController.text.isNotEmpty ||
+                            widget.mode == _MDEditorMode.addQuestion));
+                    if (_validated != _condition) {
+                      setState(() {
+                        _validated = _condition;
+                      });
+                    }
+                  },
+                  child: Column(
                     children: [
-                      Markdown(
-                        selectable: true,
-                        styleSheet: MarkdownStyleSheet(
-                          p: Theme.of(context).textTheme.bodyText1,
+                      if (widget.mode == _MDEditorMode.addQuestion)
+                        TextFormField(
+                          controller: _titleController,
+                          focusNode: _titleFocusNode,
+                          maxLength: 20,
+                          maxLines: 1,
+                          decoration: inputDecoration.copyWith(
+                            hintText: "Title",
+                          ),
+                          style: TextStyle(fontSize: 20),
                         ),
-                        data: _bodyController.text,
-                        padding: EdgeInsets.only(top: 12),
-                      ),
-                      TextFormField(
-                        style: Theme.of(context).textTheme.bodyText1,
-                        selectionControls: FlutterSelectionControls(
-                            verticalPadding: 14,
-                            horizontalPadding: 12,
-                            toolBarItems: <ToolBarItem>[
-                              ToolBarItem(
-                                  item: Icon(Icons.cut_rounded),
-                                  itemControl: ToolBarItemControl.cut),
-                              ToolBarItem(
-                                  item: Icon(Icons.copy_rounded),
-                                  itemControl: ToolBarItemControl.copy),
-                              ToolBarItem(
-                                  item: Icon(Icons.paste_rounded),
-                                  itemControl: ToolBarItemControl.paste),
-                              ToolBarItem(
-                                  item: Icon(Icons.select_all_rounded),
-                                  itemControl: ToolBarItemControl.selectAll),
-                              ToolBarItem(
-                                item: Icon(Icons.format_bold_rounded),
-                                onItemPressed: (content, start, end) =>
-                                    wrapText(_bodyController, content, start,
-                                        end, '**'),
+                      Expanded(
+                        child: IndexedStack(
+                          index: preview ? 0 : 1,
+                          children: [
+                            Markdown(
+                              selectable: true,
+                              styleSheet: MarkdownStyleSheet(
+                                p: Theme.of(context).textTheme.bodyText1,
                               ),
-                              ToolBarItem(
-                                item: Icon(Icons.format_italic_rounded),
-                                onItemPressed: (content, start, end) =>
-                                    wrapText(_bodyController, content, start,
-                                        end, '*'),
+                              data: getMarkdown(controller.document),
+                              padding: EdgeInsets.only(top: 12),
+                            ),
+                            Positioned.fill(
+                              child: QuillEditor.basic(
+                                controller: controller,
+                                readOnly: false,
+                                embedBuilders: FlutterQuillEmbeds.builders(),
                               ),
-                              ToolBarItem(
-                                item: Icon(Icons.format_strikethrough_rounded),
-                                onItemPressed: (content, start, end) =>
-                                    wrapText(_bodyController, content, start,
-                                        end, '~~'),
-                              ),
-                              ToolBarItem(
-                                item: !_loading
-                                    ? Icon(Icons.add_photo_alternate_rounded)
-                                    : CircularProgressIndicator(),
-                                onItemPressed: (content, start, end) =>
-                                    !_loading ? _onImageButtonPressed() : null,
-                              ),
-                            ]),
-                        controller: _bodyController,
-                        focusNode: _bodyFocusNode,
-                        maxLines: 99,
-                        decoration: inputDecoration.copyWith(hintText: "Body"),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
+              ),
+            ),
+            QuillToolbar.basic(
+              controller: controller,
+              iconTheme: QuillIconTheme(
+                  iconSelectedFillColor: Theme.of(context).colorScheme.primary,
+                  iconSelectedColor: Theme.of(context).colorScheme.onPrimary,
+                  ),
+              //Disable unsupported tools
+              showStrikeThrough: false,
+              showUnderLineButton: false,
+              showAlignmentButtons: false,
+              showColorButton: false,
+              showCenterAlignment: false,
+              showDirection: false,
+              showBackgroundColorButton: false,
+              showInlineCode: false,
+              showIndent: false,
+              multiRowsDisplay: false,
+              showJustifyAlignment: false,
+              showFontFamily: false,
+              showFontSize: false,
+              showListCheck: false,
+              showListNumbers: false,
+              embedButtons: FlutterQuillEmbeds.buttons(
+                onImagePickCallback: _onImageButtonPressed,
+                showCameraButton:
+                    false, //TODO: fix camera button and try to integrate the formula button
+                showFormulaButton: false,
+                showVideoButton: false,
+                mediaPickSettingSelector: selectMediaPickSetting,
+              ),
+              customButtons: [
+                QuillCustomButton(
+                    icon: preview ? Icons.edit : Icons.preview,
+                    onTap: () {
+                      if (!preview)
+                        FocusManager.instance.primaryFocus!.unfocus();
+                      setState(() => preview = !preview);
+                    }),
               ],
             ),
-          ),
+          ],
         ),
       ),
     );
   }
 }
+

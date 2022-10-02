@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:alert_dialogs/alert_dialogs.dart';
 import 'package:cs_mobile/services/questions_service.dart';
+import 'package:delta_markdown/delta_markdown.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 
 void wrapText(_bodyController, selection, start, end, String wrapee) {
   int wrapeeLength = wrapee.length;
@@ -150,3 +154,36 @@ Future<void> confirmEditComment(
     await _trySubmit();
   }
 }
+
+String getMarkdown(Document document) {
+  String? content = jsonEncode(document.toDelta().toJson());
+  content = deltaToMarkdown(content);
+  return content;
+}
+
+Future<MediaPickSetting?> selectMediaPickSetting(BuildContext context) =>
+    showDialog<MediaPickSetting>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        contentPadding: EdgeInsets.zero,
+        content: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: TextButton.icon(
+                icon: const Icon(Icons.collections),
+                label: const Text('Gallery'),
+                onPressed: () => Navigator.pop(ctx, MediaPickSetting.Gallery),
+              ),
+            ),
+            Expanded(
+              child: TextButton.icon(
+                icon: const Icon(Icons.link),
+                label: const Text('Link'),
+                onPressed: () => Navigator.pop(ctx, MediaPickSetting.Link),
+              ),
+            )
+          ],
+        ),
+      ),
+    );

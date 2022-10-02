@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cs_mobile/auth/auth_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -42,134 +43,137 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
                   Spacer(
                     flex: 1,
                   ),
-                  Center(
-                    child: Image.asset(
-                      'assets/login_anim.gif',
+                  Flexible(
+                    flex: 6,
+                    child: Center(
+                      child: Image.asset(
+                        'assets/login_anim.gif',
+                      ),
                     ),
                   ),
-                  Spacer(
-                    flex: 1,
-                  ),
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Welcome to ',
-                          style: GoogleFonts.lato(
-                            textStyle:
-                                Theme.of(context).textTheme.headline3!.copyWith(
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                          ),
-                        ),
-                        TextSpan(
-                          text: '\nCrowdSolve',
-                          style: GoogleFonts.lato(
-                            textStyle: Theme.of(context)
-                                .textTheme
-                                .headline1!
-                                .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer,
-                                )
-                                .copyWith(fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        TextSpan(
-                          text:
-                              '\n\nA platform to make sharing information easier. \nIt is build on the source-control open source principles and is even powered by github.',
-                          style: GoogleFonts.lato(
-                            textStyle: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer,
-                                )
-                                .copyWith(fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Spacer(
-                    flex: 2,
-                  ),
-                  Center(
-                    child: SizedBox(
-                      width: 300,
-                      child: Column(
+                  Flexible(
+                    flex: 5,
+                    child: AutoSizeText.rich(
+                      TextSpan(
                         children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text('LOGIN WITH GITHUB',
-                                style: GoogleFonts.abel(
-                                  textStyle: Theme.of(context)
-                                      .textTheme
-                                      .headline6!
-                                      .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimaryContainer),
-                                )),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(height: 50, child: AuthButton()),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Don\'t have an account? ',
-                                  style: GoogleFonts.roboto(
-                                    textStyle: Theme.of(context)
-                                        .textTheme
-                                        .subtitle1!
-                                        .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimaryContainer,
-                                        ),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: 'Sign up',
-                                  style: GoogleFonts.roboto(
-                                    textStyle: Theme.of(context)
-                                        .textTheme
-                                        .subtitle1!
-                                        .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimaryContainer,
-                                        )
-                                        .copyWith(fontWeight: FontWeight.w500),
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () async {
-                                      try {
-                                        await AuthModel().authenticate(
-                                            context, ref,
-                                            allowSignUp: true);
-                                      } catch (e) {}
-                                    },
-                                ),
-                              ],
+                          TextSpan(
+                            text: 'Welcome to ',
+                            style: GoogleFonts.lato(
+                              textStyle:
+                                  Theme.of(context).textTheme.headline3!.copyWith(
+                                        fontWeight: FontWeight.w300,
+                                      ),
                             ),
-                          )
+                          ),
+                          TextSpan(
+                            text: '\nCrowdSolve',
+                            style: GoogleFonts.lato(
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .headline1!
+                                  .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer,
+                                  )
+                                  .copyWith(fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          TextSpan(
+                            text:
+                                '\n\nA platform to make sharing information easier. \nIt is build on the source-control open source principles and is even powered by github.',
+                            style: GoogleFonts.lato(
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer,
+                                   fontWeight: FontWeight.w500
+                                  )
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  Spacer(
-                    flex: 2,
+                  Spacer(),
+                  
+                  Flexible(
+                    flex: 4,
+                    child: Center(
+                      child: SizedBox(
+                        width: 300,
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text('LOGIN WITH GITHUB',
+                                  style: GoogleFonts.abel(
+                                    textStyle: Theme.of(context)
+                                        .textTheme
+                                        .headline6!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimaryContainer),
+                                  )),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            SizedBox(height: 50, child: AuthButton()),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Don\'t have an account? ',
+                                    style: GoogleFonts.roboto(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1!
+                                          .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimaryContainer,
+                                          ),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: 'Sign up',
+                                    style: GoogleFonts.roboto(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1!
+                                          .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimaryContainer,
+                                          )
+                                          .copyWith(fontWeight: FontWeight.w500),
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () async {
+                                        try {
+                                          await AuthModel().authenticate(
+                                              context, ref,
+                                              allowSignUp: true);
+                                        } catch (e) {}
+                                      },
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
+                  //Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 1),
                     child: Center(

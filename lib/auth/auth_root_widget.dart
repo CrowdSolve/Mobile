@@ -53,7 +53,7 @@ class AuthWidget extends ConsumerWidget {
                   GithubAuthScreen(),
             ),
           ],
-          redirect: (state) {
+          redirect: (BuildContext context, GoRouterState state) {
             final loggingIn = state.subloc == '/login';
             if (!isSignedIn) return loggingIn ? null : '/login';
 

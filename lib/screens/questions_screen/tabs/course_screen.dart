@@ -14,6 +14,9 @@ import 'widgets/error_indicator.dart';
 
 
 class CourseScreen extends StatefulWidget {
+  final String authKey;
+
+  const CourseScreen({Key? key, required this.authKey}) : super(key: key);
   @override
   State<CourseScreen> createState() => _CourseScreenState();
 }
@@ -58,7 +61,7 @@ class _CourseScreenState extends State<CourseScreen> {
 
   String _searchTerm = _tags.isEmpty?'label:visible':'label:'+_tags.join(',') + '+label:visible';
     try {
-      final newItems = await fetchWithQuery(pageKey, searchTerm: _searchTerm);
+      final newItems = await fetchWithQuery(pageKey, searchTerm: _searchTerm, authKey: widget.authKey);
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);

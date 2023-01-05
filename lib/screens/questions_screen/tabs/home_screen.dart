@@ -8,6 +8,9 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 
 class HomeScreen extends StatefulWidget {
+  final String authKey;
+
+  const HomeScreen({Key? key, required this.authKey}) : super(key: key);
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -27,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      final newItems = await fetch(pageKey);
+      final newItems = await fetch(pageKey, authKey: widget.authKey);
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);

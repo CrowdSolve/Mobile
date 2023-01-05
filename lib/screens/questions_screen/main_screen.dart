@@ -20,6 +20,7 @@ class _MainScreenState extends ConsumerState<QuestionsScreen> {
   @override
   Widget build(BuildContext context) {
     final signedIn = ref.watch(firebaseAuthProvider).currentUser != null;
+    final authKey = ref.watch(githubOAuthKeyModelProvider);
     return Scaffold(
       appBar:AppBar(toolbarHeight: 0,surfaceTintColor: Colors.transparent,),
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -71,9 +72,9 @@ class _MainScreenState extends ConsumerState<QuestionsScreen> {
           ),
         child: TabBarView(
           children: <Widget>[
-            HomeScreen(),
-            CategoriesScreen(),
-            CourseScreen()
+            HomeScreen(authKey:authKey),
+            CategoriesScreen(authKey:authKey),
+            CourseScreen(authKey:authKey)
           ],
         ),
         ),

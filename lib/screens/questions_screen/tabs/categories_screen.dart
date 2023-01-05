@@ -10,6 +10,9 @@ import 'widgets/error_indicator.dart';
 
 
 class CategoriesScreen extends StatefulWidget {
+  final String authKey;
+
+  const CategoriesScreen({Key? key, required this.authKey}) : super(key: key);
   @override
   State<CategoriesScreen> createState() => _CategoriesScreenState();
 }
@@ -34,7 +37,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      final newItems = await fetchWithQuery(pageKey, searchTerm: query.isEmpty?'label:visible':'label:' + query + '+label:visible');
+      final newItems = await fetchWithQuery(pageKey, searchTerm: query.isEmpty?'label:visible':'label:' + query + '+label:visible', authKey: widget.authKey);
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);

@@ -6,9 +6,12 @@ import '../models/comment.dart';
 import '../models/question.dart';
 
 
-Future<List<Question>> fetch(int pageKey, {String searchTerm = 'labels=visible'}) async {
+Future<List<Question>> fetch(int pageKey, {String searchTerm = 'labels=visible', String authKey = ''}) async {
   final response = await http.get(Uri.parse(
-      'https://api.github.com/repos/CrowdSolve/data/issues?$searchTerm&page=$pageKey'));
+      'https://api.github.com/repos/CrowdSolve/data/issues?$searchTerm&page=$pageKey'),
+      headers: authKey.isNotEmpty?{
+      'Authorization': 'token ' + authKey,
+    }:null,);
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -25,9 +28,12 @@ Future<List<Question>> fetch(int pageKey, {String searchTerm = 'labels=visible'}
 }
 
 Future<List<Question>> fetchWithQuery(int pageKey,
-    {required String searchTerm}) async {
+    {required String searchTerm,String authKey = ''}) async {
   final response = await http.get(Uri.parse(
-      'https://api.github.com/search/issues?q=repo:CrowdSolve/data+$searchTerm&page=$pageKey'));
+      'https://api.github.com/search/issues?q=repo:CrowdSolve/data+$searchTerm&page=$pageKey'),
+      headers: authKey.isNotEmpty?{
+      'Authorization': 'token ' + authKey,
+    }:null);
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -187,6 +193,7 @@ Future<void> addComment(String authKey, Map data, String questionId) async {
   } else {
     // If the server did not return a 201 CREATED response,
     // then throw an exception.
+    throw Exception('Failed to add comment');
   }
 }
 Future<bool> deleteComment(String authKey, int commentId) async {

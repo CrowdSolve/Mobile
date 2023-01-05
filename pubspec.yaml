@@ -12,10 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.4
-  firebase_core: ^1.22.0
-  firebase_auth: ^3.3.11
+  firebase_core: ^2.4.1
+  firebase_auth: ^4.2.4
   flutter_riverpod: ^1.0.3
-  github_sign_in: ^0.0.5-dev.4
   shared_preferences: ^2.0.13
   flutter_launcher_icons: ^0.9.2
   font_awesome_flutter: ^10.2.1

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:alert_dialogs/alert_dialogs.dart';
 import 'package:cs_mobile/models/comment.dart';
 import 'package:cs_mobile/screens/questions_screen/tabs/widgets/categories_dialog.dart';
 import 'package:cs_mobile/services/questions_service.dart';
@@ -13,7 +12,6 @@ import 'helpers.dart';
 
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
-
 
 enum _MDEditorMode { addQuestion, addComment, editComment }
 
@@ -46,7 +44,7 @@ class MDEditor extends ConsumerStatefulWidget {
 }
 
 class _AddQuestionState extends ConsumerState<MDEditor> {
-  bool _validated = false;
+  //bool _validated = false;
   bool _loading = false;
 
   TextEditingController _titleController = TextEditingController();
@@ -55,7 +53,6 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
   FocusNode _titleFocusNode = FocusNode();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
 
   Future<String?> _onImageButtonPressed(pickedFile) async {
     String? pickedImagePath;
@@ -71,21 +68,21 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
       setState(() {
         _loading = false;
         showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Error'),
-          content: Text(e.toString()),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Error'),
+            content: Text(e.toString()),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
       });
     }
-  return pickedImagePath;
+    return pickedImagePath;
   }
 
   String query = "";
@@ -143,36 +140,60 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
               style: TextButton.styleFrom(
                 visualDensity: VisualDensity.compact,
               ),
-              onPressed: !(_validated && !_loading)
-                  ? null
-                  : () {
-                      switch (widget.mode) {
-                        case _MDEditorMode.addQuestion:
-                          {
-                            confirmSubmitQuestion(
-                                context,
-                                githubOAuthKeyModel,
-                                _titleController.text,
-                                getMarkdown(controller.document) +
-                                    '\n\n' +
-                                    '[tags]:- "$query,"');
-                          }
-                          break;
+              onPressed: () {
+                bool _condition = ((!controller.document.isEmpty() &&
+                        (_titleController.text.isNotEmpty ||
+                            widget.mode != _MDEditorMode.addQuestion))) &&
+                    !_loading;
 
-                        case _MDEditorMode.addComment:
-                          {
-                            confirmSubmitComment(context, githubOAuthKeyModel,
-                                getMarkdown(controller.document), widget.questionId!);
-                          }
-                          break;
-                        case _MDEditorMode.editComment:
-                          {
-                            confirmEditComment(context, githubOAuthKeyModel,
-                                getMarkdown(controller.document), widget.comment!.id);
-                          }
-                          break;
+                if (_condition) {
+                  switch (widget.mode) {
+                    case _MDEditorMode.addQuestion:
+                      {
+                        confirmSubmitQuestion(
+                            context,
+                            githubOAuthKeyModel,
+                            _titleController.text,
+                            getMarkdown(controller.document) +
+                                '\n\n' +
+                                '[tags]:- "$query,"');
                       }
-                    },
+                      break;
+
+                    case _MDEditorMode.addComment:
+                      {
+                        confirmSubmitComment(
+                            context,
+                            githubOAuthKeyModel,
+                            getMarkdown(controller.document),
+                            widget.questionId!);
+                      }
+                      break;
+                    case _MDEditorMode.editComment:
+                      {
+                        confirmEditComment(
+                            context,
+                            githubOAuthKeyModel,
+                            getMarkdown(controller.document),
+                            widget.comment!.id);
+                      }
+                      break;
+                  }
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Please fill all fields'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
               icon: Icon(
                 Icons.send_rounded,
                 size: 22,
@@ -188,17 +209,6 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
                 child: Form(
                   key: _formKey,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  onChanged: () {
-                    //Check if form is validated and update state
-                    bool _condition = (!controller.document.isEmpty() &&
-                        (_titleController.text.isNotEmpty ||
-                            widget.mode == _MDEditorMode.addQuestion));
-                    if (_validated != _condition) {
-                      setState(() {
-                        _validated = _condition;
-                      });
-                    }
-                  },
                   child: Column(
                     children: [
                       if (widget.mode == _MDEditorMode.addQuestion)
@@ -242,9 +252,9 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
             QuillToolbar.basic(
               controller: controller,
               iconTheme: QuillIconTheme(
-                  iconSelectedFillColor: Theme.of(context).colorScheme.primary,
-                  iconSelectedColor: Theme.of(context).colorScheme.onPrimary,
-                  ),
+                iconSelectedFillColor: Theme.of(context).colorScheme.primary,
+                iconSelectedColor: Theme.of(context).colorScheme.onPrimary,
+              ),
               //Disable unsupported tools
               showStrikeThrough: false,
               showUnderLineButton: false,
@@ -285,4 +295,3 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
     );
   }
 }
-

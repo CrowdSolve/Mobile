@@ -40,21 +40,24 @@ class CommentCard extends ConsumerWidget {
               Text(' ● ${timeago.format(DateTime.now().subtract(DateTime.now().difference(DateTime.parse(comment.createdAt))))}',
                   style: Theme.of(context).textTheme.labelSmall),
               Spacer(),
-              firebaseAuth.currentUser!.providerData.first.uid == comment.userId.toString()
-                  ? PopupMenuButton(
-                    icon: Icon(Icons.more_vert),
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        child: Text('Delete'),
-                        onTap: () => deleteComment(githubOAuthKeyModel, comment.id),
-                      ),
-                      PopupMenuItem(
-                        child: Text('Edit'),
-                        onTap: () => context.push('/comments/${comment.id}/edit', extra: comment),
-                      ),
-                    ],
-                  )
-                  : Container(),
+              if (firebaseAuth.currentUser != null &&
+                  firebaseAuth.currentUser!.providerData.first.uid ==
+                      comment.userId.toString())
+                PopupMenuButton(
+                  icon: Icon(Icons.more_vert),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      child: Text('Delete'),
+                      onTap: () =>
+                          deleteComment(githubOAuthKeyModel, comment.id),
+                    ),
+                    PopupMenuItem(
+                      child: Text('Edit'),
+                      onTap: () => context.push('/comments/${comment.id}/edit',
+                          extra: comment),
+                    ),
+                  ],
+                )
             ],
           ),
           SizedBox(

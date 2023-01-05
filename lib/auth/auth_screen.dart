@@ -3,6 +3,7 @@ import 'package:cs_mobile/auth/auth_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -128,11 +129,10 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
                               height: 5,
                             ),
                             RichText(
+                              textAlign: TextAlign.center,
                               text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'Don\'t have an account? ',
-                                    style: GoogleFonts.roboto(
+                                
+                                style: GoogleFonts.roboto(
                                       textStyle: Theme.of(context)
                                           .textTheme
                                           .subtitle1!
@@ -142,9 +142,24 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
                                                 .onPrimaryContainer,
                                           ),
                                     ),
+                                children: [
+                                  TextSpan(
+                                    text: 'Don\'t have an account? ',
+                                    
                                   ),
                                   TextSpan(
                                     text: 'Sign up',
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () async {
+                                        try {
+                                          await AuthModel().authenticate(
+                                              context, ref,
+                                              allowSignUp: true);
+                                        } catch (e) {}
+                                      },
+                                  ),
+                                  TextSpan(
+                                    text: '\nor continue as a guest',
                                     style: GoogleFonts.roboto(
                                       textStyle: Theme.of(context)
                                           .textTheme
@@ -158,11 +173,7 @@ class _GithubAuthScreenState extends ConsumerState<GithubAuthScreen> {
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () async {
-                                        try {
-                                          await AuthModel().authenticate(
-                                              context, ref,
-                                              allowSignUp: true);
-                                        } catch (e) {}
+                                        context.go('/');
                                       },
                                   ),
                                 ],

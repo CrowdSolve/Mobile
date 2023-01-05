@@ -5,12 +5,12 @@ import 'package:cs_mobile/top_level_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AuthAvatarButton extends ConsumerWidget {
-  const AuthAvatarButton({Key? key}) : super(key: key);
+class AuthAvatarButton extends StatelessWidget {
+  final String githubOAuthKeyModel;
+  const AuthAvatarButton({Key? key, required this.githubOAuthKeyModel}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ref) {
-    final githubOAuthKeyModel = ref.watch(githubOAuthKeyModelProvider);
+  Widget build(BuildContext context) {
     return FutureBuilder<FullUserModel>(
       future: fetchAuthenticatedUser(githubOAuthKeyModel),
       builder: (context, snapshot) {

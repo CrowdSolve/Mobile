@@ -15,10 +15,15 @@ import 'screens/my_questions/my_questions.dart';
 class ProfileDialog extends ConsumerWidget  {
   final FullUserModel user;
   const ProfileDialog({Key? key, required this.user}) : super(key: key);
-  Future<void> _signOut(BuildContext context, FirebaseAuth firebaseAuth) async {
+  Future<void> _signOut(BuildContext context, ref) async {
+    
     try {
-      Navigator.pop(context);
-      await firebaseAuth.signOut();
+      //Navigator.pop(context);
+      await ref.watch(firebaseAuthProvider).signOut();
+      await ref
+        .watch(githubOAuthKeyModelProvider.notifier)
+        .setGithubOAuthKey("");
+      
     } catch (e) {
       unawaited(showDialog(
         context: context,
@@ -36,7 +41,7 @@ class ProfileDialog extends ConsumerWidget  {
     }
   }
   Future<void> _confirmSignOut(
-      BuildContext context, FirebaseAuth firebaseAuth) async {
+      BuildContext context,  ref) async {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -48,7 +53,7 @@ class ProfileDialog extends ConsumerWidget  {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () async => await _signOut(context, firebaseAuth),
+            onPressed: () async => await _signOut(context, ref),
             child: const Text('Logout'),
           ),
         ],
@@ -57,8 +62,6 @@ class ProfileDialog extends ConsumerWidget  {
   }
   @override
   Widget build(BuildContext context, ref) {
-    final firebaseAuth = ref.watch(firebaseAuthProvider);
-    final githubOAuthKeyModel = ref.watch(githubOAuthKeyModelProvider);
     final themeMode = ref.watch(themeModeProvider);
     return SafeArea(
       child: SingleChildScrollView(
@@ -252,7 +255,7 @@ class ProfileDialog extends ConsumerWidget  {
                   ListTile(
                     leading: Icon(Icons.logout, color: Colors.red,),
                     title: Text('Logout', style: TextStyle(color: Colors.red),),
-                    onTap: () => _confirmSignOut(context, firebaseAuth),
+                    onTap: () => _confirmSignOut(context, ref),
                   ),
                   //TODO: Add current version
                   Center(child: Text('CrowdSolve Mobile v1.0.0',style: Theme.of(context).textTheme.caption),)

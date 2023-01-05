@@ -6,12 +6,14 @@ import 'package:cs_mobile/screens/questions_screen/shared_components/question_de
 import 'package:cs_mobile/screens/questions_screen/shared_components/question_details/widgets/expanded_question_card.dart';
 import 'package:cs_mobile/screens/questions_screen/tabs/widgets/error_indicator.dart';
 import 'package:cs_mobile/services/questions_service.dart';
+import 'package:cs_mobile/top_level_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
 
-class QuestionDetails extends StatefulWidget {
+class QuestionDetails extends ConsumerStatefulWidget {
   final String? id;
   final Question? question;
 
@@ -20,10 +22,10 @@ class QuestionDetails extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<QuestionDetails> createState() => _QuestionDetailsState();
+  _QuestionDetailsState createState() => _QuestionDetailsState();
 }
 
-class _QuestionDetailsState extends State<QuestionDetails> {
+class _QuestionDetailsState extends ConsumerState<QuestionDetails> {
   static const _pageSize = 5;
 
   final PagingController<int, Comment> _pagingController =
@@ -61,13 +63,14 @@ class _QuestionDetailsState extends State<QuestionDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final signedIn = ref.watch(firebaseAuthProvider).currentUser != null;
     return RefreshIndicator(
       onRefresh: () => Future.sync(
         () => _pagingController.refresh(),
       ),
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        floatingActionButton: AnimatedFAB(openWidget: MDEditor.comment(questionId: widget.id !='q'?widget.id:widget.question!.id,), label: 'Answer the question', icon: Icons.add_comment ,),
+        floatingActionButton: signedIn? AnimatedFAB(openWidget: MDEditor.comment(questionId: widget.id !='q'?widget.id:widget.question!.id,), label: 'Answer the question', icon: Icons.add_comment ,):null,
         body: ListView(
           children: [
             widget.question != null?ExpandedQuestionCard(question: widget.question!):

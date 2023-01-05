@@ -28,7 +28,7 @@ class AuthWidget extends ConsumerWidget {
       data: (user) {
         bool isSignedIn = user != null;
         late final _router = GoRouter(
-          initialLocation: '/',
+          initialLocation: '/login',
           routes: [
             GoRoute(
               path: '/',
@@ -55,10 +55,9 @@ class AuthWidget extends ConsumerWidget {
           ],
           redirect: (BuildContext context, GoRouterState state) {
             final loggingIn = state.subloc == '/login';
-            if (!isSignedIn) return loggingIn ? null : '/login';
-
-            if (loggingIn) return '/';
-
+            if (isSignedIn && loggingIn) {
+              return '/';
+            }
             return null;
           },
         );

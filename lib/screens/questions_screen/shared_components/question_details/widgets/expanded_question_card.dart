@@ -96,6 +96,7 @@ class ExpandedQuestionCard extends ConsumerWidget {
             SizedBox(
               height: 20,
             ),
+            if(firebaseAuth.currentUser!=null)
             Query(
               options: QueryOptions(
                 fetchPolicy: FetchPolicy.networkOnly,

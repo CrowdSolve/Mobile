@@ -1,4 +1,5 @@
 import 'package:cs_mobile/components/md_editor/md_editor.dart';
+import 'package:cs_mobile/markdown/markdown_renderer.dart';
 import 'package:cs_mobile/models/comment.dart';
 import 'package:cs_mobile/services/questions_service.dart';
 import 'package:cs_mobile/top_level_provider.dart';
@@ -63,7 +64,7 @@ class CommentCard extends ConsumerWidget {
           SizedBox(
                 height: 20,
               ),
-          MarkdownBody(
+          MarkdownRenderer(
             data: comment.body,
             styleSheet: MarkdownStyleSheet(
               a: Theme.of(context).textTheme.bodyMedium,

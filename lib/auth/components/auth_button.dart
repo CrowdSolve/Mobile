@@ -39,7 +39,7 @@ class _AuthButtonState extends ConsumerState<AuthButton> {
   }
 
   
-  void _showSignInError(Object exception) {
+  void _showSignInError(exception) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         action: SnackBarAction(
@@ -50,6 +50,11 @@ class _AuthButtonState extends ConsumerState<AuthButton> {
               context: context,
               builder: (context) => AlertDialog(
                 title: const Text('Login failed'),
+                content: Text(
+                  exception.toString(),
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onErrorContainer),
+                ),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),

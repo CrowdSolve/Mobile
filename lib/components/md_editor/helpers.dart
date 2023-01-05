@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:alert_dialogs/alert_dialogs.dart';
 import 'package:cs_mobile/services/questions_service.dart';
 import 'package:delta_markdown/delta_markdown.dart';
 import 'package:flutter/material.dart';
@@ -74,25 +73,39 @@ Future<void> confirmSubmitQuestion(
           githubOAuthKeyModel, <String, String>{'title': title, 'body': body});
       Navigator.pop(context);
     } catch (e) {
-      unawaited(showExceptionAlertDialog(
+      unawaited(showDialog(
         context: context,
-        title: "Failed",
-        exception: e,
+        builder: (context) => AlertDialog(
+          title: const Text('Failed to create question'),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
       ));
     }
   }
 
-  final bool didRequestSignOut = await showAlertDialog(
-        context: context,
-        title: "Create question",
-        content: "Are you sure",
-        cancelActionText: "Cancel",
-        defaultActionText: "Ask",
-      ) ??
-      false;
-  if (didRequestSignOut == true) {
-    await trySubmit();
-  }
+  await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Create question'),
+        content: Text('Are you sure?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async => await trySubmit(),
+            child: const Text('Ask'),
+          ),
+        ],
+      ),
+    );
 }
 
 Future<void> confirmSubmitComment(
@@ -102,27 +115,41 @@ Future<void> confirmSubmitComment(
       await addComment(
           githubOAuthKeyModel, <String, String>{'body': body}, questionId.toString());
     } catch (e) {
-      unawaited(showExceptionAlertDialog(
+      unawaited(showDialog(
         context: context,
-        title: "Failed",
-        exception: e,
+        builder: (context) => AlertDialog(
+          title: const Text('Failed to add comment'),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
       ));
     } finally {
       Navigator.pop(context);
     }
   }
 
-  final bool didRequestSignOut = await showAlertDialog(
-        context: context,
-        title: "Add a comment",
-        content: "Are you sure?",
-        cancelActionText: "Cancel",
-        defaultActionText: "Comment",
-      ) ??
-      false;
-  if (didRequestSignOut == true) {
-    await _trySubmit();
-  }
+ await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Create comment'),
+        content: Text('Are you sure?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async => await _trySubmit(),
+            child: const Text('Comment'),
+          ),
+        ],
+      ),
+    );
 }
 
 Future<void> confirmEditComment(
@@ -132,27 +159,41 @@ Future<void> confirmEditComment(
       await editComment(
           githubOAuthKeyModel, body, commentId.toString());
     } catch (e) {
-      unawaited(showExceptionAlertDialog(
+      unawaited(showDialog(
         context: context,
-        title: "Failed",
-        exception: e,
+        builder: (context) => AlertDialog(
+          title: const Text('Failed to edit comment'),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
       ));
     } finally {
       Navigator.pop(context);
     }
   }
 
-  final bool didRequestSignOut = await showAlertDialog(
-        context: context,
-        title: "Edit your comment",
-        content: "Are you sure?",
-        cancelActionText: "Cancel",
-        defaultActionText: "Edit",
-      ) ??
-      false;
-  if (didRequestSignOut == true) {
-    await _trySubmit();
-  }
+  await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit comment'),
+        content: Text('Are you sure?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async => await _trySubmit(),
+            child: const Text('Edit'),
+          ),
+        ],
+      ),
+    );
 }
 
 String getMarkdown(Document document) {

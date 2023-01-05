@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:alert_dialogs/alert_dialogs.dart';
 import 'package:cs_mobile/models/user.dart';
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,26 +20,40 @@ class ProfileDialog extends ConsumerWidget  {
       Navigator.pop(context);
       await firebaseAuth.signOut();
     } catch (e) {
-      unawaited(showExceptionAlertDialog(
+      unawaited(showDialog(
         context: context,
-        title: "Logout failed",
-        exception: e,
+        builder: (context) => AlertDialog(
+          title: const Text('Logout failed'),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
       ));
     }
   }
   Future<void> _confirmSignOut(
       BuildContext context, FirebaseAuth firebaseAuth) async {
-    final bool didRequestSignOut = await showAlertDialog(
-          context: context,
-          title: "Logout",
-          content: "Are you sure",
-          cancelActionText: "Cancel",
-          defaultActionText: "Logout",
-        ) ??
-        false;
-    if (didRequestSignOut == true) {
-      await _signOut(context, firebaseAuth);
-    }
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Logout'),
+        content: Text('Are you sure?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async => await _signOut(context, firebaseAuth),
+            child: const Text('Logout'),
+          ),
+        ],
+      ),
+    );
   }
   @override
   Widget build(BuildContext context, ref) {

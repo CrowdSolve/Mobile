@@ -1,4 +1,3 @@
-import 'package:alert_dialogs/alert_dialogs.dart';
 import 'package:cs_mobile/auth/auth_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,10 +46,17 @@ class _AuthButtonState extends ConsumerState<AuthButton> {
           label: 'More info',
           textColor: Theme.of(context).colorScheme.onErrorContainer,
           onPressed: () {
-            showExceptionAlertDialog(
+            showDialog(
               context: context,
-              title: 'Sign in failed',
-              exception: exception,
+              builder: (context) => AlertDialog(
+                title: const Text('Login failed'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
             );
           },
         ),

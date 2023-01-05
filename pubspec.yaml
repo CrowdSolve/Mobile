@@ -11,15 +11,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  string_validators:
-    git:
-      url: https://github.com/bizz84/codewithandrea_flutter_packages
-      path: packages/string_validators
-  alert_dialogs:
-    git:
-      url: https://github.com/bizz84/codewithandrea_flutter_packages
-      path: packages/alert_dialogs
   http: ^0.13.4
   firebase_core: ^1.22.0
   firebase_auth: ^3.3.11

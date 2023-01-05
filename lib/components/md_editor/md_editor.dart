@@ -70,8 +70,19 @@ class _AddQuestionState extends ConsumerState<MDEditor> {
     } catch (e) {
       setState(() {
         _loading = false;
-        showExceptionAlertDialog(
-            context: context, title: 'Error occured', exception: e);
+        showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
       });
     }
   return pickedImagePath;

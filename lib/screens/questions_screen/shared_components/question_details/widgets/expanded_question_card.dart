@@ -1,17 +1,16 @@
 import 'package:cs_mobile/markdown/markdown_renderer.dart';
 import 'package:cs_mobile/models/question.dart';
 import 'package:cs_mobile/models/user.dart';
-import 'package:cs_mobile/services/questions_service.dart';
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:like_button/like_button.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
+
+import 'like_button.dart';
 
 class ExpandedQuestionCard extends ConsumerWidget {
   final Question question;
@@ -21,21 +20,9 @@ class ExpandedQuestionCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final githubOAuthKeyModel = ref.watch(githubOAuthKeyModelProvider);
     final firebaseAuth = ref.watch(firebaseAuthProvider);
     // TODO: Add the Heros back
-    String query = r'''
-          query ($number:Int!){
-        repository(name:"data", owner:"CrowdSolve") {
-          issue(number:$number) {
-            reactions {
-              viewerHasReacted
-              totalCount
-            }
-          }
-      }
-    }
-    ''';
+
     return Material(
       color: Colors.transparent,
       child: Padding(
@@ -96,69 +83,32 @@ class ExpandedQuestionCard extends ConsumerWidget {
             SizedBox(
               height: 20,
             ),
-            if(firebaseAuth.currentUser!=null)
-            Query(
-              options: QueryOptions(
-                fetchPolicy: FetchPolicy.networkOnly,
-                document: gql(query),
-                variables: {
-                  'number': int.parse(question.id),
-                },
-              ),
-              builder: (QueryResult result,
-                  {VoidCallback? refetch, FetchMore? fetchMore}) {
-                Future<bool> onLikeButtonTapped(bool isLiked) async {
-                  if (!isLiked)
-                    await likeQuestion(
-                      githubOAuthKeyModel,
-                      question.id,
-                    );
-                  else
-                    await unlikeQuestion(githubOAuthKeyModel, question.id,
-                        firebaseAuth.currentUser!.providerData.first.uid!);
-                  return !isLiked;
-                }
-
-                if (result.hasException) {
-                  return Text(result.exception.toString());
-                }
-                if (result.isLoading) {
-                  return Text('Loading');
-                }
-
-                bool isLiked = result.data?['repository']?['issue']
-                    ?['reactions']?['viewerHasReacted'];
-                int totalCount = result.data?['repository']?['issue']
-                    ?['reactions']?['totalCount'];
-                return Row(
-                  children: [
-                    LikeButton(
-                        isLiked: isLiked,
-                        likeCount: totalCount,
-                        size: 24,
-                        onTap: onLikeButtonTapped),
-                    SizedBox(
-                      width: 30,
-                    ),
-                    Icon(
-                      Icons.comment,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      question.noOfComments.toString(),
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                    Spacer(),
-                    IconButton(
-                      onPressed: () => Share.share(
-                          'https://crowdsolve.lasheen.dev/questions/${question.id}'),
-                      icon: Icon(Icons.share),
-                    ),
-                  ],
-                );
-              },
+            Row(
+              children: [
+                GraphqlLikeButton(
+                  questionId: question.id,
+                  initialCount: question.heart,
+                ),
+                SizedBox(
+                  width: 30,
+                ),
+                Icon(
+                  Icons.comment,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  question.noOfComments.toString(),
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                Spacer(),
+                IconButton(
+                  onPressed: () => Share.share(
+                      'https://crowdsolve.lasheen.dev/questions/${question.id}'),
+                  icon: Icon(Icons.share),
+                ),
+              ],
             )
           ],
         ),

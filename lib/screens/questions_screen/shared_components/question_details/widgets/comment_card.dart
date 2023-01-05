@@ -70,23 +70,6 @@ class CommentCard extends ConsumerWidget {
               a: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
-          SizedBox(
-                height: 20,
-              ),
-          Row(
-            children: [
-              Icon(
-                Icons.favorite,
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Text(
-                comment.heart.toString(),
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-            ],
-          )
         ],
       ),
     );

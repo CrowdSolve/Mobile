@@ -224,7 +224,9 @@ Future<void> editComment(String authKey, String body, String commentId) async {
       'Accept': 'application/vnd.github+json',
       'Authorization': 'Bearer ' + authKey,
     },
-    body: '{"body": "$body"}',
+    body: jsonEncode(<String, String>{
+      'body': body,
+    }),
   );
   if (response.statusCode == 201) {
     // If the server did return a 201 CREATED response,

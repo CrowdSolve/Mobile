@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'screens/my_answers/my_answers.dart';
@@ -67,7 +68,7 @@ class ProfileDialog extends ConsumerWidget  {
       child: SingleChildScrollView(
         child: Center(
           child: Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all( Radius.circular(10))),
             elevation: 10,
             margin: EdgeInsets.only(top: 75, right: 15, left: 15),
             child: Padding(
@@ -257,8 +258,14 @@ class ProfileDialog extends ConsumerWidget  {
                     title: Text('Logout', style: TextStyle(color: Colors.red),),
                     onTap: () => _confirmSignOut(context, ref),
                   ),
-                  //TODO: Add current version
-                  Center(child: Text('CrowdSolve Mobile v1.0.0',style: Theme.of(context).textTheme.caption),)
+                  FutureBuilder<PackageInfo>(
+                    future:   PackageInfo.fromPlatform(),
+                    builder: (context, snapshot) {
+                      String version = snapshot.data?.version ?? '1.0.0';
+                      return Center(child: Text('CrowdSolve Mobile v$version',style: Theme.of(context).textTheme.caption),);
+                    }
+                  ),
+                  SizedBox(height: 2,)
                 ],
               ),
             ),

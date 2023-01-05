@@ -36,58 +36,44 @@ class GraphqlLikeButton extends ConsumerWidget {
       );
 
     }
-    return GraphQLProvider(
-      client: ValueNotifier(
-        GraphQLClient(
-          link: AuthLink(
-            getToken: () => 'Bearer ' + githubOAuthKeyModel,
-          ).concat(
-            HttpLink(
-              'https://api.github.com/graphql',
-            ),
-          ),
-          cache: GraphQLCache(),
-        ),
-      ),
-      child: Query(
-        options: QueryOptions(
-          fetchPolicy: FetchPolicy.networkOnly,
-          document: gql(questionQuery),
-          variables: {
-            'number': int.parse(questionId),
-          },
-        ),
-        builder: (QueryResult result,
-            {VoidCallback? refetch, FetchMore? fetchMore}) {
-          Future<bool> onLikeButtonTapped(bool isLiked) async {
-            if (!isLiked)
-              await likeQuestion(githubOAuthKeyModel, questionId);
-            else
-              await unlikeQuestion(githubOAuthKeyModel, questionId,
-                  firebaseAuth.currentUser!.providerData.first.uid!);
-            return !isLiked;
-          }
-
-          if (result.hasException) {
-            return Text(result.exception.toString());
-          }
-
-          bool? isLiked = false;
-          int? totalCount = initialCount;
-          if (result.data != null) {
-            isLiked = result.data?['repository']?['issue']?['reactions']
-                ?['viewerHasReacted'];
-            totalCount = result.data?['repository']?['issue']?['reactions']
-                ?['totalCount'];
-          }
-
-          return LikeButton(
-              isLiked: isLiked,
-              likeCount: totalCount,
-              size: 24,
-              onTap: onLikeButtonTapped);
+    return Query(
+      options: QueryOptions(
+        fetchPolicy: FetchPolicy.networkOnly,
+        document: gql(questionQuery),
+        variables: {
+          'number': int.parse(questionId),
         },
       ),
+      builder: (QueryResult result,
+          {VoidCallback? refetch, FetchMore? fetchMore}) {
+        Future<bool> onLikeButtonTapped(bool isLiked) async {
+          if (!isLiked)
+            await likeQuestion(githubOAuthKeyModel, questionId);
+          else
+            await unlikeQuestion(githubOAuthKeyModel, questionId,
+                firebaseAuth.currentUser!.providerData.first.uid!);
+          return !isLiked;
+        }
+
+        if (result.hasException) {
+          return Text(result.exception.toString());
+        }
+
+        bool? isLiked = false;
+        int? totalCount = initialCount;
+        if (result.data != null) {
+          isLiked = result.data?['repository']?['issue']?['reactions']
+              ?['viewerHasReacted'];
+          totalCount = result.data?['repository']?['issue']?['reactions']
+              ?['totalCount'];
+        }
+
+        return LikeButton(
+            isLiked: isLiked,
+            likeCount: totalCount,
+            size: 24,
+            onTap: onLikeButtonTapped);
+      },
     );
   }
 }

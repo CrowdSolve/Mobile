@@ -69,9 +69,10 @@ Future<void> confirmSubmitQuestion(
     context, githubOAuthKeyModel, title, body) async {
   Future<void> trySubmit() async {
     try {
-      await addQuestion(
-          githubOAuthKeyModel, <String, String>{'title': title, 'body': body});
-      Navigator.pop(context);
+      await addQuestion(githubOAuthKeyModel, <String, String>{
+        'title': title,
+        'body': body
+      }).whenComplete(() => Navigator.pop(context));
     } catch (e) {
       unawaited(showDialog(
         context: context,
@@ -86,34 +87,37 @@ Future<void> confirmSubmitQuestion(
           ],
         ),
       ));
+    } finally {
+      Navigator.pop(context);
     }
   }
 
   await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Create question'),
-        content: Text('Are you sure?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () async => await trySubmit(),
-            child: const Text('Ask'),
-          ),
-        ],
-      ),
-    );
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Create question'),
+      content: Text('Are you sure?'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () async => await trySubmit(),
+          child: const Text('Ask'),
+        ),
+      ],
+    ),
+  );
 }
 
 Future<void> confirmSubmitComment(
     context, githubOAuthKeyModel, body, questionId) async {
   Future<void> _trySubmit() async {
     try {
-      await addComment(
-          githubOAuthKeyModel, <String, String>{'body': body}, questionId.toString());
+      await addComment(githubOAuthKeyModel, <String, String>{'body': body},
+              questionId.toString())
+          .whenComplete(() => Navigator.pop(context));
     } catch (e) {
       unawaited(showDialog(
         context: context,
@@ -133,31 +137,32 @@ Future<void> confirmSubmitComment(
     }
   }
 
- await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Create comment'),
-        content: Text('Are you sure?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () async => await _trySubmit(),
-            child: const Text('Comment'),
-          ),
-        ],
-      ),
-    );
+  await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Create comment'),
+      content: Text('Are you sure?'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () async => await _trySubmit(),
+          child: const Text('Comment'),
+        ),
+      ],
+    ),
+  );
 }
 
 Future<void> confirmEditComment(
     context, githubOAuthKeyModel, body, commentId) async {
   Future<void> _trySubmit() async {
     try {
-      await editComment(
-          githubOAuthKeyModel, body, commentId.toString());
+      await editComment(githubOAuthKeyModel, body, commentId.toString())
+          .whenComplete(() => Navigator.pop(context));
+      ;
     } catch (e) {
       unawaited(showDialog(
         context: context,
@@ -178,22 +183,22 @@ Future<void> confirmEditComment(
   }
 
   await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Edit comment'),
-        content: Text('Are you sure?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () async => await _trySubmit(),
-            child: const Text('Edit'),
-          ),
-        ],
-      ),
-    );
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Edit comment'),
+      content: Text('Are you sure?'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () async => await _trySubmit(),
+          child: const Text('Edit'),
+        ),
+      ],
+    ),
+  );
 }
 
 String getMarkdown(Document document) {

@@ -75,13 +75,15 @@ class ProfileDialog extends ConsumerWidget  {
                   Row(
                     children: [
                       Expanded(
-                        child: IconButton(
+                        child: Align(
                           alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.zero,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            icon: Icon(Icons.close_rounded)),
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              icon: Icon(Icons.close_rounded)),
+                        ),
                       ),
                       Expanded(
                         child: Image.asset(

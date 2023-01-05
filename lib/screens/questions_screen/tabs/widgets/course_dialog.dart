@@ -62,7 +62,7 @@ class CourseDialog extends StatelessWidget {
           }
 
           // By default, show a loading spinner.
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );

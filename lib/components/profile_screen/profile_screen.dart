@@ -4,22 +4,25 @@ import 'package:cs_mobile/models/user.dart';
 import 'package:cs_mobile/screens/questions_screen/shared_components/question_card.dart';
 import 'package:cs_mobile/screens/questions_screen/tabs/widgets/error_indicator.dart';
 import 'package:cs_mobile/services/questions_service.dart';
+import 'package:cs_mobile/top_level_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   final UserModel? user;
 
   const ProfileScreen({Key? key, this.user}) : super(key: key);
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final signedIn = ref.watch(firebaseAuthProvider).currentUser != null;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -50,7 +53,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-          FullUserInfo(userLogin: widget.user!.login),
+          signedIn
+              ? FullUserInfo(userLogin: widget.user!.login)
+              : SizedBox.shrink(),
           UserQuestions(userLogin: widget.user!.login),
         ],
       ),
@@ -81,7 +86,8 @@ class _UserQuestionsState extends State<UserQuestions> {
 
   Future<void> _fetchPage(int pageKey, userLogin) async {
     try {
-      final newItems = await fetchWithQuery(pageKey, searchTerm: 'author:' + userLogin + '&labels=visible');
+      final newItems = await fetchWithQuery(pageKey,
+          searchTerm: 'author:' + userLogin + '&labels=visible');
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);
@@ -98,8 +104,8 @@ class _UserQuestionsState extends State<UserQuestions> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () => Future.sync(
-            () => _pagingController.refresh(),
-          ),
+        () => _pagingController.refresh(),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: PagedListView<int, Question>(
@@ -110,32 +116,41 @@ class _UserQuestionsState extends State<UserQuestions> {
               firstPageErrorIndicatorBuilder: (context) => ErrorIndicator(
                     onTryAgain: () => _pagingController.refresh(),
                   ),
-                  noItemsFoundIndicatorBuilder: (context) => Text('No questions found'),
-              itemBuilder: (context, item, index) =>
-              index==0?Column(
-                children: [
-                  Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 44.0, bottom: 8.0),
-                  child: Text(
-                    "Questions by this user (" +
-                        _pagingController.itemList!.length.toString() +
-                        ')',
-                    style: GoogleFonts.roboto(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-                  QuestionCard(question: item,),
-                ],
-              ):QuestionCard(question: item,)),
+              noItemsFoundIndicatorBuilder: (context) =>
+                  Text('No questions found'),
+              itemBuilder: (context, item, index) => index == 0
+                  ? Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(top: 44.0, bottom: 8.0),
+                            child: Text(
+                              "Questions by this user (" +
+                                  _pagingController.itemList!.length
+                                      .toString() +
+                                  ')',
+                              style: GoogleFonts.roboto(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        QuestionCard(
+                          question: item,
+                        ),
+                      ],
+                    )
+                  : QuestionCard(
+                      question: item,
+                    )),
         ),
       ),
     );
   }
+
   @override
   void dispose() {
     _pagingController.dispose();

@@ -1,6 +1,7 @@
 import 'package:cs_mobile/components/md_editor/md_editor.dart';
 import 'package:cs_mobile/markdown/markdown_renderer.dart';
 import 'package:cs_mobile/models/comment.dart';
+import 'package:cs_mobile/models/user.dart';
 import 'package:cs_mobile/services/questions_service.dart';
 import 'package:cs_mobile/top_level_provider.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
-
-
 
 class CommentCard extends ConsumerWidget {
   final Comment comment;
@@ -27,19 +26,32 @@ class CommentCard extends ConsumerWidget {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(comment.posterAvatarUrl),
-                radius: 10,
+              InkWell(
+                onTap: () => context.go('/users/s',
+                    extra: UserModel(
+                      login: comment.posterName,
+                      avatarUrl: comment.posterAvatarUrl,
+                      id: comment.posterName,
+                    )),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(comment.posterAvatarUrl),
+                      radius: 10,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      comment.posterName,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    Text(
+                        ' ● ${timeago.format(DateTime.now().subtract(DateTime.now().difference(DateTime.parse(comment.createdAt))))}',
+                        style: Theme.of(context).textTheme.labelSmall),
+                  ],
+                ),
               ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                comment.posterName,
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-              Text(' ● ${timeago.format(DateTime.now().subtract(DateTime.now().difference(DateTime.parse(comment.createdAt))))}',
-                  style: Theme.of(context).textTheme.labelSmall),
               Spacer(),
               if (firebaseAuth.currentUser != null &&
                   firebaseAuth.currentUser!.providerData.first.uid ==
@@ -62,8 +74,8 @@ class CommentCard extends ConsumerWidget {
             ],
           ),
           SizedBox(
-                height: 20,
-              ),
+            height: 20,
+          ),
           MarkdownRenderer(
             data: comment.body,
             styleSheet: MarkdownStyleSheet(
